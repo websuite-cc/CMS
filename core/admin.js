@@ -1,6 +1,6 @@
 // API Base URL Configuration
 // Allows hosting frontend separately from the worker
-const API_BASE_URL = window.STACKPAGES_API_URL || "";
+const API_BASE_URL = window.STACKPAGES_API_URL || "https://demo.stackpages.workers.dev/";
 
 // Get user config (Public Mode)
 const USER_CONFIG = window.STACKPAGES_CONFIG || {};
