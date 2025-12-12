@@ -11,7 +11,7 @@ export async function onRequestGet(context) {
     const config = {
         siteName: "StackPages CMS",
         author: "Admin",
-        substackRssUrl: env.SUBSTACK_FEED_URL || "",
+        blogRssUrl: env.BLOG_FEED_URL || "",
         youtubeRssUrl: env.YOUTUBE_FEED_URL || "",
         frontendBuilderUrl: env.FRONTEND_BUILDER_URL || "",
         podcastFeedUrl: env.PODCAST_FEED_URL || "",

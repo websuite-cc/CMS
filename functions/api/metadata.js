@@ -9,7 +9,7 @@ export async function onRequestGet(context) {
         description: env.META_DESCRIPTION || "Portail de contenus",
         author: "Admin",
         lastBuildDate: new Date().toISOString(),
-        substackRssUrl: env.BLOG_FEED_URL || "",
+        blogRssUrl: env.BLOG_FEED_URL || "",
         youtubeRssUrl: env.YOUTUBE_FEED_URL || "",
         podcastFeedUrl: env.PODCAST_FEED_URL || ""
     };

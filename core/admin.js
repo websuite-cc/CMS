@@ -203,7 +203,7 @@ async function loadConfig() {
         // Populate Config Form (Read-Only) with combined data
         document.getElementById('conf-siteName').value = config.siteName || metadata.siteName || '';
         document.getElementById('conf-author').value = config.author || metadata.author || '';
-        document.getElementById('conf-substack').value = config.substackRssUrl || '';
+        document.getElementById('conf-substack').value = config.blogRssUrl || '';
         if (document.getElementById('conf-youtube')) {
             document.getElementById('conf-youtube').value = config.youtubeRssUrl || 'Non configuré';
         }
@@ -222,7 +222,7 @@ async function loadConfig() {
             if (!config.seo?.metaKeywords) document.getElementById('conf-metaKeywords').value = metadata.seo.metaKeywords || '';
         }
         // Show warning if Substack URL missing
-        if (!config.substackRssUrl) {
+        if (!config.blogRssUrl) {
             document.getElementById('config-warning')?.classList.remove('hidden');
         } else {
             document.getElementById('config-warning')?.classList.add('hidden');
