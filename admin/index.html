@@ -27,9 +27,18 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-purple-50 to-red-50 h-screen flex items-center justify-center p-4">
+<body
+    class="bg-gradient-to-br from-purple-50 to-red-50 dark:from-slate-900 dark:to-purple-900 h-screen flex items-center justify-center p-4 transition-colors duration-300">
 
-    <div class="glass-panel p-8 rounded-2xl shadow-xl w-full max-w-md">
+    <div class="fixed top-4 right-4 z-50">
+        <button onclick="toggleDarkMode()"
+            class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-3 rounded-full shadow-lg text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 transition">
+            <i class="fas fa-moon theme-toggle-icon text-xl block"></i>
+        </button>
+    </div>
+
+    <div
+        class="glass-panel dark:bg-slate-800/80 dark:border-slate-700 p-8 rounded-2xl shadow-xl w-full max-w-md transition-colors duration-300">
         <div class="text-center mb-8">
             <h1 class="text-xl font-bold">
                 <a href="https://stackpages.net/" target="_blank" class="flex flex-col items-center gap-2">
@@ -37,10 +46,10 @@
                         class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center shadow-lg">
                         <i class="fas fa-plus text-white text-3xl"></i>
                     </div>
-                    <span>iziWebCMS CMS</span>
+                    <span class="dark:text-white">iziWebCMS CMS</span>
                 </a>
             </h1>
-            <p class="text-slate-500 text-sm">Portail d'Administration</p>
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Portail d'Administration</p>
         </div>
 
         <form id="login-form" class="space-y-6">

@@ -22,10 +22,50 @@ const appState = {
 
 // Init
 document.addEventListener('DOMContentLoaded', async () => {
+    initDarkMode(); // Init dark mode
     await checkAuth();
     await loadConfig(); // load config first
     await loadData();
 });
+
+// Dark Mode Logic
+function initDarkMode() {
+    const isDark = localStorage.getItem('theme') === 'dark' ||
+        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+    if (isDark) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+    updateDarkModeIcon();
+}
+
+window.toggleDarkMode = function () {
+    const html = document.documentElement;
+    if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+    }
+    updateDarkModeIcon();
+}
+
+function updateDarkModeIcon() {
+    const isDark = document.documentElement.classList.contains('dark');
+    const icons = document.querySelectorAll('.theme-toggle-icon');
+    icons.forEach(icon => {
+        if (isDark) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        }
+    });
+}
 
 // Search Listeners
 document.addEventListener('DOMContentLoaded', () => {

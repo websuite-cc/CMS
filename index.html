@@ -20,19 +20,28 @@
     </style>
 </head>
 
-<body class="bg-slate-50 min-h-screen flex flex-col items-center justify-center p-4">
+<body
+    class="bg-slate-50 dark:bg-slate-900 min-h-screen flex flex-col items-center justify-center p-4 transition-colors duration-300">
+
+    <div class="fixed top-4 right-4 z-50">
+        <button onclick="toggleDarkMode()"
+            class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-3 rounded-full shadow-lg text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 transition">
+            <i class="fas fa-moon theme-toggle-icon text-xl block"></i>
+        </button>
+    </div>
+
     <div class="text-center space-y-6 max-w-lg">
         <div
             class="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-purple-200">
             <i class="fas fa-plus text-white text-4xl"></i>
         </div>
 
-        <h1 class="text-4xl font-bold text-slate-900">iziWebCMS</h1>
-        <p class="text-lg text-slate-600">Bienvenue sur votre portail de gestion de contenu.</p>
+        <h1 class="text-4xl font-bold text-slate-900 dark:text-white">iziWebCMS</h1>
+        <p class="text-lg text-slate-600 dark:text-slate-400">Bienvenue sur votre portail de gestion de contenu.</p>
 
         <div class="pt-4">
             <a href="/admin/"
-                class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 dark:bg-slate-800 text-white rounded-lg hover:bg-slate-800 dark:hover:bg-slate-700 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                 <span>Accéder à l'administration</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3">
@@ -41,6 +50,50 @@
             </a>
         </div>
     </div>
+
+    <script>
+        // Inline script for root index
+        function initDarkMode() {
+            const isDark = localStorage.getItem('theme') === 'dark' ||
+                (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            updateDarkModeIcon();
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            updateDarkModeIcon();
+        }
+
+        function updateDarkModeIcon() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const icons = document.querySelectorAll('.theme-toggle-icon');
+            icons.forEach(icon => {
+                if (isDark) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            });
+        }
+
+        // Init immediately
+        initDarkMode();
+    </script>
 </body>
 
 </html>
