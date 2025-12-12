@@ -4,10 +4,17 @@
 // Mode simplifié : toutes les requêtes vont directement au worker local
 // La configuration (flux RSS, etc.) est gérée par les env vars du worker
 
-// Helper function to build API URL (mode local simplifié)
+// Helper function to build API URL (modeagnostique)
 function buildApiUrl(endpoint) {
-    // En mode local, on retourne simplement l'endpoint
-    // Le worker local gère la config via ses env vars
+    const baseUrl = localStorage.getItem('api_base_url');
+    // Si une URL de base est définie (worker distant), on l'utilise
+    if (baseUrl) {
+        // Enlever le slash final si présent dans baseUrl et le slash initial si présent dans endpoint pour éviter //
+        const cleanBase = baseUrl.replace(/\/$/, '');
+        const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+        return `${cleanBase}${cleanEndpoint}`;
+    }
+    // Sinon comportement local standard
     return endpoint;
 }
 

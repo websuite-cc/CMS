@@ -1020,8 +1020,9 @@
     <script>
         // Logout Handler
         async function logout() {
-            await fetch('/api/logout');
+            // await fetch('/api/logout'); // Optional: Call backend logout if needed
             localStorage.removeItem('stackpages_auth');
+            localStorage.removeItem('api_base_url'); // Clear remote worker URL
             window.location.href = '/admin';
         }
     </script>
