@@ -147,10 +147,10 @@
     <main class="flex-1 overflow-auto relative">
         <!-- Header -->
         <header class="sticky top-0 z-20 glass-panel px-8 py-4 flex justify-between items-center">
-            <h2 id="page-title" class="text-xl font-semibold text-slate-800">Tableau de bord</h2>
+            <h2 id="page-title" class="text-xl font-semibold text-slate-800 dark:text-white">Tableau de bord</h2>
             <div class="flex gap-3">
                 <a id="header-site-btn" href="/" target="_blank"
-                    class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-purple-600 transition bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow">
+                    class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 transition bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg shadow-sm hover:shadow">
                     <i class="fas fa-external-link-alt mr-2"></i>Aller au Site
                 </a>
             </div>
@@ -303,21 +303,24 @@
 
             <!-- VIEW: CONTENT -->
             <div id="view-content" class="view-section hidden space-y-6">
-                <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden transition-colors duration-300">
+                    <div
+                        class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-white dark:bg-slate-800 transition-colors duration-300">
                         <div class="flex items-center gap-4">
-                            <h3 class="font-semibold text-slate-800">Tous les Articles</h3>
+                            <h3 class="font-semibold text-slate-800 dark:text-white">Tous les Articles</h3>
                             <button onclick="loadData()" class="text-slate-400 hover:text-purple-500 transition"
                                 title="Actualiser">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
                         </div>
                         <input type="text" id="search-posts" placeholder="Rechercher..."
-                            class="px-3 py-1.5 border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            class="px-3 py-1.5 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left">
-                            <thead class="bg-slate-50 text-slate-500 font-medium">
+                            <thead
+                                class="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 font-medium">
                                 <tr>
                                     <th class="px-6 py-3">Image</th>
                                     <th class="px-6 py-3">Titre</th>
@@ -325,19 +328,21 @@
                                     <th class="px-6 py-3 text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="all-posts-table" class="divide-y divide-slate-100">
+                            <tbody id="all-posts-table" class="divide-y divide-slate-100 dark:divide-slate-700">
                                 <!-- Populated by JS -->
                             </tbody>
                         </table>
                     </div>
                     <!-- Pagination Controls -->
-                    <div class="px-6 py-4 border-t border-slate-100 flex justify-between items-center bg-slate-50">
-                        <span id="pagination-info" class="text-sm text-slate-500">Page 1 sur 1</span>
+                    <div
+                        class="px-6 py-4 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50 transition-colors duration-300">
+                        <span id="pagination-info" class="text-sm text-slate-500 dark:text-slate-400">Page 1 sur
+                            1</span>
                         <div class="flex gap-2">
                             <button id="prev-page-btn" onclick="prevPage()"
-                                class="px-3 py-1 bg-white border border-slate-300 rounded text-sm hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Précédent</button>
+                                class="px-3 py-1 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 dark:text-slate-200 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed">Précédent</button>
                             <button id="next-page-btn" onclick="nextPage()"
-                                class="px-3 py-1 bg-white border border-slate-300 rounded text-sm hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Suivant</button>
+                                class="px-3 py-1 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 dark:text-slate-200 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed">Suivant</button>
                         </div>
                     </div>
                 </div>
@@ -345,22 +350,25 @@
 
             <!-- VIEW: VIDEOS -->
             <div id="view-videos" class="view-section hidden space-y-6">
-                <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden transition-colors duration-300">
+                    <div
+                        class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-white dark:bg-slate-800 transition-colors duration-300">
                         <div class="flex items-center gap-4">
-                            <h3 class="font-semibold text-slate-800">Toutes les Vidéos</h3>
+                            <h3 class="font-semibold text-slate-800 dark:text-white">Toutes les Vidéos</h3>
                             <button onclick="loadData()" class="text-slate-400 hover:text-purple-500 transition"
                                 title="Actualiser">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
                         </div>
                         <input type="text" id="search-videos" placeholder="Rechercher..."
-                            class="px-3 py-1.5 border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            class="px-3 py-1.5 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left">
-                            <thead class="bg-slate-50 text-slate-500 font-medium">
+                            <thead
+                                class="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 font-medium">
                                 <tr>
                                     <th class="px-6 py-3">Image</th>
                                     <th class="px-6 py-3">Titre</th>
@@ -368,86 +376,98 @@
                                     <th class="px-6 py-3 text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="videos-table" class="divide-y divide-slate-100">
+                            <tbody id="videos-table" class="divide-y divide-slate-100 dark:divide-slate-700">
                                 <!-- Populated by JS -->
                             </tbody>
                         </table>
                     </div>
 
                     <!-- Pagination Controls -->
-                    <div class="px-6 py-4 border-t border-slate-100 flex justify-between items-center bg-slate-50">
-                        <span id="video-pagination-info" class="text-sm text-slate-500">Page 1 sur 1</span>
+                    <div
+                        class="px-6 py-4 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50 transition-colors duration-300">
+                        <span id="video-pagination-info" class="text-sm text-slate-500 dark:text-slate-400">Page 1 sur
+                            1</span>
                         <div class="flex gap-2">
                             <button id="prev-video-page-btn" onclick="prevVideoPage()"
-                                class="px-3 py-1 bg-white border border-slate-300 rounded text-sm hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Précédent</button>
+                                class="px-3 py-1 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 dark:text-slate-200 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed">Précédent</button>
                             <button id="next-video-page-btn" onclick="nextVideoPage()"
-                                class="px-3 py-1 bg-white border border-slate-300 rounded text-sm hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Suivant</button>
+                                class="px-3 py-1 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 dark:text-slate-200 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed">Suivant</button>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- VIEW: API EXPLORER -->
             <div id="view-api-explorer" class="view-section hidden space-y-6">
-                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
-                    <h3 class="font-semibold text-slate-800 mb-4">Tester les Endpoints</h3>
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 transition-colors duration-300">
+                    <h3 class="font-semibold text-slate-800 dark:text-white mb-4">Tester les Endpoints</h3>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <!-- Left Column: Controls -->
                         <div class="space-y-4">
-                            <div class="flex gap-4 items-center p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <div
+                                class="flex gap-4 items-center p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
                                 <span
                                     class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-mono font-bold">GET</span>
-                                <code class="text-sm font-mono text-slate-600">/api/metadata</code>
+                                <code class="text-sm font-mono text-slate-600 dark:text-slate-300">/api/metadata</code>
                                 <button onclick="testApi('/api/metadata')"
-                                    class="ml-auto px-3 py-1 bg-white border border-slate-300 rounded text-sm hover:bg-slate-50">Envoyer</button>
+                                    class="ml-auto px-3 py-1 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-500 dark:text-white">Envoyer</button>
                             </div>
-                            <div class="flex gap-4 items-center p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <div
+                                class="flex gap-4 items-center p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
                                 <span
                                     class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-mono font-bold">GET</span>
-                                <code class="text-sm font-mono text-slate-600">/api/posts</code>
+                                <code class="text-sm font-mono text-slate-600 dark:text-slate-300">/api/posts</code>
                                 <button onclick="testApi('/api/posts')"
-                                    class="ml-auto px-3 py-1 bg-white border border-slate-300 rounded text-sm hover:bg-slate-50">Envoyer</button>
+                                    class="ml-auto px-3 py-1 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-500 dark:text-white">Envoyer</button>
                             </div>
-                            <div class="flex gap-4 items-center p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <div
+                                class="flex gap-4 items-center p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
                                 <span
                                     class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-mono font-bold">GET</span>
-                                <code class="text-sm font-mono text-slate-600">/api/videos</code>
+                                <code class="text-sm font-mono text-slate-600 dark:text-slate-300">/api/videos</code>
                                 <button onclick="testApi('/api/videos')"
-                                    class="ml-auto px-3 py-1 bg-white border border-slate-300 rounded text-sm hover:bg-slate-50">Envoyer</button>
+                                    class="ml-auto px-3 py-1 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-500 dark:text-white">Envoyer</button>
                             </div>
-                            <div class="flex gap-4 items-center p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <div
+                                class="flex gap-4 items-center p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
                                 <span
                                     class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-mono font-bold">GET</span>
-                                <code class="text-sm font-mono text-slate-600">/api/podcasts</code>
+                                <code class="text-sm font-mono text-slate-600 dark:text-slate-300">/api/podcasts</code>
                                 <button onclick="testApi('/api/podcasts')"
-                                    class="ml-auto px-3 py-1 bg-white border border-slate-300 rounded text-sm hover:bg-slate-50">Envoyer</button>
+                                    class="ml-auto px-3 py-1 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-500 dark:text-white">Envoyer</button>
                             </div>
-                            <div class="flex gap-4 items-center p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <div
+                                class="flex gap-4 items-center p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
                                 <span
                                     class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-mono font-bold">GET</span>
-                                <code class="text-sm font-mono text-slate-600">/api/post/:slug</code>
+                                <code
+                                    class="text-sm font-mono text-slate-600 dark:text-slate-300">/api/post/:slug</code>
                                 <input type="text" id="api-slug-input" placeholder="slug-article"
-                                    class="px-2 py-1 text-sm border border-slate-300 rounded w-32">
+                                    class="px-2 py-1 text-sm border border-slate-300 dark:border-slate-500 dark:bg-slate-600 dark:text-white rounded w-32">
                                 <button onclick="testApiSlug()"
-                                    class="ml-auto px-3 py-1 bg-white border border-slate-300 rounded text-sm hover:bg-slate-50">Envoyer</button>
+                                    class="ml-auto px-3 py-1 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-500 dark:text-white">Envoyer</button>
                             </div>
-                            <div class="flex gap-4 items-center p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <div
+                                class="flex gap-4 items-center p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
                                 <span
                                     class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-mono font-bold">GET</span>
-                                <code class="text-sm font-mono text-slate-600">/api/video/:id</code>
+                                <code class="text-sm font-mono text-slate-600 dark:text-slate-300">/api/video/:id</code>
                                 <input type="text" id="api-video-input" placeholder="id-video"
-                                    class="px-2 py-1 text-sm border border-slate-300 rounded w-32">
+                                    class="px-2 py-1 text-sm border border-slate-300 dark:border-slate-500 dark:bg-slate-600 dark:text-white rounded w-32">
                                 <button onclick="testApiVideo()"
-                                    class="ml-auto px-3 py-1 bg-white border border-slate-300 rounded text-sm hover:bg-slate-50">Envoyer</button>
+                                    class="ml-auto px-3 py-1 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-500 dark:text-white">Envoyer</button>
                             </div>
-                            <div class="flex gap-4 items-center p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <div
+                                class="flex gap-4 items-center p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
                                 <span
                                     class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-mono font-bold">GET</span>
-                                <code class="text-sm font-mono text-slate-600">/api/podcast/:id</code>
+                                <code
+                                    class="text-sm font-mono text-slate-600 dark:text-slate-300">/api/podcast/:id</code>
                                 <input type="text" id="api-podcast-input" placeholder="guid-ou-slug"
-                                    class="px-2 py-1 text-sm border border-slate-300 rounded w-32">
+                                    class="px-2 py-1 text-sm border border-slate-300 dark:border-slate-500 dark:bg-slate-600 dark:text-white rounded w-32">
                                 <button onclick="testApiPodcast()"
-                                    class="ml-auto px-3 py-1 bg-white border border-slate-300 rounded text-sm hover:bg-slate-50">Envoyer</button>
+                                    class="ml-auto px-3 py-1 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-500 dark:text-white">Envoyer</button>
                             </div>
 
                         </div>
@@ -455,13 +475,14 @@
                         <!-- Right Column: Response -->
                         <div class="flex flex-col space-y-4">
                             <div>
-                                <h4 id="api-response-title" class="text-sm font-medium text-slate-500 mb-2">Réponse
+                                <h4 id="api-response-title"
+                                    class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Réponse
                                 </h4>
                                 <pre id="api-output"
-                                    class="bg-slate-900 text-green-400 p-4 rounded-lg text-xs font-mono h-[450px] overflow-auto">En attente...</pre>
+                                    class="bg-slate-900 border border-slate-800 text-green-400 p-4 rounded-lg text-xs font-mono h-[450px] overflow-auto shadow-inner">En attente...</pre>
                             </div>
                             <button onclick="clearApiOutput()"
-                                class="w-full py-2 border border-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg text-sm transition flex items-center justify-center gap-2">
+                                class="w-full py-2 border border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg text-sm transition flex items-center justify-center gap-2">
                                 <i class="fas fa-trash-alt"></i> Effacer la console
                             </button>
                         </div>
@@ -471,9 +492,11 @@
 
             <!-- VIEW: ANALYTICS -->
             <div id="view-analytics" class="view-section hidden space-y-6">
-                <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50">
-                        <h3 class="font-semibold text-slate-800">Rapports Google Analytics</h3>
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden transition-colors duration-300">
+                    <div
+                        class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+                        <h3 class="font-semibold text-slate-800 dark:text-white">Rapports Google Analytics</h3>
                     </div>
                     <div class="p-6">
                         <!-- Container for dynamic iframe -->
@@ -489,42 +512,47 @@
                                 class="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                                 <i class="fas fa-chart-line text-3xl"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">Configurer Google Analytics</h3>
-                            <p class="text-slate-600 mb-8 max-w-lg mx-auto">
+                            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Configurer Google
+                                Analytics</h3>
+                            <p class="text-slate-600 dark:text-slate-300 mb-8 max-w-lg mx-auto">
                                 Pour afficher vos statistiques, vous devez connecter votre compte Google Analytics
                                 via
                                 Looker Studio.
                             </p>
 
                             <div
-                                class="max-w-xl mx-auto space-y-4 text-left bg-slate-50 p-6 rounded-xl border border-slate-200">
+                                class="max-w-xl mx-auto space-y-4 text-left bg-slate-50 dark:bg-slate-700/30 p-6 rounded-xl border border-slate-200 dark:border-slate-600">
                                 <div class="flex items-start gap-4">
                                     <div
-                                        class="flex-shrink-0 w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center font-bold text-slate-600">
+                                        class="flex-shrink-0 w-8 h-8 bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded-full flex items-center justify-center font-bold text-slate-600 dark:text-white">
                                         1
                                     </div>
                                     <div>
-                                        <p class="text-slate-700 font-medium mb-1">Cloner le modèle Looker Studio
+                                        <p class="text-slate-700 dark:text-slate-200 font-medium mb-1">Cloner le modèle
+                                            Looker Studio
                                         </p>
-                                        <p class="text-sm text-slate-500 mb-2">Utilisez notre modèle pré-configuré
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-2">Utilisez notre modèle
+                                            pré-configuré
                                             comme
                                             base.
                                         </p>
                                         <a href="https://lookerstudio.google.com/reporting/a2371327-f823-4c3d-85b2-d6d3084997fd/page/e1rgF"
                                             target="_blank"
-                                            class="text-purple-600 hover:text-purple-700 font-medium text-sm">
+                                            class="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium text-sm">
                                             Ouvrir le modèle <i class="fas fa-external-link-alt text-xs ml-1"></i>
                                         </a>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-4">
                                     <div
-                                        class="flex-shrink-0 w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center font-bold text-slate-600">
+                                        class="flex-shrink-0 w-8 h-8 bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded-full flex items-center justify-center font-bold text-slate-600 dark:text-white">
                                         2
                                     </div>
                                     <div>
-                                        <p class="text-slate-700 font-medium mb-1">Connecter vos données</p>
-                                        <p class="text-sm text-slate-500">Cliquez sur les 3 points en haut à droite
+                                        <p class="text-slate-700 dark:text-slate-200 font-medium mb-1">Connecter vos
+                                            données</p>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400">Cliquez sur les 3 points
+                                            en haut à droite
                                             >
                                             "Créer une copie" > Sélectionnez votre source de données Google
                                             Analytics.
@@ -533,23 +561,26 @@
                                 </div>
                                 <div class="flex items-start gap-4">
                                     <div
-                                        class="flex-shrink-0 w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center font-bold text-slate-600">
+                                        class="flex-shrink-0 w-8 h-8 bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded-full flex items-center justify-center font-bold text-slate-600 dark:text-white">
                                         3
                                     </div>
                                     <div>
-                                        <p class="text-slate-700 font-medium mb-1">Obtenir le lien d'intégration</p>
-                                        <p class="text-sm text-slate-500">Fichier > Intégrer le rapport > Activer
+                                        <p class="text-slate-700 dark:text-slate-200 font-medium mb-1">Obtenir le lien
+                                            d'intégration</p>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400">Fichier > Intégrer le
+                                            rapport > Activer
                                             l'intégration > Copier l'URL d'intégration.</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-4">
                                     <div
-                                        class="flex-shrink-0 w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center font-bold text-slate-600">
+                                        class="flex-shrink-0 w-8 h-8 bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded-full flex items-center justify-center font-bold text-slate-600 dark:text-white">
                                         4
                                     </div>
                                     <div>
-                                        <p class="text-slate-700 font-medium mb-1">Configurer la variable</p>
-                                        <p class="text-sm text-slate-500">Ajoutez la variable
+                                        <p class="text-slate-700 dark:text-slate-200 font-medium mb-1">Configurer la
+                                            variable</p>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400">Ajoutez la variable
                                             <code>ANALYTICS_EMBED_URL</code> dans Cloudflare Pages avec votre lien.
                                         </p>
                                     </div>
@@ -562,42 +593,47 @@
 
             <!-- VIEW: PODCASTS -->
             <div id="view-podcasts" class="view-section hidden space-y-6">
-                <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden transition-colors duration-300">
+                    <div
+                        class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-white dark:bg-slate-800 transition-colors duration-300">
                         <div class="flex items-center gap-4">
-                            <h3 class="font-semibold text-slate-800">Épisodes de Podcast</h3>
+                            <h3 class="font-semibold text-slate-800 dark:text-white">Épisodes de Podcast</h3>
                             <button onclick="loadData()" class="text-slate-400 hover:text-purple-500 transition"
                                 title="Actualiser">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
                         </div>
                         <input type="text" id="search-podcasts" placeholder="Rechercher..."
-                            class="px-3 py-1.5 border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            class="px-3 py-1.5 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left">
-                            <thead class="bg-slate-50 text-slate-500 font-medium">
+                            <thead
+                                class="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 font-medium">
                                 <tr>
                                     <th class="px-6 py-3">Titre</th>
                                     <th class="px-6 py-3">Date</th>
                                     <th class="px-6 py-3 text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="podcasts-table" class="divide-y divide-slate-100">
+                            <tbody id="podcasts-table" class="divide-y divide-slate-100 dark:divide-slate-700">
                                 <!-- Populated by JS -->
                             </tbody>
                         </table>
                     </div>
 
                     <!-- Pagination Controls -->
-                    <div class="px-6 py-4 border-t border-slate-100 flex justify-between items-center bg-slate-50">
-                        <span id="podcast-pagination-info" class="text-sm text-slate-500">Page 1 sur 1</span>
+                    <div
+                        class="px-6 py-4 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50 transition-colors duration-300">
+                        <span id="podcast-pagination-info" class="text-sm text-slate-500 dark:text-slate-400">Page 1 sur
+                            1</span>
                         <div class="flex gap-2">
                             <button id="prev-podcast-page-btn" onclick="prevPodcastPage()"
-                                class="px-3 py-1 bg-white border border-slate-300 rounded text-sm hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Précédent</button>
+                                class="px-3 py-1 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 dark:text-slate-200 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed">Précédent</button>
                             <button id="next-podcast-page-btn" onclick="nextPodcastPage()"
-                                class="px-3 py-1 bg-white border border-slate-300 rounded text-sm hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Suivant</button>
+                                class="px-3 py-1 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 dark:text-slate-200 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed">Suivant</button>
                         </div>
                     </div>
                 </div>
@@ -605,18 +641,21 @@
 
             <!-- VIEW: CONFIGURATION -->
             <div id="view-config" class="view-section hidden space-y-6">
-                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8">
-                    <h3 class="font-semibold text-slate-800 mb-6 border-b pb-2">Paramètres du Site</h3>
-                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-r shadow-sm">
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 transition-colors duration-300">
+                    <h3 class="font-semibold text-slate-800 dark:text-white mb-6 border-b dark:border-slate-700 pb-2">
+                        Paramètres du Site</h3>
+                    <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 mb-6 rounded-r shadow-sm">
                         <div class="flex items-start">
                             <div class="flex-shrink-0">
-                                <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
+                                <i class="fas fa-info-circle text-blue-500 dark:text-blue-400 mt-0.5"></i>
                             </div>
                             <div class="ml-3">
-                                <h3 class="text-sm font-medium text-blue-800">Configuration via Variables
+                                <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">Configuration via
+                                    Variables
                                     d'Environnement
                                 </h3>
-                                <div class="mt-1 text-sm text-blue-700">
+                                <div class="mt-1 text-sm text-blue-700 dark:text-blue-300">
                                     <p>La configuration de ce site est gérée directement via les variables
                                         d'environnement
                                         de votre hébergeur (ex: Cloudflare Dashboard ou wrangler.toml).</p>
@@ -631,83 +670,106 @@
                     <form id="config-form" class="space-y-6 opacity-75">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-slate-700 mb-1">Nom du Site</label>
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nom du
+                                    Site</label>
                                 <input type="text" id="conf-siteName" readonly
-                                    class="w-full bg-slate-100 border-slate-300 rounded-lg shadow-sm text-slate-500 cursor-not-allowed">
+                                    class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-slate-700 mb-1">Auteur</label>
+                                <label
+                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Auteur</label>
                                 <input type="text" id="conf-author" readonly
-                                    class="w-full bg-slate-100 border-slate-300 rounded-lg shadow-sm text-slate-500 cursor-not-allowed">
+                                    class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">URL Flux RSS Blog</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
+                                RSS Blog</label>
                             <input type="url" id="conf-substack" readonly
-                                class="w-full bg-slate-100 border-slate-300 rounded-lg shadow-sm text-slate-500 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 mt-1">Variable: <code>BLOG_FEED_URL</code> (Substack,
-                                WordPress, Ghost, Medium...)</p>
+                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                                <code>BLOG_FEED_URL</code> (Substack,
+                                WordPress, Ghost, Medium...)
+                            </p>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">URL Flux RSS
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
+                                RSS
                                 YouTube</label>
                             <input type="url" id="conf-youtube" readonly
-                                class="w-full bg-slate-100 border-slate-300 rounded-lg shadow-sm text-slate-500 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 mt-1">Variable: <code>YOUTUBE_FEED_URL</code></p>
+                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                                <code>YOUTUBE_FEED_URL</code>
+                            </p>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">URL Flux RSS
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
+                                RSS
                                 Podcast</label>
                             <input type="url" id="conf-podcast" readonly
-                                class="w-full bg-slate-100 border-slate-300 rounded-lg shadow-sm text-slate-500 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 mt-1">Variable: <code>PODCAST_FEED_URL</code></p>
+                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                                <code>PODCAST_FEED_URL</code>
+                            </p>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">URL Webstudio
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL
+                                Webstudio
                                 Staging</label>
                             <input type="url" id="conf-wstd-staging" readonly
-                                class="w-full bg-slate-100 border-slate-300 rounded-lg shadow-sm text-slate-500 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 mt-1">Variable: <code>WSTD_STAGING_URL</code>
+                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                                <code>WSTD_STAGING_URL</code>
                                 (Optionnel -
-                                Active le proxy vers Webstudio)</p>
+                                Active le proxy vers Webstudio)
+                            </p>
                         </div>
 
 
-                        <div class="border-t pt-4">
-                            <h4 class="text-sm font-medium text-slate-900 mb-4">SEO & Métadonnées</h4>
+                        <div class="border-t dark:border-slate-700 pt-4">
+                            <h4 class="text-sm font-medium text-slate-900 dark:text-white mb-4">SEO & Métadonnées</h4>
                             <div class="space-y-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-700 mb-1">Titre Meta</label>
-                                    <input type="text" id="conf-metaTitle" readonly
-                                        class="w-full bg-slate-100 border-slate-300 rounded-lg shadow-sm text-slate-500 cursor-not-allowed">
-                                    <p class="text-xs text-slate-500 mt-1">Variable: <code>META_TITLE</code></p>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700 mb-1">Description
+                                    <label
+                                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Titre
                                         Meta</label>
-                                    <textarea id="conf-metaDesc" rows="3" readonly
-                                        class="w-full bg-slate-100 border-slate-300 rounded-lg shadow-sm text-slate-500 cursor-not-allowed"></textarea>
-                                    <p class="text-xs text-slate-500 mt-1">Variable: <code>META_DESCRIPTION</code>
+                                    <input type="text" id="conf-metaTitle" readonly
+                                        class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                                        <code>META_TITLE</code>
                                     </p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-700 mb-1">Mots-clés
+                                    <label
+                                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Description
+                                        Meta</label>
+                                    <textarea id="conf-metaDesc" rows="3" readonly
+                                        class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed"></textarea>
+                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                                        <code>META_DESCRIPTION</code>
+                                    </p>
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Mots-clés
                                         Meta</label>
                                     <input type="text" id="conf-metaKeywords" readonly
-                                        class="w-full bg-slate-100 border-slate-300 rounded-lg shadow-sm text-slate-500 cursor-not-allowed">
-                                    <p class="text-xs text-slate-500 mt-1">Variable: <code>META_KEYWORDS</code></p>
+                                        class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                                        <code>META_KEYWORDS</code>
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="border-t pt-4">
-                            <h4 class="text-sm font-medium text-slate-900 mb-4">Maintenance</h4>
+                        <div class="border-t dark:border-slate-700 pt-4">
+                            <h4 class="text-sm font-medium text-slate-900 dark:text-white mb-4">Maintenance</h4>
                             <button type="button" onclick="clearCache()"
-                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
+                                class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
                                 <i class="fas fa-broom"></i> Vider le Cache
                             </button>
                             <p id="cache-status" class="text-xs text-slate-500 mt-2"></p>
@@ -721,14 +783,14 @@
                 <div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-6 h-[calc(100vh-12rem)]">
                     <!-- Left Column: Instructions & Button -->
                     <div
-                        class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 flex flex-col justify-center items-start space-y-8">
+                        class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 flex flex-col justify-center items-start space-y-8 transition-colors duration-300">
                         <div>
                             <div
-                                class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 mb-6">
+                                class="w-16 h-16 bg-purple-100 dark:bg-purple-900/50 rounded-2xl flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6">
                                 <i class="fas fa-paint-brush text-3xl"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-slate-800 mb-3">Éditeur Visuel</h3>
-                            <p class="text-slate-600 text-lg leading-relaxed">
+                            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-3">Éditeur Visuel</h3>
+                            <p class="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
                                 Utilisez notre éditeur visuel avancé pour personnaliser l'apparence de votre site.
                                 L'interface s'ouvrira dans un nouvel onglet pour vous offrir un espace de travail
                                 optimal.
@@ -741,13 +803,13 @@
                             <i class="fas fa-external-link-alt"></i>
                         </a>
 
-                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r w-full">
+                        <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r w-full">
                             <div class="flex">
                                 <div class="flex-shrink-0">
-                                    <i class="fas fa-info-circle text-blue-500"></i>
+                                    <i class="fas fa-info-circle text-blue-500 dark:text-blue-400"></i>
                                 </div>
                                 <div class="ml-3">
-                                    <p class="text-sm text-blue-700">
+                                    <p class="text-sm text-blue-700 dark:text-blue-300">
                                         Regardez les tutoriels à droite pour apprendre à maîtriser l'outil.
                                     </p>
                                 </div>
@@ -756,10 +818,13 @@
                     </div>
 
                     <!-- Right Column: Tutorials -->
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col">
-                        <div class="px-6 py-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
-                            <h3 class="font-semibold text-slate-800">Tutoriels Vidéo</h3>
-                            <span class="text-xs font-medium text-slate-500 uppercase tracking-wider">Playlist
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden flex flex-col transition-colors duration-300">
+                        <div
+                            class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 flex justify-between items-center transition-colors duration-300">
+                            <h3 class="font-semibold text-slate-800 dark:text-white">Tutoriels Vidéo</h3>
+                            <span
+                                class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Playlist
                                 YouTube</span>
                         </div>
                         <div class="flex-1 bg-black relative group">
@@ -778,22 +843,26 @@
 
             <!-- VIEW: HELP (FAQ Accordion) -->
             <div id="view-help" class="view-section hidden space-y-6">
-                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8">
-                    <h3 class="font-semibold text-slate-800 mb-6 text-xl">Foire Aux Questions</h3>
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 transition-colors duration-300">
+                    <h3 class="font-semibold text-slate-800 dark:text-white mb-6 text-xl">Foire Aux Questions</h3>
                     <div class="space-y-4">
 
                         <!-- Item 1 -->
-                        <details class="group border border-slate-200 rounded-lg open:border-purple-200 transition">
+                        <details
+                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
                             <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 rounded-lg group-open:bg-purple-50 group-open:text-purple-700 transition">
-                                <span class="font-medium text-slate-700 group-open:text-purple-700">Qu'est-ce que
+                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                                <span
+                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Qu'est-ce
+                                    que
                                     iziWebCMS ?</span>
                                 <span class="transition group-open:rotate-180">
                                     <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
                                 </span>
                             </summary>
                             <div
-                                class="p-4 text-slate-600 leading-relaxed border-t border-slate-100 group-open:border-purple-100">
+                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
                                 iziWebCMS est un CMS Headless moderne qui connecte vos sources de données existantes
                                 (Substack, YouTube, Podcast) à un frontend ultra-rapide. Il vous permet de gérer
                                 votre
@@ -802,17 +871,20 @@
                         </details>
 
                         <!-- Item 2 -->
-                        <details class="group border border-slate-200 rounded-lg open:border-purple-200 transition">
+                        <details
+                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
                             <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 rounded-lg group-open:bg-purple-50 group-open:text-purple-700 transition">
-                                <span class="font-medium text-slate-700 group-open:text-purple-700">Comment mettre à
+                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                                <span
+                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Comment
+                                    mettre à
                                     jour mon contenu ?</span>
                                 <span class="transition group-open:rotate-180">
                                     <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
                                 </span>
                             </summary>
                             <div
-                                class="p-4 text-slate-600 leading-relaxed border-t border-slate-100 group-open:border-purple-100">
+                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
                                 C'est automatique ! iziWebCMS se synchronise avec vos flux RSS (Substack, YouTube,
                                 Anchor). Dès que vous publiez sur ces plateformes, votre site est mis à jour après
                                 expiration du cache (environ 3 minutes). Vous pouvez forcer la mise à jour avec le
@@ -821,10 +893,13 @@
                         </details>
 
                         <!-- Item 3 -->
-                        <details class="group border border-slate-200 rounded-lg open:border-purple-200 transition">
+                        <details
+                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
                             <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 rounded-lg group-open:bg-purple-50 group-open:text-purple-700 transition">
-                                <span class="font-medium text-slate-700 group-open:text-purple-700">Comment changer
+                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                                <span
+                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Comment
+                                    changer
                                     le
                                     nom de mon site ?</span>
                                 <span class="transition group-open:rotate-180">
@@ -832,7 +907,7 @@
                                 </span>
                             </summary>
                             <div
-                                class="p-4 text-slate-600 leading-relaxed border-t border-slate-100 group-open:border-purple-100">
+                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
                                 Le nom de votre site est défini par la variable d'environnement
                                 <code>META_TITLE</code>
                                 dans Cloudflare Pages. Vous pouvez le modifier dans les paramètres de votre projet
@@ -841,10 +916,13 @@
                         </details>
 
                         <!-- Item 4 -->
-                        <details class="group border border-slate-200 rounded-lg open:border-purple-200 transition">
+                        <details
+                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
                             <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 rounded-lg group-open:bg-purple-50 group-open:text-purple-700 transition">
-                                <span class="font-medium text-slate-700 group-open:text-purple-700">Le Frontend
+                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                                <span
+                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Le
+                                    Frontend
                                     Builder
                                     ne fonctionne pas</span>
                                 <span class="transition group-open:rotate-180">
@@ -852,26 +930,30 @@
                                 </span>
                             </summary>
                             <div
-                                class="p-4 text-slate-600 leading-relaxed border-t border-slate-100 group-open:border-purple-100">
-                                Assurez-vous d'avoir configuré la variable <code>FRONTEND_BUILDER_URL</code> avec le
-                                lien vers votre projet Webstudio. Si ce lien est manquant, le bouton d'accès au
-                                constructeur sera désactivé.
+                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
+                                Le Builder ouvre votre site en mode édition. Assurez-vous d'avoir configuré la variable
+                                <code>FRONTEND_BUILDER_URL</code> avec l'URL de votre éditeur (ex:
+                                https://builder.webstudio.so). Si la page reste blanche, vérifiez si votre navigateur
+                                ne
+                                bloque pas les pop-ups.
                             </div>
                         </details>
 
                         <!-- Item 5 -->
-                        <details class="group border border-slate-200 rounded-lg open:border-purple-200 transition">
+                        <details
+                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
                             <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 rounded-lg group-open:bg-purple-50 group-open:text-purple-700 transition">
-                                <span class="font-medium text-slate-700 group-open:text-purple-700">Pourquoi mes
-                                    images
-                                    ne s'affichent pas ?</span>
+                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                                <span
+                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Mes
+                                    images ne
+                                    s'affichent pas</span>
                                 <span class="transition group-open:rotate-180">
                                     <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
                                 </span>
                             </summary>
                             <div
-                                class="p-4 text-slate-600 leading-relaxed border-t border-slate-100 group-open:border-purple-100">
+                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
                                 iziWebCMS utilise un proxy intelligent pour afficher votre site Webstudio sur votre
                                 propre domaine. Si des images manquent, c'est souvent lié à une configuration DNS ou
                                 CSP. Le système gère, cependant, automatiquement la plupart des cas via le proxy
@@ -889,14 +971,18 @@
     <!-- Modal Preview -->
     <div id="preview-modal"
         class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
-            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <h3 id="modal-title" class="font-bold text-lg text-slate-800 truncate pr-4">Titre de l'article</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition">
+        <div
+            class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
+            <div
+                class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-700/50">
+                <h3 id="modal-title" class="font-bold text-lg text-slate-800 dark:text-white truncate pr-4">Titre de
+                    l'article</h3>
+                <button onclick="closeModal()"
+                    class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            <div id="modal-content" class="p-8 overflow-y-auto prose prose-purple max-w-none">
+            <div id="modal-content" class="p-8 overflow-y-auto prose prose-purple dark:prose-invert max-w-none">
                 <!-- Content -->
             </div>
         </div>

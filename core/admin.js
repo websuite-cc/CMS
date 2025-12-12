@@ -522,7 +522,7 @@ function renderPodcasts() {
             </td>
             <td class="px-6 py-4 text-slate-500 text-xs">${new Date(podcast.pubDate).toLocaleDateString('fr-FR')}</td>
             <td class="px-6 py-4 text-right">
-                <button onclick="openPodcastPreview('${podcast.link}')" class="bg-white border border-slate-200 hover:border-purple-500 text-slate-600 hover:text-purple-600 px-3 py-1.5 rounded-md text-sm transition shadow-sm">
+                <button onclick="openPodcastPreview('${podcast.link}')" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 hover:border-purple-500 dark:hover:border-purple-400 text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-1.5 rounded-md text-sm transition shadow-sm">
                     <i class="fas fa-play mr-1"></i> Ouvrir
                 </button>
             </td>
