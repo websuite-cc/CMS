@@ -24,7 +24,7 @@ vars = { }
 
 # Exemple de variables non sensibles (peuvent rester dans wrangler.toml)
 [vars]
-META_TITLE = "StackPages CMS"
+META_TITLE = "iziWebCMS"
 META_DESCRIPTION = "Portail de gestion de contenu basé sur RSS"
 META_KEYWORDS = "cms,blog,substack,youtube,podcast"
 FRONTEND_BUILDER_URL = "https://apps.webstudio.is/dashboard"

@@ -1,4 +1,4 @@
-# Configuration Mode Local - StackPages CMS
+# Configuration Mode Local - iziWebCMS
 
 ## ✅ Modifications effectuées
 

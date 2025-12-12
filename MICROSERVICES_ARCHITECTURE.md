@@ -1,4 +1,4 @@
-# 🏗️ Architecture Microservices - StackPages CMS
+# 🏗️ Architecture Microservices - iziWebCMS
 
 ## ✨ Structure Complète
 

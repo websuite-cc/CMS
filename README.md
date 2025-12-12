@@ -1,4 +1,4 @@
-# 🎯 StackPages CMS - Cloudflare Pages Edition
+# 🎯 iziWebCMS - Cloudflare Pages Edition
 
 > **CMS headless moderne** basé sur RSS (Substack, YouTube, Podcasts) déployable sur Cloudflare Pages en un clic.
 
@@ -320,5 +320,5 @@ MIT License - Voir [LICENSE](LICENSE) pour plus de détails.
 
 <p align="center">
   Fait avec ❤️ pour la communauté<br>
-  <strong>StackPages CMS</strong> - Votre contenu, partout, facilement.
+  <strong>iziWebCMS</strong> - Votre contenu, partout, facilement.
 </p>

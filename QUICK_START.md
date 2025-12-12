@@ -1,4 +1,4 @@
-# 🚀 Guide de Démarrage Rapide - StackPages CMS
+# 🚀 Guide de Démarrage Rapide - iziWebCMS
 
 ## ✅ Configuration en 5 minutes
 
@@ -62,7 +62,7 @@ http://localhost:8787/api/metadata
 Vous devriez voir un JSON avec :
 ```json
 {
-  "siteName": "StackPages Portal",
+  "siteName": "iziWebCMS",
   "description": "Portail de contenus",
   "author": "Admin",
   ...

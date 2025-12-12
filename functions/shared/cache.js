@@ -100,7 +100,7 @@ export async function getCachedPodcastData(feedUrl, forceRefresh = false) {
 
     try {
         const res = await fetch(feedUrl, {
-            headers: { "User-Agent": "StackPages-Worker/1.0" }
+            headers: { "User-Agent": "iziWebCMS-Worker/1.0" }
         });
         if (!res.ok) throw new Error(`Failed to fetch RSS: ${res.status}`);
 

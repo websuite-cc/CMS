@@ -123,7 +123,7 @@ async function loadData() {
         // Update UI with Metadata
         // Update UI with Metadata
         // const siteNameEl = document.getElementById('dashboard-site-name');
-        // if (siteNameEl) siteNameEl.textContent = metadata.siteName || 'StackPages CMS';
+        // if (siteNameEl) siteNameEl.textContent = metadata.siteName || 'iziWebCMS CMS';
 
         // const authorEl = document.getElementById('dashboard-author');
         // if (authorEl) authorEl.textContent = metadata.author || 'Admin';
