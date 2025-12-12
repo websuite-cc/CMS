@@ -48,10 +48,16 @@ export async function onRequest(context) {
         // Construire l'URL Webstudio
         const webstudioUrl = new URL(url.pathname + url.search, WSTD_STAGING_URL);
 
+        // Créer de nouveaux headers sans Referer/Origin du worker
+        const proxyHeaders = new Headers(request.headers);
+        proxyHeaders.delete('referer');
+        proxyHeaders.delete('origin');
+        proxyHeaders.set('host', new URL(WSTD_STAGING_URL).hostname);
+
         // Créer une nouvelle requête vers Webstudio
         const webstudioRequest = new Request(webstudioUrl, {
             method: request.method,
-            headers: request.headers,
+            headers: proxyHeaders,
             body: request.body,
             redirect: 'follow'
         });
@@ -83,22 +89,9 @@ export async function onRequest(context) {
         newHeaders.delete('X-Content-Security-Policy');
         newHeaders.delete('X-WebKit-CSP');
 
-        // Si c'est du HTML, ajouter simplement les headers CORS
-        const contentType = webstudioResponse.headers.get('content-type') || '';
-        if (contentType.includes('text/html')) {
-            // Pas de réécriture d'URLs !
-            // Les images/assets restent sur leurs URLs Webstudio originales
-            // Le navigateur les chargera directement depuis Webstudio
 
-            // Retourner le HTML tel quel avec headers CORS
-            return new Response(webstudioResponse.body, {
-                status: webstudioResponse.status,
-                statusText: webstudioResponse.statusText,
-                headers: newHeaders
-            });
-        }
-
-        // Pour les autres types de contenu (CSS, JS, images), passer avec headers CORS
+        // Pour TOUS les types de contenu (HTML, images, CSS, JS, etc.)
+        // Retourner avec headers CORS
         return new Response(webstudioResponse.body, {
             status: webstudioResponse.status,
             statusText: webstudioResponse.statusText,
