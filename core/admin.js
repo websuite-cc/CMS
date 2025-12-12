@@ -324,14 +324,14 @@ function renderDashboard() {
     const postsTbody = document.getElementById('dashboard-recent-posts');
     if (postsTbody) {
         if (!appState.posts || appState.posts.length === 0) {
-            postsTbody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-slate-500">Aucun article trouvé.</td></tr>';
+            postsTbody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-slate-500 dark:text-slate-400">Aucun article trouvé.</td></tr>';
         } else {
             postsTbody.innerHTML = appState.posts.slice(0, 5).map(post => `
-                <tr class="hover:bg-slate-50 transition">
-                    <td class="px-6 py-4 font-medium text-slate-800 truncate max-w-xs" title="${post.title}">${post.title}</td>
-                    <td class="px-6 py-4 text-slate-500">${new Date(post.pubDate).toLocaleDateString('fr-FR')}</td>
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition border-b border-transparent dark:border-slate-700/50 last:border-0">
+                    <td class="px-6 py-4 font-medium text-slate-800 dark:text-white truncate max-w-xs" title="${post.title}">${post.title}</td>
+                    <td class="px-6 py-4 text-slate-500 dark:text-slate-400">${new Date(post.pubDate).toLocaleDateString('fr-FR')}</td>
                     <td class="px-6 py-4 text-right">
-                        <button onclick="openPreview('${post.slug}')" class="text-orange-500 hover:text-purple-700 font-medium text-xs uppercase tracking-wide">Voir</button>
+                        <button onclick="openPreview('${post.slug}')" class="text-purple-600 dark:text-purple-400 hover:text-purple-700 font-medium text-xs uppercase tracking-wide">Voir</button>
                     </td>
                 </tr>
             `).join('');
@@ -342,32 +342,32 @@ function renderDashboard() {
     const videosTbody = document.getElementById('dashboard-recent-videos');
     if (videosTbody) {
         if (!appState.videos || appState.videos.length === 0) {
-            videosTbody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-slate-500">Aucune vidéo trouvée.</td></tr>';
+            videosTbody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-slate-500 dark:text-slate-400">Aucune vidéo trouvée.</td></tr>';
         } else {
             videosTbody.innerHTML = appState.videos.slice(0, 5).map(video => `
-                <tr class="hover:bg-slate-50 transition">
-                    <td class="px-6 py-4 font-medium text-slate-800 truncate max-w-xs" title="${video.title}">${video.title}</td>
-                    <td class="px-6 py-4 text-slate-500">${new Date(video.published).toLocaleDateString('fr-FR')}</td>
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition border-b border-transparent dark:border-slate-700/50 last:border-0">
+                    <td class="px-6 py-4 font-medium text-slate-800 dark:text-white truncate max-w-xs" title="${video.title}">${video.title}</td>
+                    <td class="px-6 py-4 text-slate-500 dark:text-slate-400">${new Date(video.published).toLocaleDateString('fr-FR')}</td>
                     <td class="px-6 py-4 text-right">
-                        <button onclick="openVideoPreview('${video.link}')" class="text-red-500 hover:text-red-700 font-medium text-xs uppercase tracking-wide">Voir</button>
+                        <button onclick="openVideoPreview('${video.link}')" class="text-purple-600 dark:text-purple-400 hover:text-purple-700 font-medium text-xs uppercase tracking-wide">Voir</button>
                     </td>
                 </tr>
             `).join('');
         }
     }
 
-    // Recent Podcasts
+    // Recent Podcasts (Optimized safety check)
     const podcastsTbody = document.getElementById('dashboard-recent-podcasts');
     if (podcastsTbody) {
         if (!appState.podcasts || appState.podcasts.length === 0) {
-            podcastsTbody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-slate-500">Aucun podcast trouvé.</td></tr>';
+            podcastsTbody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-slate-500 dark:text-slate-400">Aucun podcast trouvé.</td></tr>';
         } else {
             podcastsTbody.innerHTML = appState.podcasts.slice(0, 5).map(podcast => `
-                <tr class="hover:bg-slate-50 transition">
-                    <td class="px-6 py-4 font-medium text-slate-800 truncate max-w-xs" title="${podcast.title}">${podcast.title}</td>
-                    <td class="px-6 py-4 text-slate-500">${new Date(podcast.pubDate).toLocaleDateString('fr-FR')}</td>
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition">
+                    <td class="px-6 py-4 font-medium text-slate-800 dark:text-white truncate max-w-xs" title="${podcast.title}">${podcast.title}</td>
+                    <td class="px-6 py-4 text-slate-500 dark:text-slate-400">${new Date(podcast.pubDate).toLocaleDateString('fr-FR')}</td>
                     <td class="px-6 py-4 text-right">
-                        <button onclick="openPodcastPreview('${podcast.link}')" class="text-blue-500 hover:text-blue-700 font-medium text-xs uppercase tracking-wide">Ouvrir</button>
+                        <button onclick="openPodcastPreview('${podcast.link}')" class="text-blue-500 dark:text-blue-400 hover:text-blue-700 font-medium text-xs uppercase tracking-wide">Ouvrir</button>
                     </td>
                 </tr>
             `).join('');
@@ -395,19 +395,19 @@ function renderContentTable() {
 
     // Update Table
     tbody.innerHTML = paginatedPosts.map(post => `
-        <tr class="hover:bg-slate-50 transition group">
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition group border-b border-transparent dark:border-slate-700/50 last:border-0">
             <td class="px-6 py-4">
-                <div class="w-16 h-10 rounded bg-slate-200 overflow-hidden">
-                    ${post.image ? `<img src="${post.image}" class="w-full h-full object-cover" />` : '<div class="w-full h-full flex items-center justify-center text-slate-400"><i class="fas fa-image"></i></div>'}
+                <div class="w-16 h-10 rounded bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                    ${post.image ? `<img src="${post.image}" class="w-full h-full object-cover" />` : '<div class="w-full h-full flex items-center justify-center text-slate-400 dark:text-slate-500"><i class="fas fa-image"></i></div>'}
                 </div>
             </td>
-            <td class="px-6 py-4 font-medium text-slate-800">
+            <td class="px-6 py-4 font-medium text-slate-800 dark:text-white">
                 ${post.title}
-                <div class="text-xs text-slate-400 mt-0.5 truncate max-w-md">${post.description.substring(0, 60)}...</div>
+                <div class="text-xs text-slate-400 dark:text-slate-500 mt-0.5 truncate max-w-md">${post.description.substring(0, 60)}...</div>
             </td>
-            <td class="px-6 py-4 text-slate-500 text-xs">${new Date(post.pubDate).toLocaleDateString('fr-FR')}</td>
+            <td class="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs">${new Date(post.pubDate).toLocaleDateString('fr-FR')}</td>
             <td class="px-6 py-4 text-right">
-                <button onclick="openPreview('${post.slug}')" class="bg-white border border-slate-200 hover:border-purple-500 text-slate-600 hover:text-purple-600 px-3 py-1.5 rounded-md text-sm transition shadow-sm">
+                <button onclick="openPreview('${post.slug}')" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 hover:border-purple-500 dark:hover:border-purple-400 text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-1.5 rounded-md text-sm transition shadow-sm">
                     <i class="fas fa-eye mr-1"></i> Aperçu
                 </button>
             </td>
@@ -451,7 +451,7 @@ function renderVideos() {
     const filtered = appState.videos.filter(v => v.title.toLowerCase().includes(search));
 
     if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-12 bg-slate-50 rounded-lg border border-dashed border-slate-300"><i class="fas fa-video text-4xl text-slate-300 mb-3"></i><p class="text-slate-500">Aucune vidéo trouvée</p></td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-12 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-dashed border-slate-300 dark:border-slate-700"><i class="fas fa-video text-4xl text-slate-300 dark:text-slate-600 mb-3"></i><p class="text-slate-500 dark:text-slate-400">Aucune vidéo trouvée</p></td></tr>`;
         document.getElementById('video-pagination-info').textContent = `Page 1 sur 1`;
         document.getElementById('prev-video-page-btn').disabled = true;
         document.getElementById('next-video-page-btn').disabled = true;
@@ -465,19 +465,19 @@ function renderVideos() {
     const pageVideos = filtered.slice(start, start + VIDEOS_PER_PAGE);
 
     tbody.innerHTML = pageVideos.map(video => `
-        <tr class="hover:bg-slate-50 transition group">
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition group border-b border-transparent dark:border-slate-700/50 last:border-0">
             <td class="px-6 py-4">
-                <div class="w-16 h-10 rounded bg-slate-200 overflow-hidden">
-                    ${video.thumbnail ? `<img src="${video.thumbnail}" class="w-full h-full object-cover"/>` : '<div class="w-full h-full flex items-center justify-center text-slate-400"><i class="fas fa-video"></i></div>'}
+                <div class="w-16 h-10 rounded bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                    ${video.thumbnail ? `<img src="${video.thumbnail}" class="w-full h-full object-cover"/>` : '<div class="w-full h-full flex items-center justify-center text-slate-400 dark:text-slate-500"><i class="fas fa-video"></i></div>'}
                 </div>
             </td>
-            <td class="px-6 py-4 font-medium text-slate-800">
+            <td class="px-6 py-4 font-medium text-slate-800 dark:text-white">
                 ${video.title}
-                <div class="text-xs text-slate-400 mt-0.5 truncate max-w-md">${video.description ? video.description.substring(0, 60) + '...' : ''}</div>
+                <div class="text-xs text-slate-400 dark:text-slate-500 mt-0.5 truncate max-w-md">${video.description ? video.description.substring(0, 60) + '...' : ''}</div>
             </td>
-            <td class="px-6 py-4 text-slate-500 text-xs">${new Date(video.published).toLocaleDateString('fr-FR')}</td>
+            <td class="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs">${new Date(video.published).toLocaleDateString('fr-FR')}</td>
             <td class="px-6 py-4 text-right">
-                <button onclick="openVideoPreview('${video.link}')" class="bg-white border border-slate-200 hover:border-purple-500 text-slate-600 hover:text-purple-600 px-3 py-1.5 rounded-md text-sm transition shadow-sm">
+                <button onclick="openVideoPreview('${video.link}')" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 hover:border-purple-500 dark:hover:border-purple-400 text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-1.5 rounded-md text-sm transition shadow-sm">
                     <i class="fas fa-eye mr-1"></i> Aperçu
                 </button>
             </td>
