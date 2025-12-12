@@ -106,7 +106,7 @@
 
                 if (res.ok) {
                     localStorage.setItem('stackpages_auth', password);
-                    window.location.href = '/dashboard';
+                    window.location.href = '/admin/dashboard.html';
                 } else {
                     errorDiv.textContent = "Identifiants incorrects.";
                     errorDiv.classList.remove('hidden');
