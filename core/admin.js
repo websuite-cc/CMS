@@ -140,13 +140,13 @@ function showView(viewName) {
 
     // Update Nav State
     document.querySelectorAll('.nav-item').forEach(el => {
-        el.classList.remove('bg-purple-50', 'text-purple-600');
-        el.classList.add('text-slate-600');
+        el.classList.remove('bg-purple-50', 'dark:bg-slate-700', 'text-purple-600', 'dark:text-purple-400');
+        el.classList.add('text-slate-600', 'dark:text-slate-300');
     });
     const activeBtn = document.querySelector(`button[onclick="showView('${viewName}')"]`);
     if (activeBtn) {
-        activeBtn.classList.add('bg-purple-50', 'text-purple-600');
-        activeBtn.classList.remove('text-slate-600');
+        activeBtn.classList.add('bg-purple-50', 'dark:bg-slate-700', 'text-purple-600', 'dark:text-purple-400');
+        activeBtn.classList.remove('text-slate-600', 'dark:text-slate-300');
     }
 }
 
@@ -515,7 +515,7 @@ function renderPodcasts() {
     const pagePodcasts = filtered.slice(start, start + PODCASTS_PER_PAGE);
 
     tbody.innerHTML = pagePodcasts.map(podcast => `
-        <tr class="hover:bg-slate-50 transition group">
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition group">
             <td class="px-6 py-4 font-medium text-slate-800">
                 ${podcast.title}
                 <div class="text-xs text-slate-400 mt-0.5 truncate max-w-md">${podcast.description ? podcast.description.replace(/<[^>]*>/g, '').substring(0, 60) + '...' : ''}</div>
