@@ -97,18 +97,19 @@ export async function onRequest(context) {
                 `https://${workerDomain}`
             );
 
-            // 2. Réécrire les chemins relatifs simples dans src et href
-            // MAIS ignorer les chemins spéciaux Webstudio (/cgi/, /assets/, /_next/)
+            // 2. Réécrire les chemins relatifs dans src et href
             html = html.replace(
                 /(\s(?:src|href)=["'])\/([^"']+)(["'])/gi,
                 (match, prefix, path, suffix) => {
-                    // Ne PAS réécrire les chemins spéciaux Webstudio
-                    if (path.startsWith('cgi/') ||
-                        path.startsWith('assets/') ||
-                        path.startsWith('_next/') ||
-                        path.startsWith('_astro/')) {
-                        return match; // Garder tel quel
+                    // Chemins spéciaux Webstudio (/cgi/, /assets/) → pointer vers Webstudio directement
+                    if (path.startsWith('cgi/') || path.startsWith('assets/')) {
+                        return `${prefix}${WSTD_STAGING_URL}/${path}${suffix}`;
                     }
+                    // Chemins framework (_next/, _astro/) → garder relatifs pour proxy
+                    if (path.startsWith('_next/') || path.startsWith('_astro/')) {
+                        return match;
+                    }
+                    // Autres chemins → réécrire vers le worker
                     return `${prefix}https://${workerDomain}/${path}${suffix}`;
                 }
             );
@@ -132,13 +133,18 @@ export async function onRequest(context) {
 
                             const [, url, descriptor = ''] = urlMatch;
 
-                            // Réécrire seulement les chemins relatifs (commençant par /)
-                            // SAUF les chemins spéciaux Webstudio
-                            if (url.startsWith('/') &&
-                                !url.startsWith('/cgi/') &&
-                                !url.startsWith('/assets/') &&
-                                !url.startsWith('/_next/') &&
-                                !url.startsWith('/_astro/')) {
+                            // Réécrire les chemins relatifs commençant par /
+                            if (url.startsWith('/')) {
+                                // Chemins spéciaux Webstudio (/cgi/, /assets/) → pointer vers Webstudio directement
+                                if (url.startsWith('/cgi/') || url.startsWith('/assets/')) {
+                                    const rewrittenUrl = `${WSTD_STAGING_URL}${url}`;
+                                    return rewrittenUrl + descriptor;
+                                }
+                                // Chemins framework → garder relatifs
+                                if (url.startsWith('/_next/') || url.startsWith('/_astro/')) {
+                                    return trimmed;
+                                }
+                                // Autres chemins → réécrire vers le worker
                                 const rewrittenUrl = `https://${workerDomain}${url}`;
                                 return rewrittenUrl + descriptor;
                             }
