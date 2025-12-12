@@ -1,7 +1,7 @@
 // Agent de Démonstration
 // URL: /agents/demo
 
-import { jsonResponse } from '../../shared/utils.js';
+import { jsonResponse } from '../shared/utils.js';
 
 export async function onRequest(context) {
     const { request, env } = context;
