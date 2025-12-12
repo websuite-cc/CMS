@@ -59,6 +59,14 @@ export async function onRequest(context) {
         // Fetch depuis Webstudio
         const webstudioResponse = await fetch(webstudioRequest);
 
+        // Créer de nouveaux headers avec CORS ajoutés
+        const newHeaders = new Headers(webstudioResponse.headers);
+
+        // Ajouter les headers CORS pour permettre le chargement cross-origin
+        newHeaders.set('Access-Control-Allow-Origin', '*');
+        newHeaders.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        newHeaders.set('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Key');
+
         // Si c'est du HTML, réécrire les URLs
         const contentType = webstudioResponse.headers.get('content-type') || '';
         if (contentType.includes('text/html')) {
@@ -74,16 +82,20 @@ export async function onRequest(context) {
                 `https://${workerDomain}`
             );
 
-            // Retourner le HTML modifié
+            // Retourner le HTML modifié avec headers CORS
             return new Response(html, {
                 status: webstudioResponse.status,
                 statusText: webstudioResponse.statusText,
-                headers: webstudioResponse.headers
+                headers: newHeaders
             });
         }
 
-        // Pour les autres types de contenu (CSS, JS, images), passer tel quel
-        return webstudioResponse;
+        // Pour les autres types de contenu (CSS, JS, images), passer avec headers CORS
+        return new Response(webstudioResponse.body, {
+            status: webstudioResponse.status,
+            statusText: webstudioResponse.statusText,
+            headers: newHeaders
+        });
 
     } catch (error) {
         console.error('Erreur proxy Webstudio:', error);
