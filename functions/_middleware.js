@@ -88,21 +88,41 @@ export async function onRequest(context) {
         if (contentType.includes('text/html')) {
             let html = await webstudioResponse.text();
 
-            // Remplacer les URLs Webstudio par l'URL du worker
             const webstudioDomain = new URL(WSTD_STAGING_URL).hostname;
             const workerDomain = url.hostname;
 
-            // Réécrire toutes les URLs absolues Webstudio
+            // 1. Réécrire toutes les URLs absolues Webstudio
             html = html.replace(
                 new RegExp(`https?://${webstudioDomain.replace(/\./g, '\\.')}`, 'g'),
                 `https://${workerDomain}`
             );
 
-            // Réécrire les chemins relatifs dans les attributs src, href, srcset
-            // Pour que les assets locaux de Webstudio soient proxiés
+            // 2. Réécrire les chemins relatifs simples dans src et href
             html = html.replace(
-                /(\s(?:src|href|srcset)=["'])\/([^"']+)(["'])/gi,
+                /(\s(?:src|href)=["'])\/([^"']+)(["'])/gi,
                 `$1https://${workerDomain}/$2$3`
+            );
+
+            // 3. Réécrire les srcset (format spécial avec virgules et descripteurs)
+            // Exemple: srcset="/img1.jpg 480w, /img2.jpg 800w, /img3.jpg 1200w"
+            html = html.replace(
+                /srcset=["']([^"']+)["']/gi,
+                (match, srcsetContent) => {
+                    // Séparer par virgule, réécrire chaque URL, rejoindre
+                    const rewritten = srcsetContent
+                        .split(',')
+                        .map(part => {
+                            // Chaque part = "URL descripteur" (ex: "/image.jpg 480w")
+                            const trimmed = part.trim();
+                            // Réécrire seulement si commence par /
+                            if (trimmed.startsWith('/')) {
+                                return trimmed.replace(/^\//, `https://${workerDomain}/`);
+                            }
+                            return trimmed;
+                        })
+                        .join(', ');
+                    return `srcset="${rewritten}"`;
+                }
             );
 
             // Retourner le HTML modifié avec headers CORS
