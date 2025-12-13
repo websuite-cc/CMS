@@ -769,316 +769,349 @@
                     </div>
 
                     <!-- Agents List -->
-                    <div <!-- SERVICES MODAL -->
-                        <div id="services-modal"
-                            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 hidden backdrop-blur-sm p-4">
-                            <div
-                                class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700 animate-fade-in-up">
-                                <!-- Helper for animation -->
-                                <style>
-                                    @keyframes fadeInUp {
-                                        from {
-                                            opacity: 0;
-                                            transform: translateY(20px);
-                                        }
-
-                                        to {
-                                            opacity: 1;
-                                            transform: translateY(0);
-                                        }
-                                    }
-
-                                    .animate-fade-in-up {
-                                        animation: fadeInUp 0.3s ease-out;
-                                    }
-                                </style>
-
-                                <!-- Header -->
-                                <div
-                                    class="p-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50 rounded-t-2xl">
-                                    <div>
-                                        <h2 class="text-xl font-bold dark:text-white flex items-center gap-3">
-                                            <div
-                                                class="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg text-emerald-600 dark:text-emerald-400">
-                                                <i class="fas fa-plug"></i>
-                                            </div>
-                                            Services Connectés
-                                        </h2>
-                                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Gérez les connexions
-                                            aux services tiers indispensables pour vos agents.</p>
-                                    </div>
-                                    <button onclick="document.getElementById('services-modal').classList.add('hidden')"
-                                        class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full">
-                                        <i class="fas fa-times text-xl"></i>
-                                    </button>
-                                </div>
-
-                                <!-- Content Grid -->
-                                <div class="p-8">
-                                    <!-- Google Ecosystem -->
-                                    <div class="mb-8">
-
-
-                                        <div
-                                            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                                            <!-- Gmail -->
-                                            <div
-                                                class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                                <i class="fas fa-envelope text-red-500 text-2xl mb-2"></i>
-                                                <span
-                                                    class="text-xs font-medium text-slate-700 dark:text-slate-300">Gmail</span>
-                                            </div>
-                                            <!-- Sheets -->
-                                            <div
-                                                class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                                <i class="fas fa-table text-emerald-500 text-2xl mb-2"></i>
-                                                <span
-                                                    class="text-xs font-medium text-slate-700 dark:text-slate-300">Sheets</span>
-                                            </div>
-                                            <!-- Drive -->
-                                            <div
-                                                class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                                <i class="fab fa-google-drive text-blue-500 text-2xl mb-2"></i>
-                                                <span
-                                                    class="text-xs font-medium text-slate-700 dark:text-slate-300">Drive</span>
-                                            </div>
-                                            <!-- Docs -->
-                                            <div
-                                                class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                                <i class="fas fa-file-alt text-blue-600 text-2xl mb-2"></i>
-                                                <span
-                                                    class="text-xs font-medium text-slate-700 dark:text-slate-300">Docs</span>
-                                            </div>
-                                            <!-- YouTube -->
-                                            <div
-                                                class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                                <i class="fab fa-youtube text-red-600 text-2xl mb-2"></i>
-                                                <span
-                                                    class="text-xs font-medium text-slate-700 dark:text-slate-300">YouTube</span>
-                                            </div>
-                                            <!-- Analytics -->
-                                            <div
-                                                class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                                <i class="fas fa-chart-line text-orange-500 text-2xl mb-2"></i>
-                                                <span
-                                                    class="text-xs font-medium text-slate-700 dark:text-slate-300">Analytics</span>
-                                            </div>
-                                            <!-- Calendar -->
-                                            <div
-                                                class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                                <i class="fas fa-calendar-alt text-blue-500 text-2xl mb-2"></i>
-                                                <span
-                                                    class="text-xs font-medium text-slate-700 dark:text-slate-300">Calendar</span>
-                                            </div>
-                                            <!-- BigQuery -->
-                                            <div
-                                                class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                                <i class="fas fa-database text-teal-600 text-2xl mb-2"></i>
-                                                <span
-                                                    class="text-xs font-medium text-slate-700 dark:text-slate-300">BigQuery</span>
-                                            </div>
-                                            <!-- Forms -->
-                                            <div
-                                                class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                                <i class="fas fa-list-alt text-purple-500 text-2xl mb-2"></i>
-                                                <span
-                                                    class="text-xs font-medium text-slate-700 dark:text-slate-300">Forms</span>
-                                            </div>
-                                            <!-- Contacts -->
-                                            <div
-                                                class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                                <i class="fas fa-address-book text-blue-400 text-2xl mb-2"></i>
-                                                <span
-                                                    class="text-xs font-medium text-slate-700 dark:text-slate-300">Contacts</span>
-                                            </div>
-                                            <!-- Tasks -->
-                                            <div
-                                                class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                                <i class="fas fa-check-circle text-blue-500 text-2xl mb-2"></i>
-                                                <span
-                                                    class="text-xs font-medium text-slate-700 dark:text-slate-300">Tasks</span>
-                                            </div>
-                                            <!-- Meet -->
-                                            <div
-                                                class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                                <i class="fas fa-video text-emerald-600 text-2xl mb-2"></i>
-                                                <span
-                                                    class="text-xs font-medium text-slate-700 dark:text-slate-300">Meet</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                                        <!-- GitHub -->
-                                        <div
-                                            class="group relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg hover:border-emerald-500/50 transition-all duration-300">
-                                            <div class="absolute top-4 right-4">
-                                                <span
-                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                                    <i class="fas fa-check-circle mr-1"></i> Connecté
-                                                </span>
-                                            </div>
-                                            <div class="mb-4">
-                                                <div
-                                                    class="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-110 transition-transform">
-                                                    <i class="fab fa-github"></i>
-                                                </div>
-                                            </div>
-                                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">GitHub
-                                            </h3>
-                                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 min-h-[40px]">
-                                                Stockage et versionning de vos agents. Indispensable pour l'exécution du
-                                                code.
-                                            </p>
-                                            <a href="https://github.com/settings/tokens" target="_blank"
-                                                class="inline-flex w-full justify-center items-center px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg text-sm font-medium transition gap-2">
-                                                <i class="fas fa-external-link-alt"></i> Configurer
-                                            </a>
-                                        </div>
-
-                                        <!-- CronJob.org -->
-                                        <div
-                                            class="group relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg hover:border-blue-500/50 transition-all duration-300">
-                                            <div class="absolute top-4 right-4">
-                                                <span
-                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                                    <i class="fas fa-check-circle mr-1"></i> Connecté
-                                                </span>
-                                            </div>
-                                            <div class="mb-4">
-                                                <div
-                                                    class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-110 transition-transform">
-                                                    <i class="fas fa-clock"></i>
-                                                </div>
-                                            </div>
-                                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
-                                                CronJob.org</h3>
-                                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 min-h-[40px]">
-                                                Planificateur de tâches externe gratuit et fiable pour exécuter vos
-                                                agents.
-                                            </p>
-                                            <a href="https://console.cron-job.org/settings" target="_blank"
-                                                class="inline-flex w-full justify-center items-center px-4 py-2 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-lg text-sm font-medium transition gap-2">
-                                                <i class="fas fa-cog"></i> Configurer
-                                            </a>
-                                        </div>
-
-                                        <!-- Google AI -->
-                                        <div
-                                            class="group relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg hover:border-purple-500/50 transition-all duration-300">
-                                            <div class="absolute top-4 right-4">
-                                                <span
-                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                                    <i class="fas fa-check-circle mr-1"></i> Connecté
-                                                </span>
-                                            </div>
-                                            <div class="mb-4">
-                                                <div
-                                                    class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-110 transition-transform">
-                                                    <i class="fab fa-google"></i>
-                                                </div>
-                                            </div>
-                                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Google AI
-                                            </h3>
-                                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 min-h-[40px]">
-                                                Moteur d'intelligence artificielle Gemini pour générer le code de vos
-                                                agents.
-                                            </p>
-                                            <a href="https://aistudio.google.com/app/apikey" target="_blank"
-                                                class="inline-flex w-full justify-center items-center px-4 py-2 bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-300 rounded-lg text-sm font-medium transition gap-2">
-                                                <i class="fas fa-key"></i> Obtenir Clé API
-                                            </a>
-                                        </div>
-
-                                    </div>
-
-
-
-                                </div>
-                            </div>
+                    <div id="agents-list" class="mt-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-bold text-slate-800 dark:text-white">Agents</h2>
+                            <button id="btn-create-agent" disabled
+                                class="px-4 py-2 bg-white text-emerald-700 hover:bg-emerald-50 rounded-lg text-sm font-bold shadow transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <i class="fas fa-plus"></i> Nouvel Agent
+                            </button>
                         </div>
+                        <div id="agents-table" class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-700">
+                                <thead>
+                                    <tr>
+                                        <th
+                                            class="px-4 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                            Nom</th>
+                                        <th
+                                            class="px-4 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                            Email</th>
+                                        <th
+                                            class="px-4 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                            Role</th>
+                                        <th
+                                            class="px-4 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                            Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="agents-body" class="divide-y divide-slate-100 dark:divide-slate-700">
+                                    <!-- Agents will be dynamically added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-                        <!-- Agents List -->
+                    <!-- SERVICES MODAL -->
+                    <div id="services-modal"
+                        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 hidden backdrop-blur-sm p-4">
                         <div
-                            class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden transition-colors duration-300">
+                            class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700 animate-fade-in-up">
+                            <!-- Helper for animation -->
+                            <style>
+                                @keyframes fadeInUp {
+                                    from {
+                                        opacity: 0;
+                                        transform: translateY(20px);
+                                    }
+
+                                    to {
+                                        opacity: 1;
+                                        transform: translateY(0);
+                                    }
+                                }
+
+                                .animate-fade-in-up {
+                                    animation: fadeInUp 0.3s ease-out;
+                                }
+                            </style>
+
+                            <!-- Header -->
                             <div
-                                class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-white dark:bg-slate-800 transition-colors duration-300">
-                                <h3 class="font-semibold text-slate-800 dark:text-white">Mes Agents</h3>
-                                <button onclick="loadAgents()" class="text-slate-400 hover:text-emerald-500 transition"
-                                    title="Actualiser">
-                                    <i class="fas fa-sync-alt"></i>
+                                class="p-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50 rounded-t-2xl">
+                                <div>
+                                    <h2 class="text-xl font-bold dark:text-white flex items-center gap-3">
+                                        <div
+                                            class="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg text-emerald-600 dark:text-emerald-400">
+                                            <i class="fas fa-plug"></i>
+                                        </div>
+                                        Services Connectés
+                                    </h2>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Gérez les connexions
+                                        aux services tiers indispensables pour vos agents.</p>
+                                </div>
+                                <button onclick="document.getElementById('services-modal').classList.add('hidden')"
+                                    class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full">
+                                    <i class="fas fa-times text-xl"></i>
                                 </button>
                             </div>
 
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-sm text-left">
-                                    <thead
-                                        class="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 font-medium">
-                                        <tr>
-                                            <th class="px-6 py-3">Statut</th>
-                                            <th class="px-6 py-3">Nom de l'Agent</th>
-                                            <th class="px-6 py-3">Dernière exécution</th>
-                                            <th class="px-6 py-3 text-right">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="agents-table" class="divide-y divide-slate-100 dark:divide-slate-700">
-                                        <!-- Populated by JS -->
-                                    </tbody>
-                                </table>
+                            <!-- Content Grid -->
+                            <div class="p-8">
+                                <!-- Google Ecosystem -->
+                                <div class="mb-8">
+
+
+                                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                                        <!-- Gmail -->
+                                        <div
+                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                            <i class="fas fa-envelope text-red-500 text-2xl mb-2"></i>
+                                            <span
+                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Gmail</span>
+                                        </div>
+                                        <!-- Sheets -->
+                                        <div
+                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                            <i class="fas fa-table text-emerald-500 text-2xl mb-2"></i>
+                                            <span
+                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Sheets</span>
+                                        </div>
+                                        <!-- Drive -->
+                                        <div
+                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                            <i class="fab fa-google-drive text-blue-500 text-2xl mb-2"></i>
+                                            <span
+                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Drive</span>
+                                        </div>
+                                        <!-- Docs -->
+                                        <div
+                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                            <i class="fas fa-file-alt text-blue-600 text-2xl mb-2"></i>
+                                            <span
+                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Docs</span>
+                                        </div>
+                                        <!-- YouTube -->
+                                        <div
+                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                            <i class="fab fa-youtube text-red-600 text-2xl mb-2"></i>
+                                            <span
+                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">YouTube</span>
+                                        </div>
+                                        <!-- Analytics -->
+                                        <div
+                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                            <i class="fas fa-chart-line text-orange-500 text-2xl mb-2"></i>
+                                            <span
+                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Analytics</span>
+                                        </div>
+                                        <!-- Calendar -->
+                                        <div
+                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                            <i class="fas fa-calendar-alt text-blue-500 text-2xl mb-2"></i>
+                                            <span
+                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Calendar</span>
+                                        </div>
+                                        <!-- BigQuery -->
+                                        <div
+                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                            <i class="fas fa-database text-teal-600 text-2xl mb-2"></i>
+                                            <span
+                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">BigQuery</span>
+                                        </div>
+                                        <!-- Forms -->
+                                        <div
+                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                            <i class="fas fa-list-alt text-purple-500 text-2xl mb-2"></i>
+                                            <span
+                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Forms</span>
+                                        </div>
+                                        <!-- Contacts -->
+                                        <div
+                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                            <i class="fas fa-address-book text-blue-400 text-2xl mb-2"></i>
+                                            <span
+                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Contacts</span>
+                                        </div>
+                                        <!-- Tasks -->
+                                        <div
+                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                            <i class="fas fa-check-circle text-blue-500 text-2xl mb-2"></i>
+                                            <span
+                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Tasks</span>
+                                        </div>
+                                        <!-- Meet -->
+                                        <div
+                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                            <i class="fas fa-video text-emerald-600 text-2xl mb-2"></i>
+                                            <span
+                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Meet</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                                    <!-- GitHub -->
+                                    <div
+                                        class="group relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg hover:border-emerald-500/50 transition-all duration-300">
+                                        <div class="absolute top-4 right-4">
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                                <i class="fas fa-check-circle mr-1"></i> Connecté
+                                            </span>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div
+                                                class="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-110 transition-transform">
+                                                <i class="fab fa-github"></i>
+                                            </div>
+                                        </div>
+                                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">GitHub
+                                        </h3>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 min-h-[40px]">
+                                            Stockage et versionning de vos agents. Indispensable pour l'exécution du
+                                            code.
+                                        </p>
+                                        <a href="https://github.com/settings/tokens" target="_blank"
+                                            class="inline-flex w-full justify-center items-center px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg text-sm font-medium transition gap-2">
+                                            <i class="fas fa-external-link-alt"></i> Configurer
+                                        </a>
+                                    </div>
+
+                                    <!-- CronJob.org -->
+                                    <div
+                                        class="group relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg hover:border-blue-500/50 transition-all duration-300">
+                                        <div class="absolute top-4 right-4">
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                                <i class="fas fa-check-circle mr-1"></i> Connecté
+                                            </span>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div
+                                                class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-110 transition-transform">
+                                                <i class="fas fa-clock"></i>
+                                            </div>
+                                        </div>
+                                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                                            CronJob.org</h3>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 min-h-[40px]">
+                                            Planificateur de tâches externe gratuit et fiable pour exécuter vos
+                                            agents.
+                                        </p>
+                                        <a href="https://console.cron-job.org/settings" target="_blank"
+                                            class="inline-flex w-full justify-center items-center px-4 py-2 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-lg text-sm font-medium transition gap-2">
+                                            <i class="fas fa-cog"></i> Configurer
+                                        </a>
+                                    </div>
+
+                                    <!-- Google AI -->
+                                    <div
+                                        class="group relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg hover:border-purple-500/50 transition-all duration-300">
+                                        <div class="absolute top-4 right-4">
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                                <i class="fas fa-check-circle mr-1"></i> Connecté
+                                            </span>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div
+                                                class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-110 transition-transform">
+                                                <i class="fab fa-google"></i>
+                                            </div>
+                                        </div>
+                                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Google AI
+                                        </h3>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 min-h-[40px]">
+                                            Moteur d'intelligence artificielle Gemini pour générer le code de vos
+                                            agents.
+                                        </p>
+                                        <a href="https://aistudio.google.com/app/apikey" target="_blank"
+                                            class="inline-flex w-full justify-center items-center px-4 py-2 bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-300 rounded-lg text-sm font-medium transition gap-2">
+                                            <i class="fas fa-key"></i> Obtenir Clé API
+                                        </a>
+                                    </div>
+
+                                </div>
+
+
+
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- VIEW: AGENT CONNECTIONS (DEPRECATED) -->
-                <!-- GAS handles connections directly in the script properties -->
-
-                <!-- MODAL: AGENT WIZARD -->
-                <div id="agent-create-modal"
-                    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 hidden backdrop-blur-sm p-4">
+                    <!-- Agents List -->
                     <div
-                        class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700 animate-fade-in-up relative">
-                        <!-- Close Button -->
-                        <button onclick="document.getElementById('agent-create-modal').classList.add('hidden')"
-                            class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 z-50 backdrop-blur-sm bg-white/50 dark:bg-slate-800/50 rounded-full p-2">
-                            <i class="fas fa-times text-xl"></i>
-                        </button>
-                        <!-- Wizard Progress -->
-                        <div class="max-w-4xl mx-auto mb-8">
-                            <div class="flex items-center justify-between relative">
-                                <div
-                                    class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 dark:bg-slate-700 -z-10">
-                                </div>
-
-                                <!-- Step 1 -->
-                                <div class="flex flex-col items-center gap-2 bg-slate-50 dark:bg-slate-900 px-4 z-10">
-                                    <div id="step-marker-1"
-                                        class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold shadow-lg ring-4 ring-white dark:ring-slate-900 transition-colors">
-                                        1</div>
-                                    <span
-                                        class="text-sm font-medium text-emerald-600 dark:text-emerald-400">Déclencheur</span>
-                                </div>
-
-                                <!-- Step 2 -->
-                                <div class="flex flex-col items-center gap-2 bg-slate-50 dark:bg-slate-900 px-4 z-10">
-                                    <div id="step-marker-2"
-                                        class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold ring-4 ring-white dark:ring-slate-900 transition-colors">
-                                        2</div>
-                                    <span class="text-sm font-medium text-slate-500">Intelligence</span>
-                                </div>
-
-                                <!-- Step 3 -->
-                                <div class="flex flex-col items-center gap-2 bg-slate-50 dark:bg-slate-900 px-4 z-10">
-                                    <div id="step-marker-3"
-                                        class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold ring-4 ring-white dark:ring-slate-900 transition-colors">
-                                        3</div>
-                                    <span class="text-sm font-medium text-slate-500">Validation</span>
-                                </div>
-                            </div>
+                        class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden transition-colors duration-300">
+                        <div
+                            class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-white dark:bg-slate-800 transition-colors duration-300">
+                            <h3 class="font-semibold text-slate-800 dark:text-white">Mes Agents</h3>
+                            <button onclick="loadAgents()" class="text-slate-400 hover:text-emerald-500 transition"
+                                title="Actualiser">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
                         </div>
 
-                        <!-- Wizard Content -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead
+                                    class="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 font-medium">
+                                    <tr>
+                                        <th class="px-6 py-3">Statut</th>
+                                        <th class="px-6 py-3">Nom de l'Agent</th>
+                                        <th class="px-6 py-3">Dernière exécution</th>
+                                        <th class="px-6 py-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="agents-table" class="divide-y divide-slate-100 dark:divide-slate-700">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: AGENT CONNECTIONS (DEPRECATED) -->
+            <!-- GAS handles connections directly in the script properties -->
+
+            <!-- MODAL: AGENT WIZARD -->
+            <div id="agent-create-modal"
+                class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 hidden backdrop-blur-sm p-4">
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col border border-slate-200 dark:border-slate-700 animate-fade-in-up relative overflow-hidden">
+                    <!-- Close Button -->
+                    <button onclick="document.getElementById('agent-create-modal').classList.add('hidden')"
+                        class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 z-50 backdrop-blur-sm bg-white/50 dark:bg-slate-800/50 rounded-full p-2">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                    <!-- Wizard Progress (Fixed Header) -->
+                    <div class="max-w-4xl mx-auto pt-8 px-8 mb-4 w-full flex-shrink-0">
+                        <div class="flex items-center justify-between relative">
+                            <div
+                                class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 dark:bg-slate-700 -z-10">
+                            </div>
+
+                            <!-- Step 1 -->
+                            <div class="flex flex-col items-center gap-2 bg-slate-50 dark:bg-slate-900 px-4 z-10">
+                                <div id="step-marker-1"
+                                    class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold shadow-lg ring-4 ring-white dark:ring-slate-900 transition-colors">
+                                    1</div>
+                                <span
+                                    class="text-sm font-medium text-emerald-600 dark:text-emerald-400">Déclencheur</span>
+                            </div>
+
+                            <!-- Step 2 -->
+                            <div class="flex flex-col items-center gap-2 bg-slate-50 dark:bg-slate-900 px-4 z-10">
+                                <div id="step-marker-2"
+                                    class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold ring-4 ring-white dark:ring-slate-900 transition-colors">
+                                    2</div>
+                                <span class="text-sm font-medium text-slate-500">Intelligence</span>
+                            </div>
+
+                            <!-- Step 3 -->
+                            <div class="flex flex-col items-center gap-2 bg-slate-50 dark:bg-slate-900 px-4 z-10">
+                                <div id="step-marker-3"
+                                    class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold ring-4 ring-white dark:ring-slate-900 transition-colors">
+                                    3</div>
+                                <span class="text-sm font-medium text-slate-500">Validation</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wizard Content (Scrollable) -->
+                    <div class="flex-1 overflow-y-auto px-8 pb-4 w-full">
                         <div
                             class="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden transition-colors duration-300">
 
@@ -1296,355 +1329,355 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Footer / Navigation -->
-                        <div
-                            class="px-8 py-6 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                            <button id="btn-back" onclick="wizardBack()"
-                                class="px-4 py-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition hidden">
-                                Retour
+                    <!-- Footer / Navigation (Fixed) -->
+                    <div
+                        class="px-8 py-6 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center flex-shrink-0">
+                        <button id="btn-back" onclick="wizardBack()"
+                            class="px-4 py-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition hidden">
+                            Retour
+                        </button>
+                        <div class="ml-auto">
+                            <button id="btn-cancel"
+                                onclick="document.getElementById('agent-create-modal').classList.add('hidden')"
+                                class="px-4 py-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition mr-2">
+                                Annuler
                             </button>
-                            <div class="ml-auto">
-                                <button id="btn-cancel"
-                                    onclick="document.getElementById('agent-create-modal').classList.add('hidden')"
-                                    class="px-4 py-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition mr-2">
-                                    Annuler
-                                </button>
-                                <button id="btn-next" onclick="wizardNext()"
-                                    class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold shadow-lg shadow-emerald-500/30 transition transform hover:scale-105">
-                                    Suivant <i class="fas fa-arrow-right ml-2"></i>
-                                </button>
-                            </div>
+                            <button id="btn-next" onclick="wizardNext()"
+                                class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold shadow-lg shadow-emerald-500/30 transition transform hover:scale-105">
+                                Suivant <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- VIEW: CONFIGURATION -->
-            <div id="view-config" class="view-section hidden space-y-6">
-                <div
-                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 transition-colors duration-300">
-                    <h3 class="font-semibold text-slate-800 dark:text-white mb-6 border-b dark:border-slate-700 pb-2">
-                        Paramètres du Site</h3>
-                    <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 mb-6 rounded-r shadow-sm">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-info-circle text-blue-500 dark:text-blue-400 mt-0.5"></i>
-                            </div>
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">Configuration via
-                                    Variables
-                                    d'Environnement
-                                </h3>
-                                <div class="mt-1 text-sm text-blue-700 dark:text-blue-300">
-                                    <p>La configuration de ce site est gérée directement via les variables
-                                        d'environnement
-                                        de votre hébergeur (ex: Cloudflare Dashboard ou wrangler.toml).</p>
-                                    <p class="mt-2">Les valeurs ci-dessous sont affichées à titre informatif et ne
-                                        peuvent
-                                        pas être modifiées ici.</p>
-                                </div>
+        <!-- VIEW: CONFIGURATION -->
+        <div id="view-config" class="view-section hidden space-y-6">
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 transition-colors duration-300">
+                <h3 class="font-semibold text-slate-800 dark:text-white mb-6 border-b dark:border-slate-700 pb-2">
+                    Paramètres du Site</h3>
+                <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 mb-6 rounded-r shadow-sm">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-info-circle text-blue-500 dark:text-blue-400 mt-0.5"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">Configuration via
+                                Variables
+                                d'Environnement
+                            </h3>
+                            <div class="mt-1 text-sm text-blue-700 dark:text-blue-300">
+                                <p>La configuration de ce site est gérée directement via les variables
+                                    d'environnement
+                                    de votre hébergeur (ex: Cloudflare Dashboard ou wrangler.toml).</p>
+                                <p class="mt-2">Les valeurs ci-dessous sont affichées à titre informatif et ne
+                                    peuvent
+                                    pas être modifiées ici.</p>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <form id="config-form" class="space-y-6 opacity-75">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <form id="config-form" class="space-y-6 opacity-75">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nom du
+                                Site</label>
+                            <input type="text" id="conf-siteName" readonly
+                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                        </div>
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Auteur</label>
+                            <input type="text" id="conf-author" readonly
+                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
+                            RSS Blog</label>
+                        <input type="url" id="conf-substack" readonly
+                            class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                        <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                            <code>BLOG_FEED_URL</code> (Substack,
+                            WordPress, Ghost, Medium...)
+                        </p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
+                            RSS
+                            YouTube</label>
+                        <input type="url" id="conf-youtube" readonly
+                            class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                        <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                            <code>YOUTUBE_FEED_URL</code>
+                        </p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
+                            RSS
+                            Podcast</label>
+                        <input type="url" id="conf-podcast" readonly
+                            class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                        <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                            <code>PODCAST_FEED_URL</code>
+                        </p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL
+                            Webstudio
+                            Staging</label>
+                        <input type="url" id="conf-wstd-staging" readonly
+                            class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                        <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                            <code>WSTD_STAGING_URL</code>
+                            (Optionnel -
+                            Active le proxy vers Webstudio)
+                        </p>
+                    </div>
+
+
+                    <div class="border-t dark:border-slate-700 pt-4">
+                        <h4 class="text-sm font-medium text-slate-900 dark:text-white mb-4">SEO & Métadonnées</h4>
+                        <div class="space-y-4">
                             <div>
-                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nom du
-                                    Site</label>
-                                <input type="text" id="conf-siteName" readonly
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Titre
+                                    Meta</label>
+                                <input type="text" id="conf-metaTitle" readonly
                                     class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                                <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                                    <code>META_TITLE</code>
+                                </p>
                             </div>
                             <div>
                                 <label
-                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Auteur</label>
-                                <input type="text" id="conf-author" readonly
+                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Description
+                                    Meta</label>
+                                <textarea id="conf-metaDesc" rows="3" readonly
+                                    class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed"></textarea>
+                                <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                                    <code>META_DESCRIPTION</code>
+                                </p>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Mots-clés
+                                    Meta</label>
+                                <input type="text" id="conf-metaKeywords" readonly
                                     class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
-                                RSS Blog</label>
-                            <input type="url" id="conf-substack" readonly
-                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                <code>BLOG_FEED_URL</code> (Substack,
-                                WordPress, Ghost, Medium...)
-                            </p>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
-                                RSS
-                                YouTube</label>
-                            <input type="url" id="conf-youtube" readonly
-                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                <code>YOUTUBE_FEED_URL</code>
-                            </p>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
-                                RSS
-                                Podcast</label>
-                            <input type="url" id="conf-podcast" readonly
-                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                <code>PODCAST_FEED_URL</code>
-                            </p>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL
-                                Webstudio
-                                Staging</label>
-                            <input type="url" id="conf-wstd-staging" readonly
-                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                <code>WSTD_STAGING_URL</code>
-                                (Optionnel -
-                                Active le proxy vers Webstudio)
-                            </p>
-                        </div>
-
-
-                        <div class="border-t dark:border-slate-700 pt-4">
-                            <h4 class="text-sm font-medium text-slate-900 dark:text-white mb-4">SEO & Métadonnées</h4>
-                            <div class="space-y-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Titre
-                                        Meta</label>
-                                    <input type="text" id="conf-metaTitle" readonly
-                                        class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                        <code>META_TITLE</code>
-                                    </p>
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Description
-                                        Meta</label>
-                                    <textarea id="conf-metaDesc" rows="3" readonly
-                                        class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed"></textarea>
-                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                        <code>META_DESCRIPTION</code>
-                                    </p>
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Mots-clés
-                                        Meta</label>
-                                    <input type="text" id="conf-metaKeywords" readonly
-                                        class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                        <code>META_KEYWORDS</code>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="border-t dark:border-slate-700 pt-4">
-                            <h4 class="text-sm font-medium text-slate-900 dark:text-white mb-4">Maintenance</h4>
-                            <button type="button" onclick="clearCache()"
-                                class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
-                                <i class="fas fa-broom"></i> Vider le Cache
-                            </button>
-                            <p id="cache-status" class="text-xs text-slate-500 mt-2"></p>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- VIEW: BUILDER -->
-            <div id="view-builder" class="view-section hidden space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-6 h-[calc(100vh-12rem)]">
-                    <!-- Left Column: Instructions & Button -->
-                    <div
-                        class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 flex flex-col justify-center items-start space-y-8 transition-colors duration-300">
-                        <div>
-                            <div
-                                class="w-16 h-16 bg-purple-100 dark:bg-purple-900/50 rounded-2xl flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6">
-                                <i class="fas fa-paint-brush text-3xl"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-3">Éditeur Visuel</h3>
-                            <p class="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
-                                Utilisez notre éditeur visuel avancé pour personnaliser l'apparence de votre site.
-                                L'interface s'ouvrira dans un nouvel onglet pour vous offrir un espace de travail
-                                optimal.
-                            </p>
-                        </div>
-
-                        <a id="builder-tab-btn" href="#" target="_blank"
-                            class="inline-flex items-center gap-3 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                            <span>Ouvrir le Builder</span>
-                            <i class="fas fa-external-link-alt"></i>
-                        </a>
-
-                        <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r w-full">
-                            <div class="flex">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-info-circle text-blue-500 dark:text-blue-400"></i>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm text-blue-700 dark:text-blue-300">
-                                        Regardez les tutoriels à droite pour apprendre à maîtriser l'outil.
-                                    </p>
-                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                                    <code>META_KEYWORDS</code>
+                                </p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Column: Tutorials -->
-                    <div
-                        class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden flex flex-col transition-colors duration-300">
-                        <div
-                            class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 flex justify-between items-center transition-colors duration-300">
-                            <h3 class="font-semibold text-slate-800 dark:text-white">Tutoriels Vidéo</h3>
-                            <span
-                                class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Playlist
-                                YouTube</span>
-                        </div>
-                        <div class="flex-1 bg-black relative group">
-                            <iframe width="100%" height="100%"
-                                src="https://www.youtube-nocookie.com/embed/videoseries?si=YyePOX9RjcazflwN&amp;list=PL4vVqpngzeT4Bfs_D25xNi_qNMY99R928"
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
-                                class="absolute inset-0 w-full h-full">
-                            </iframe>
-                        </div>
+                    <div class="border-t dark:border-slate-700 pt-4">
+                        <h4 class="text-sm font-medium text-slate-900 dark:text-white mb-4">Maintenance</h4>
+                        <button type="button" onclick="clearCache()"
+                            class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
+                            <i class="fas fa-broom"></i> Vider le Cache
+                        </button>
+                        <p id="cache-status" class="text-xs text-slate-500 mt-2"></p>
                     </div>
-                </div>
+                </form>
             </div>
+        </div>
 
-
-            <!-- VIEW: HELP (FAQ Accordion) -->
-            <div id="view-help" class="view-section hidden space-y-6">
+        <!-- VIEW: BUILDER -->
+        <div id="view-builder" class="view-section hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-6 h-[calc(100vh-12rem)]">
+                <!-- Left Column: Instructions & Button -->
                 <div
-                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 transition-colors duration-300">
-                    <h3 class="font-semibold text-slate-800 dark:text-white mb-6 text-xl">Foire Aux Questions</h3>
-                    <div class="space-y-4">
+                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 flex flex-col justify-center items-start space-y-8 transition-colors duration-300">
+                    <div>
+                        <div
+                            class="w-16 h-16 bg-purple-100 dark:bg-purple-900/50 rounded-2xl flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6">
+                            <i class="fas fa-paint-brush text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-3">Éditeur Visuel</h3>
+                        <p class="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
+                            Utilisez notre éditeur visuel avancé pour personnaliser l'apparence de votre site.
+                            L'interface s'ouvrira dans un nouvel onglet pour vous offrir un espace de travail
+                            optimal.
+                        </p>
+                    </div>
 
-                        <!-- Item 1 -->
-                        <details
-                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
-                            <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
-                                <span
-                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Qu'est-ce
-                                    que
-                                    iziWebCMS ?</span>
-                                <span class="transition group-open:rotate-180">
-                                    <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
-                                </span>
-                            </summary>
-                            <div
-                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
-                                iziWebCMS est un CMS Headless moderne qui connecte vos sources de données existantes
-                                (Substack, YouTube, Podcast) à un frontend ultra-rapide. Il vous permet de gérer
-                                votre
-                                contenu centralisé sans base de données complexe.
+                    <a id="builder-tab-btn" href="#" target="_blank"
+                        class="inline-flex items-center gap-3 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <span>Ouvrir le Builder</span>
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+
+                    <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r w-full">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-info-circle text-blue-500 dark:text-blue-400"></i>
                             </div>
-                        </details>
-
-                        <!-- Item 2 -->
-                        <details
-                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
-                            <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
-                                <span
-                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Comment
-                                    mettre à
-                                    jour mon contenu ?</span>
-                                <span class="transition group-open:rotate-180">
-                                    <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
-                                </span>
-                            </summary>
-                            <div
-                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
-                                C'est automatique ! iziWebCMS se synchronise avec vos flux RSS (Substack, YouTube,
-                                Anchor). Dès que vous publiez sur ces plateformes, votre site est mis à jour après
-                                expiration du cache (environ 3 minutes). Vous pouvez forcer la mise à jour avec le
-                                bouton "Vider le Cache".
+                            <div class="ml-3">
+                                <p class="text-sm text-blue-700 dark:text-blue-300">
+                                    Regardez les tutoriels à droite pour apprendre à maîtriser l'outil.
+                                </p>
                             </div>
-                        </details>
+                        </div>
+                    </div>
+                </div>
 
-                        <!-- Item 3 -->
-                        <details
-                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
-                            <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
-                                <span
-                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Comment
-                                    changer
-                                    le
-                                    nom de mon site ?</span>
-                                <span class="transition group-open:rotate-180">
-                                    <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
-                                </span>
-                            </summary>
-                            <div
-                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
-                                Le nom de votre site est défini par la variable d'environnement
-                                <code>META_TITLE</code>
-                                dans Cloudflare Pages. Vous pouvez le modifier dans les paramètres de votre projet
-                                Cloudflare > Settings > Environment Variables.
-                            </div>
-                        </details>
-
-                        <!-- Item 4 -->
-                        <details
-                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
-                            <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
-                                <span
-                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Le
-                                    Frontend
-                                    Builder
-                                    ne fonctionne pas</span>
-                                <span class="transition group-open:rotate-180">
-                                    <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
-                                </span>
-                            </summary>
-                            <div
-                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
-                                Le Builder ouvre votre site en mode édition. Assurez-vous d'avoir configuré la variable
-                                <code>FRONTEND_BUILDER_URL</code> avec l'URL de votre éditeur (ex:
-                                https://builder.webstudio.so). Si la page reste blanche, vérifiez si votre navigateur
-                                ne
-                                bloque pas les pop-ups.
-                            </div>
-                        </details>
-
-                        <!-- Item 5 -->
-                        <details
-                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
-                            <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
-                                <span
-                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Mes
-                                    images ne
-                                    s'affichent pas</span>
-                                <span class="transition group-open:rotate-180">
-                                    <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
-                                </span>
-                            </summary>
-                            <div
-                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
-                                iziWebCMS utilise un proxy intelligent pour afficher votre site Webstudio sur votre
-                                propre domaine. Si des images manquent, c'est souvent lié à une configuration DNS ou
-                                CSP. Le système gère, cependant, automatiquement la plupart des cas via le proxy
-                                intégré.
-                            </div>
-                        </details>
-
+                <!-- Right Column: Tutorials -->
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden flex flex-col transition-colors duration-300">
+                    <div
+                        class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 flex justify-between items-center transition-colors duration-300">
+                        <h3 class="font-semibold text-slate-800 dark:text-white">Tutoriels Vidéo</h3>
+                        <span
+                            class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Playlist
+                            YouTube</span>
+                    </div>
+                    <div class="flex-1 bg-black relative group">
+                        <iframe width="100%" height="100%"
+                            src="https://www.youtube-nocookie.com/embed/videoseries?si=YyePOX9RjcazflwN&amp;list=PL4vVqpngzeT4Bfs_D25xNi_qNMY99R928"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
+                            class="absolute inset-0 w-full h-full">
+                        </iframe>
                     </div>
                 </div>
             </div>
+        </div>
+
+
+        <!-- VIEW: HELP (FAQ Accordion) -->
+        <div id="view-help" class="view-section hidden space-y-6">
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 transition-colors duration-300">
+                <h3 class="font-semibold text-slate-800 dark:text-white mb-6 text-xl">Foire Aux Questions</h3>
+                <div class="space-y-4">
+
+                    <!-- Item 1 -->
+                    <details
+                        class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
+                        <summary
+                            class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                            <span
+                                class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Qu'est-ce
+                                que
+                                iziWebCMS ?</span>
+                            <span class="transition group-open:rotate-180">
+                                <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
+                            </span>
+                        </summary>
+                        <div
+                            class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
+                            iziWebCMS est un CMS Headless moderne qui connecte vos sources de données existantes
+                            (Substack, YouTube, Podcast) à un frontend ultra-rapide. Il vous permet de gérer
+                            votre
+                            contenu centralisé sans base de données complexe.
+                        </div>
+                    </details>
+
+                    <!-- Item 2 -->
+                    <details
+                        class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
+                        <summary
+                            class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                            <span
+                                class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Comment
+                                mettre à
+                                jour mon contenu ?</span>
+                            <span class="transition group-open:rotate-180">
+                                <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
+                            </span>
+                        </summary>
+                        <div
+                            class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
+                            C'est automatique ! iziWebCMS se synchronise avec vos flux RSS (Substack, YouTube,
+                            Anchor). Dès que vous publiez sur ces plateformes, votre site est mis à jour après
+                            expiration du cache (environ 3 minutes). Vous pouvez forcer la mise à jour avec le
+                            bouton "Vider le Cache".
+                        </div>
+                    </details>
+
+                    <!-- Item 3 -->
+                    <details
+                        class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
+                        <summary
+                            class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                            <span
+                                class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Comment
+                                changer
+                                le
+                                nom de mon site ?</span>
+                            <span class="transition group-open:rotate-180">
+                                <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
+                            </span>
+                        </summary>
+                        <div
+                            class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
+                            Le nom de votre site est défini par la variable d'environnement
+                            <code>META_TITLE</code>
+                            dans Cloudflare Pages. Vous pouvez le modifier dans les paramètres de votre projet
+                            Cloudflare > Settings > Environment Variables.
+                        </div>
+                    </details>
+
+                    <!-- Item 4 -->
+                    <details
+                        class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
+                        <summary
+                            class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                            <span
+                                class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Le
+                                Frontend
+                                Builder
+                                ne fonctionne pas</span>
+                            <span class="transition group-open:rotate-180">
+                                <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
+                            </span>
+                        </summary>
+                        <div
+                            class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
+                            Le Builder ouvre votre site en mode édition. Assurez-vous d'avoir configuré la variable
+                            <code>FRONTEND_BUILDER_URL</code> avec l'URL de votre éditeur (ex:
+                            https://builder.webstudio.so). Si la page reste blanche, vérifiez si votre navigateur
+                            ne
+                            bloque pas les pop-ups.
+                        </div>
+                    </details>
+
+                    <!-- Item 5 -->
+                    <details
+                        class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
+                        <summary
+                            class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                            <span
+                                class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Mes
+                                images ne
+                                s'affichent pas</span>
+                            <span class="transition group-open:rotate-180">
+                                <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
+                            </span>
+                        </summary>
+                        <div
+                            class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
+                            iziWebCMS utilise un proxy intelligent pour afficher votre site Webstudio sur votre
+                            propre domaine. Si des images manquent, c'est souvent lié à une configuration DNS ou
+                            CSP. Le système gère, cependant, automatiquement la plupart des cas via le proxy
+                            intégré.
+                        </div>
+                    </details>
+
+                </div>
+            </div>
+        </div>
 
         </div>
     </main>
