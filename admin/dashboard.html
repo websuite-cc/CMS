@@ -665,11 +665,70 @@
                                 Pour utiliser les Agents Google AI, vous devez configurer les variables d'environnement
                                 suivantes :
                             </p>
-                            <ul
-                                class="list-disc list-inside text-sm text-orange-700 dark:text-orange-300 mt-2 space-y-1 font-mono">
-                                <li id="missing-github" class="hidden">GITHUB_TOKEN & GITHUB_REPO</li>
-                                <li id="missing-cronjob" class="hidden">CRONJOB_API_KEY</li>
-                                <li id="missing-google" class="hidden">GOOGLE_AI_KEY (Optionnel pour le moment)</li>
+                            <ul class="space-y-4 mt-4">
+                                <!-- GITHUB INSTRUCTIONS -->
+                                <li id="missing-github"
+                                    class="hidden p-4 bg-orange-100 dark:bg-orange-900/40 rounded-lg border border-orange-200 dark:border-orange-800 text-sm">
+                                    <strong class="block text-orange-900 dark:text-orange-100 mb-2 text-base">
+                                        <i class="fab fa-github mr-2"></i>GitHub (Stockage des Agents)
+                                    </strong>
+                                    <ol
+                                        class="list-decimal list-inside space-y-1 text-orange-800 dark:text-orange-200 ml-1">
+                                        <li>Allez sur <a href="https://github.com/settings/tokens" target="_blank"
+                                                class="underline font-bold hover:text-orange-950">GitHub Developer
+                                                Settings</a>.</li>
+                                        <li>Créez un <strong>Personal Access Token (Classic)</strong>.</li>
+                                        <li>Cochez la permission <strong>repo</strong> (Full control).</li>
+                                        <li>Ajoutez ces variables :
+                                            <ul class="list-disc list-inside ml-4 mt-1 font-mono text-xs opacity-90">
+                                                <li>GITHUB_TOKEN : <code>ghp_...</code></li>
+                                                <li>GITHUB_REPO : <code>votre-nom/votre-repo</code></li>
+                                            </ul>
+                                        </li>
+                                    </ol>
+                                </li>
+
+                                <!-- CRONJOB INSTRUCTIONS -->
+                                <li id="missing-cronjob"
+                                    class="hidden p-4 bg-orange-100 dark:bg-orange-900/40 rounded-lg border border-orange-200 dark:border-orange-800 text-sm">
+                                    <strong class="block text-orange-900 dark:text-orange-100 mb-2 text-base">
+                                        <i class="fas fa-clock mr-2"></i>CronJob.org (Planification)
+                                    </strong>
+                                    <ol
+                                        class="list-decimal list-inside space-y-1 text-orange-800 dark:text-orange-200 ml-1">
+                                        <li>Connectez-vous à <a href="https://console.cron-job.org/settings"
+                                                target="_blank"
+                                                class="underline font-bold hover:text-orange-950">CronJob.org Console >
+                                                Settings</a>.</li>
+                                        <li>Allez dans la section <strong>API Key</strong>.</li>
+                                        <li>Cliquez sur <strong>Create API Key</strong>.</li>
+                                        <li>Ajoutez la variable :
+                                            <ul class="list-disc list-inside ml-4 mt-1 font-mono text-xs opacity-90">
+                                                <li>CRONJOB_API_KEY : <code>Masquer...</code></li>
+                                            </ul>
+                                        </li>
+                                    </ol>
+                                </li>
+
+                                <!-- GOOGLE AI INSTRUCTIONS -->
+                                <li id="missing-google"
+                                    class="hidden p-4 bg-orange-100 dark:bg-orange-900/40 rounded-lg border border-orange-200 dark:border-orange-800 text-sm">
+                                    <strong class="block text-orange-900 dark:text-orange-100 mb-2 text-base">
+                                        <i class="fab fa-google mr-2"></i>Google AI (Génération de Code)
+                                    </strong>
+                                    <ol
+                                        class="list-decimal list-inside space-y-1 text-orange-800 dark:text-orange-200 ml-1">
+                                        <li>Rendez-vous sur <a href="https://aistudio.google.com/app/apikey"
+                                                target="_blank" class="underline font-bold hover:text-orange-950">Google
+                                                AI Studio</a>.</li>
+                                        <li>Cliquez sur <strong>Create API Key</strong>.</li>
+                                        <li>Ajoutez la variable :
+                                            <ul class="list-disc list-inside ml-4 mt-1 font-mono text-xs opacity-90">
+                                                <li>GOOGLE_AI_KEY : <code>AIza...</code></li>
+                                            </ul>
+                                        </li>
+                                    </ol>
+                                </li>
                             </ul>
                             <p class="text-sm text-orange-700 dark:text-orange-300 mt-4">
                                 Consultez le fichier <code>README.md</code> ou <code>QUICK_START.md</code> pour savoir
