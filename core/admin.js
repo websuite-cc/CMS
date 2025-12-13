@@ -774,43 +774,60 @@ async function clearCache() {
 
 // Configuration Check
 async function checkAgentsConfig() {
+    console.log("Checking Agents Config...");
+    const warning = document.getElementById('agents-config-warning');
+    const createBtn = document.getElementById('btn-create-agent');
+
+    // Default State: Disabled
+    if (createBtn) createBtn.disabled = true;
+
     try {
         const raw = await fetch('/api/config');
-        if (!raw.ok) return false;
+        if (!raw.ok) {
+            console.error("Config fetch failed:", raw.status);
+            if (warning) {
+                warning.classList.remove('hidden');
+                warning.innerHTML = `<div class="p-4 bg-red-100 text-red-700">Erreur de chargement de la configuration (${raw.status}).</div>`;
+            }
+            return false;
+        }
+
         const conf = await raw.json();
-
-        const warning = document.getElementById('agents-config-warning');
-        const listContainer = document.getElementById('agents-list-container');
-        const createBtn = document.querySelector('button[onclick="showView(\'agent-create\')"]');
-
-        // Reset
-        warning.classList.add('hidden');
-        listContainer.classList.remove('opacity-50', 'pointer-events-none');
-        createBtn.disabled = false;
-        createBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        console.log("Config received:", conf);
 
         let missing = [];
+        const missingGithub = document.getElementById('missing-github');
+        const missingCron = document.getElementById('missing-cronjob');
+
+        // Reset specific warnings
+        if (missingGithub) missingGithub.classList.add('hidden');
+        if (missingCron) missingCron.classList.add('hidden');
+
         if (!conf.hasGithub) {
-            document.getElementById('missing-github').classList.remove('hidden');
+            if (missingGithub) missingGithub.classList.remove('hidden');
             missing.push('github');
         }
         if (!conf.hasCronJob) {
-            document.getElementById('missing-cronjob').classList.remove('hidden');
+            if (missingCron) missingCron.classList.remove('hidden');
             missing.push('cronjob');
         }
-        // Google AI is optional but requested
 
         if (missing.length > 0) {
-            warning.classList.remove('hidden');
-            // We don't hide the list, but we disable creation
-            createBtn.disabled = true;
-            createBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            createBtn.title = "Configuration requise";
+            if (warning) warning.classList.remove('hidden');
             return false;
         }
+
+        // Success
+        if (warning) warning.classList.add('hidden');
+        if (createBtn) createBtn.disabled = false;
+
         return true;
     } catch (e) {
         console.error("Config Check Error", e);
+        if (warning) {
+            warning.classList.remove('hidden');
+            warning.innerHTML = `<div class="p-4 bg-red-100 text-red-700">Erreur système: impossible de vérifier la configuration.</div>`;
+        }
         return false;
     }
 }
