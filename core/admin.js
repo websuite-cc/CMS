@@ -929,4 +929,3 @@ function updateWizardUI() {
         }
     }
 }
-```
