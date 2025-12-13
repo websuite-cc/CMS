@@ -160,10 +160,20 @@ function showView(viewName) {
 
     // Special handlers per view
     if (viewName === 'agents') loadAgents();
-    if (viewName === 'agent-create') {
-        currentWizardStep = 1;
-        updateWizardUI();
-    }
+}
+
+function openWizard() {
+    const modal = document.getElementById('wizard-modal');
+    modal.classList.remove('hidden');
+
+    // Reset State
+    currentWizardStep = 1;
+    updateWizardUI();
+}
+
+function closeWizard() {
+    const modal = document.getElementById('wizard-modal');
+    modal.classList.add('hidden');
 }
 
 // Data Loading

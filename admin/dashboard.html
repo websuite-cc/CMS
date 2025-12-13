@@ -114,11 +114,11 @@
 
             <button onclick="showView('config')"
                 class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors hover:bg-purple-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 flex items-center">
-                <i class="fas fa-cog w-6"></i> Configuration
+                <i class="fas fa-robot w-6"></i> Agents Google AI
             </button>
-            <button onclick="showView('help')"
+            <button onclick="openWizard()"
                 class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors hover:bg-purple-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 flex items-center">
-                <i class="fas fa-question-circle w-6"></i> Aide & Support
+                <i class="fas fa-plus-circle w-6"></i> Nouvel Agent
             </button>
             <a href="https://docs.stackpages.net/" target="_blank"
                 class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors hover:bg-purple-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 flex items-center">
@@ -1021,6 +1021,10 @@
                                     title="Actualiser">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
+                                <button onclick="openWizard()"
+                                    class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition shadow-lg shadow-purple-500/30 flex items-center gap-2">
+                                    <i class="fas fa-plus"></i> Créer
+                                </button>
                             </div>
 
                             <div class="overflow-x-auto">
@@ -1046,113 +1050,16 @@
                 <!-- VIEW: AGENT CONNECTIONS (DEPRECATED) -->
                 <!-- GAS handles connections directly in the script properties -->
 
-                <!-- VIEW: AGENT CREATE (WIZARD) -->
-                <div id="view-agent-create" class="view-section hidden space-y-6">
-                    <!-- Wizard Progress -->
-                    <div class="max-w-4xl mx-auto mb-8">
-                        <div class="flex items-center justify-between relative">
-                            <div
-                                class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 dark:bg-slate-700 -z-10">
-                            </div>
 
-                            <!-- Step 1 -->
-                            <div class="flex flex-col items-center gap-2 bg-slate-50 dark:bg-slate-900 px-4 z-10">
-                                <div id="step-marker-1"
-                                    class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold shadow-lg ring-4 ring-white dark:ring-slate-900 transition-colors">
-                                    1</div>
-                                <span
-                                    class="text-sm font-medium text-emerald-600 dark:text-emerald-400">Déclencheur</span>
-                            </div>
 
-                            <!-- Step 2 -->
-                            <div class="flex flex-col items-center gap-2 bg-slate-50 dark:bg-slate-900 px-4 z-10">
-                                <div id="step-marker-2"
-                                    class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold ring-4 ring-white dark:ring-slate-900 transition-colors">
-                                    2</div>
-                                <span class="text-sm font-medium text-slate-500">Intelligence</span>
-                            </div>
-
-                            <!-- Step 3 -->
-                            <div class="flex flex-col items-center gap-2 bg-slate-50 dark:bg-slate-900 px-4 z-10">
-                                <div id="step-marker-3"
-                                    class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold ring-4 ring-white dark:ring-slate-900 transition-colors">
-                                    3</div>
-                                <span class="text-sm font-medium text-slate-500">Validation</span>
-                            </div>
-                        </div>
+                <!-- 1. Code View -->
+                <div class="bg-slate-900 rounded-xl p-4 overflow-hidden mb-6 relative group border border-slate-700">
+                    <div class="absolute top-2 right-4 text-xs text-slate-500 font-mono">Code.gs</div>
+                    <div class="absolute top-2 right-14">
+                        <button
+                            class="text-xs bg-white/10 hover:bg-white/20 text-white px-2 py-1 rounded transition">Copier</button>
                     </div>
-
-                    <!-- Wizard Content -->
-                    <div
-                        class="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden transition-colors duration-300">
-
-                        <!-- STEP 1: IDENTITY (Name & Prompt) -->
-                        <div id="wizard-step-1" class="p-8">
-                            <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2">Définition de l'Agent
-                            </h2>
-                            <p class="text-slate-500 dark:text-slate-400 mb-6">Commencez par nommer votre agent et
-                                décrire
-                                sa
-                                mission.</p>
-
-                            <div class="space-y-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Nom
-                                        de
-                                        l'Agent</label>
-                                    <input type="text" id="agent-name" placeholder="ex: LinkedIn Auto-Post"
-                                        class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition">
-                                </div>
-
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Objectif
-                                        (Prompt)</label>
-                                    <div class="relative">
-                                        <textarea id="agent-prompt" rows="6"
-                                            class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition resize-none"
-                                            placeholder="Ex: Récupère le dernier article de mon blog via le flux RSS, résume-le en 3 phrases accrocheuses, et prépare un post au format JSON pour LinkedIn..."></textarea>
-                                        <div class="absolute bottom-3 right-3 text-emerald-600 dark:text-emerald-400">
-                                            <i class="fas fa-magic"></i>
-                                        </div>
-                                    </div>
-                                    <p class="text-xs text-slate-500 mt-2"><i class="fas fa-info-circle mr-1"></i> Soyez
-                                        précis.
-                                        Ce prompt servira à générer le code Google Apps Script.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- STEP 2: EXECUTION (Code & Link) -->
-                        <div id="wizard-step-2" class="p-8 hidden">
-                            <div class="text-center mb-8">
-                                <div
-                                    class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-                                    <i class="fab fa-google"></i>
-                                </div>
-                                <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Code Google Apps Script
-                                </h2>
-                                <p class="text-slate-500 dark:text-slate-400">1. Créez un projet sur <a
-                                        href="https://script.new" target="_blank"
-                                        class="text-blue-500 underline">script.new</a>. 2. Copiez ce code. 3. Déployez
-                                    en
-                                    Web
-                                    App.</p>
-                                <button onclick="generateGasCode()"
-                                    class="mt-4 px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg font-bold shadow-lg shadow-purple-500/30 transition transform hover:scale-105 flex items-center mx-auto gap-2">
-                                    <i class="fas fa-magic"></i> Générer le code avec Gemini
-                                </button>
-                            </div>
-
-                            <!-- 1. Code View -->
-                            <div
-                                class="bg-slate-900 rounded-xl p-4 overflow-hidden mb-6 relative group border border-slate-700">
-                                <div class="absolute top-2 right-4 text-xs text-slate-500 font-mono">Code.gs</div>
-                                <div class="absolute top-2 right-14">
-                                    <button
-                                        class="text-xs bg-white/10 hover:bg-white/20 text-white px-2 py-1 rounded transition">Copier</button>
-                                </div>
-                                <pre class="text-xs font-mono text-blue-300 overflow-x-auto p-2 h-40">
+                    <pre class="text-xs font-mono text-blue-300 overflow-x-auto p-2 h-40">
 <span class="text-purple-400">function</span> <span class="text-yellow-400">doPost</span>(e) {
   <span class="text-purple-400">var</span> data = JSON.<span class="text-blue-400">parse</span>(e.postData.contents);
   <span class="text-purple-400">if</span> (data.token !== <span class="text-green-400">"SECRET_TOKEN_XYZ"</span>) <span class="text-purple-400">return</span>;
@@ -1162,486 +1069,478 @@
   
   <span class="text-purple-400">return</span> ContentService.<span class="text-blue-400">createTextOutput</span>(<span class="text-green-400">"OK"</span>);
 }</pre>
-                            </div>
+                </div>
 
-                            <!-- 2. Configuration Inputs -->
-                            <div
-                                class="space-y-4 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL
-                                        de
-                                        déploiement (Web App)</label>
-                                    <input type="text" id="gas-url" placeholder="https://script.google.com/macros/s/..."
-                                        class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none font-mono text-xs">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Token
-                                        Secret</label>
-                                    <input type="text" id="gas-token" value="SECRET_TOKEN_XYZ" readonly
-                                        class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 bg-slate-100 text-slate-500 outline-none font-mono text-xs cursor-not-allowed">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- STEP 3: SCHEDULING (ADVANCED) -->
-                        <div id="wizard-step-3" class="p-8 hidden">
-                            <div class="text-center mb-8">
-                                <div
-                                    class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </div>
-                                <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Planification Avancée</h2>
-                                <p class="text-slate-500 dark:text-slate-400">Définissez précisément quand votre agent
-                                    doit
-                                    travailler.</p>
-                            </div>
-
-                            <div class="max-w-2xl mx-auto">
-                                <!-- Frequency Tabs -->
-                                <div class="flex border-b border-slate-200 dark:border-slate-700 mb-6">
-                                    <button onclick="setScheduleMode('simple')" id="tab-simple"
-                                        class="px-6 py-2 border-b-2 border-emerald-500 text-emerald-600 font-bold bg-slate-50 dark:bg-slate-800/50 rounded-t-lg transition">Simple</button>
-                                    <button onclick="setScheduleMode('advanced')" id="tab-advanced"
-                                        class="px-6 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 transition">Avance
-                                        (Cron)</button>
-                                </div>
-
-                                <!-- MODE: SIMPLE -->
-                                <div id="schedule-simple" class="space-y-6">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div>
-                                            <label
-                                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Fréquence</label>
-                                            <select id="sched-frequency"
-                                                class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none">
-                                                <option value="every_x_minutes">Toutes les X minutes</option>
-                                                <option value="hourly">Toutes les heures</option>
-                                                <option value="daily">Tous les jours</option>
-                                                <option value="weekly">Toutes les semaines</option>
-                                                <option value="monthly">Tous les mois</option>
-                                            </select>
-                                        </div>
-                                        <div id="sched-time-container" class="hidden">
-                                            <label
-                                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Heure
-                                                (UTC)</label>
-                                            <input type="time" id="sched-time"
-                                                class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none">
-                                        </div>
-                                    </div>
-
-                                    <div id="sched-days-container" class="hidden">
-                                        <label
-                                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Jours
-                                            de la semaine</label>
-                                        <div class="flex gap-2">
-                                            <button type="button"
-                                                class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
-                                                onclick="toggleDay(this, '1')">L</button>
-                                            <button type="button"
-                                                class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
-                                                onclick="toggleDay(this, '2')">M</button>
-                                            <button type="button"
-                                                class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
-                                                onclick="toggleDay(this, '3')">M</button>
-                                            <button type="button"
-                                                class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
-                                                onclick="toggleDay(this, '4')">J</button>
-                                            <button type="button"
-                                                class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
-                                                onclick="toggleDay(this, '5')">V</button>
-                                            <button type="button"
-                                                class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
-                                                onclick="toggleDay(this, '6')">S</button>
-                                            <button type="button"
-                                                class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
-                                                onclick="toggleDay(this, '0')">D</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- MODE: ADVANCED -->
-                                <div id="schedule-advanced" class="hidden space-y-6">
-                                    <div>
-                                        <label
-                                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Expression
-                                            CRON</label>
-                                        <input type="text" id="cron-expression" placeholder="* * * * *"
-                                            class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none font-mono text-lg tracking-widest text-center">
-                                        <p class="text-xs text-slate-500 mt-2 text-center">Format:
-                                            <code>Minute Heure Jour Mois JourSemaine</code>
-                                        </p>
-                                        <div class="mt-4 flex justify-center gap-2">
-                                            <button
-                                                onclick="document.getElementById('cron-expression').value = '0 * * * *'"
-                                                class="px-2 py-1 bg-slate-100 rounded text-xs hover:bg-slate-200 text-slate-600">Hourly</button>
-                                            <button
-                                                onclick="document.getElementById('cron-expression').value = '0 9 * * *'"
-                                                class="px-2 py-1 bg-slate-100 rounded text-xs hover:bg-slate-200 text-slate-600">Daily
-                                                9am</button>
-                                            <button
-                                                onclick="document.getElementById('cron-expression').value = '0 0 * * 1'"
-                                                class="px-2 py-1 bg-slate-100 rounded text-xs hover:bg-slate-200 text-slate-600">Weekly</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="mt-8 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg text-sm text-slate-600 dark:text-slate-400 flex items-center justify-center">
-                                    <i class="fas fa-server mr-2 text-emerald-500"></i> Propulsé par
-                                    <strong>CronJob.org</strong>
-                                </div>
-                            </div>
-                        </div>
+                <!-- 2. Configuration Inputs -->
+                <div
+                    class="space-y-4 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL
+                            de
+                            déploiement (Web App)</label>
+                        <input type="text" id="gas-url" placeholder="https://script.google.com/macros/s/..."
+                            class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none font-mono text-xs">
                     </div>
-
-                    <!-- Footer / Navigation -->
-                    <div
-                        class="px-8 py-6 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                        <button id="btn-back" onclick="wizardBack()"
-                            class="px-4 py-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition hidden">
-                            Retour
-                        </button>
-                        <div class="ml-auto">
-                            <button id="btn-cancel" onclick="showView('agents')"
-                                class="px-4 py-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition mr-2">
-                                Annuler
-                            </button>
-                            <button id="btn-next" onclick="wizardNext()"
-                                class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold shadow-lg shadow-emerald-500/30 transition transform hover:scale-105">
-                                Suivant <i class="fas fa-arrow-right ml-2"></i>
-                            </button>
-                        </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Token
+                            Secret</label>
+                        <input type="text" id="gas-token" value="SECRET_TOKEN_XYZ" readonly
+                            class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 bg-slate-100 text-slate-500 outline-none font-mono text-xs cursor-not-allowed">
                     </div>
                 </div>
             </div>
 
-            <!-- VIEW: CONFIGURATION -->
-            <div id="view-config" class="view-section hidden space-y-6">
-                <div
-                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 transition-colors duration-300">
-                    <h3 class="font-semibold text-slate-800 dark:text-white mb-6 border-b dark:border-slate-700 pb-2">
-                        Paramètres du Site</h3>
-                    <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 mb-6 rounded-r shadow-sm">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-info-circle text-blue-500 dark:text-blue-400 mt-0.5"></i>
+            <!-- STEP 3: SCHEDULING (ADVANCED) -->
+            <div id="wizard-step-3" class="p-8 hidden">
+                <div class="text-center mb-8">
+                    <div
+                        class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Planification Avancée</h2>
+                    <p class="text-slate-500 dark:text-slate-400">Définissez précisément quand votre agent
+                        doit
+                        travailler.</p>
+                </div>
+
+                <div class="max-w-2xl mx-auto">
+                    <!-- Frequency Tabs -->
+                    <div class="flex border-b border-slate-200 dark:border-slate-700 mb-6">
+                        <button onclick="setScheduleMode('simple')" id="tab-simple"
+                            class="px-6 py-2 border-b-2 border-emerald-500 text-emerald-600 font-bold bg-slate-50 dark:bg-slate-800/50 rounded-t-lg transition">Simple</button>
+                        <button onclick="setScheduleMode('advanced')" id="tab-advanced"
+                            class="px-6 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 transition">Avance
+                            (Cron)</button>
+                    </div>
+
+                    <!-- MODE: SIMPLE -->
+                    <div id="schedule-simple" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Fréquence</label>
+                                <select id="sched-frequency"
+                                    class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none">
+                                    <option value="every_x_minutes">Toutes les X minutes</option>
+                                    <option value="hourly">Toutes les heures</option>
+                                    <option value="daily">Tous les jours</option>
+                                    <option value="weekly">Toutes les semaines</option>
+                                    <option value="monthly">Tous les mois</option>
+                                </select>
                             </div>
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">Configuration via
-                                    Variables
-                                    d'Environnement
-                                </h3>
-                                <div class="mt-1 text-sm text-blue-700 dark:text-blue-300">
-                                    <p>La configuration de ce site est gérée directement via les variables
-                                        d'environnement
-                                        de votre hébergeur (ex: Cloudflare Dashboard ou wrangler.toml).</p>
-                                    <p class="mt-2">Les valeurs ci-dessous sont affichées à titre informatif et ne
-                                        peuvent
-                                        pas être modifiées ici.</p>
-                                </div>
+                            <div id="sched-time-container" class="hidden">
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Heure
+                                    (UTC)</label>
+                                <input type="time" id="sched-time"
+                                    class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none">
+                            </div>
+                        </div>
+
+                        <div id="sched-days-container" class="hidden">
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Jours
+                                de la semaine</label>
+                            <div class="flex gap-2">
+                                <button type="button"
+                                    class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
+                                    onclick="toggleDay(this, '1')">L</button>
+                                <button type="button"
+                                    class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
+                                    onclick="toggleDay(this, '2')">M</button>
+                                <button type="button"
+                                    class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
+                                    onclick="toggleDay(this, '3')">M</button>
+                                <button type="button"
+                                    class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
+                                    onclick="toggleDay(this, '4')">J</button>
+                                <button type="button"
+                                    class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
+                                    onclick="toggleDay(this, '5')">V</button>
+                                <button type="button"
+                                    class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
+                                    onclick="toggleDay(this, '6')">S</button>
+                                <button type="button"
+                                    class="sched-day w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-500 text-sm font-bold transition"
+                                    onclick="toggleDay(this, '0')">D</button>
                             </div>
                         </div>
                     </div>
 
-                    <form id="config-form" class="space-y-6 opacity-75">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- MODE: ADVANCED -->
+                    <div id="schedule-advanced" class="hidden space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Expression
+                                CRON</label>
+                            <input type="text" id="cron-expression" placeholder="* * * * *"
+                                class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none font-mono text-lg tracking-widest text-center">
+                            <p class="text-xs text-slate-500 mt-2 text-center">Format:
+                                <code>Minute Heure Jour Mois JourSemaine</code>
+                            </p>
+                            <div class="mt-4 flex justify-center gap-2">
+                                <button onclick="document.getElementById('cron-expression').value = '0 * * * *'"
+                                    class="px-2 py-1 bg-slate-100 rounded text-xs hover:bg-slate-200 text-slate-600">Hourly</button>
+                                <button onclick="document.getElementById('cron-expression').value = '0 9 * * *'"
+                                    class="px-2 py-1 bg-slate-100 rounded text-xs hover:bg-slate-200 text-slate-600">Daily
+                                    9am</button>
+                                <button onclick="document.getElementById('cron-expression').value = '0 0 * * 1'"
+                                    class="px-2 py-1 bg-slate-100 rounded text-xs hover:bg-slate-200 text-slate-600">Weekly</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="mt-8 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg text-sm text-slate-600 dark:text-slate-400 flex items-center justify-center">
+                        <i class="fas fa-server mr-2 text-emerald-500"></i> Propulsé par
+                        <strong>CronJob.org</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer / Navigation -->
+        <div
+            class="px-8 py-6 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">
+            <button id="btn-back" onclick="wizardBack()"
+                class="px-4 py-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition hidden">
+                Retour
+            </button>
+            <div class="ml-auto">
+                <button id="btn-cancel" onclick="showView('agents')"
+                    class="px-4 py-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition mr-2">
+                    Annuler
+                </button>
+                <button id="btn-next" onclick="wizardNext()"
+                    class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold shadow-lg shadow-emerald-500/30 transition transform hover:scale-105">
+                    Suivant <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+        </div>
+        </div>
+
+        <!-- VIEW: CONFIGURATION -->
+        <div id="view-config" class="view-section hidden space-y-6">
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 transition-colors duration-300">
+                <h3 class="font-semibold text-slate-800 dark:text-white mb-6 border-b dark:border-slate-700 pb-2">
+                    Paramètres du Site</h3>
+                <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 mb-6 rounded-r shadow-sm">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-info-circle text-blue-500 dark:text-blue-400 mt-0.5"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">Configuration via
+                                Variables
+                                d'Environnement
+                            </h3>
+                            <div class="mt-1 text-sm text-blue-700 dark:text-blue-300">
+                                <p>La configuration de ce site est gérée directement via les variables
+                                    d'environnement
+                                    de votre hébergeur (ex: Cloudflare Dashboard ou wrangler.toml).</p>
+                                <p class="mt-2">Les valeurs ci-dessous sont affichées à titre informatif et ne
+                                    peuvent
+                                    pas être modifiées ici.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="config-form" class="space-y-6 opacity-75">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nom du
+                                Site</label>
+                            <input type="text" id="conf-siteName" readonly
+                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                        </div>
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Auteur</label>
+                            <input type="text" id="conf-author" readonly
+                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
+                            RSS Blog</label>
+                        <input type="url" id="conf-substack" readonly
+                            class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                        <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                            <code>BLOG_FEED_URL</code> (Substack,
+                            WordPress, Ghost, Medium...)
+                        </p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
+                            RSS
+                            YouTube</label>
+                        <input type="url" id="conf-youtube" readonly
+                            class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                        <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                            <code>YOUTUBE_FEED_URL</code>
+                        </p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
+                            RSS
+                            Podcast</label>
+                        <input type="url" id="conf-podcast" readonly
+                            class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                        <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                            <code>PODCAST_FEED_URL</code>
+                        </p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL
+                            Webstudio
+                            Staging</label>
+                        <input type="url" id="conf-wstd-staging" readonly
+                            class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                        <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                            <code>WSTD_STAGING_URL</code>
+                            (Optionnel -
+                            Active le proxy vers Webstudio)
+                        </p>
+                    </div>
+
+
+                    <div class="border-t dark:border-slate-700 pt-4">
+                        <h4 class="text-sm font-medium text-slate-900 dark:text-white mb-4">SEO & Métadonnées</h4>
+                        <div class="space-y-4">
                             <div>
-                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nom du
-                                    Site</label>
-                                <input type="text" id="conf-siteName" readonly
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Titre
+                                    Meta</label>
+                                <input type="text" id="conf-metaTitle" readonly
                                     class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                                <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                                    <code>META_TITLE</code>
+                                </p>
                             </div>
                             <div>
                                 <label
-                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Auteur</label>
-                                <input type="text" id="conf-author" readonly
+                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Description
+                                    Meta</label>
+                                <textarea id="conf-metaDesc" rows="3" readonly
+                                    class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed"></textarea>
+                                <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                                    <code>META_DESCRIPTION</code>
+                                </p>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Mots-clés
+                                    Meta</label>
+                                <input type="text" id="conf-metaKeywords" readonly
                                     class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
-                                RSS Blog</label>
-                            <input type="url" id="conf-substack" readonly
-                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                <code>BLOG_FEED_URL</code> (Substack,
-                                WordPress, Ghost, Medium...)
-                            </p>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
-                                RSS
-                                YouTube</label>
-                            <input type="url" id="conf-youtube" readonly
-                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                <code>YOUTUBE_FEED_URL</code>
-                            </p>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
-                                RSS
-                                Podcast</label>
-                            <input type="url" id="conf-podcast" readonly
-                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                <code>PODCAST_FEED_URL</code>
-                            </p>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL
-                                Webstudio
-                                Staging</label>
-                            <input type="url" id="conf-wstd-staging" readonly
-                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                <code>WSTD_STAGING_URL</code>
-                                (Optionnel -
-                                Active le proxy vers Webstudio)
-                            </p>
-                        </div>
-
-
-                        <div class="border-t dark:border-slate-700 pt-4">
-                            <h4 class="text-sm font-medium text-slate-900 dark:text-white mb-4">SEO & Métadonnées</h4>
-                            <div class="space-y-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Titre
-                                        Meta</label>
-                                    <input type="text" id="conf-metaTitle" readonly
-                                        class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                        <code>META_TITLE</code>
-                                    </p>
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Description
-                                        Meta</label>
-                                    <textarea id="conf-metaDesc" rows="3" readonly
-                                        class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed"></textarea>
-                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                        <code>META_DESCRIPTION</code>
-                                    </p>
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Mots-clés
-                                        Meta</label>
-                                    <input type="text" id="conf-metaKeywords" readonly
-                                        class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                        <code>META_KEYWORDS</code>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="border-t dark:border-slate-700 pt-4">
-                            <h4 class="text-sm font-medium text-slate-900 dark:text-white mb-4">Maintenance</h4>
-                            <button type="button" onclick="clearCache()"
-                                class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
-                                <i class="fas fa-broom"></i> Vider le Cache
-                            </button>
-                            <p id="cache-status" class="text-xs text-slate-500 mt-2"></p>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- VIEW: BUILDER -->
-            <div id="view-builder" class="view-section hidden space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-6 h-[calc(100vh-12rem)]">
-                    <!-- Left Column: Instructions & Button -->
-                    <div
-                        class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 flex flex-col justify-center items-start space-y-8 transition-colors duration-300">
-                        <div>
-                            <div
-                                class="w-16 h-16 bg-purple-100 dark:bg-purple-900/50 rounded-2xl flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6">
-                                <i class="fas fa-paint-brush text-3xl"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-3">Éditeur Visuel</h3>
-                            <p class="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
-                                Utilisez notre éditeur visuel avancé pour personnaliser l'apparence de votre site.
-                                L'interface s'ouvrira dans un nouvel onglet pour vous offrir un espace de travail
-                                optimal.
-                            </p>
-                        </div>
-
-                        <a id="builder-tab-btn" href="#" target="_blank"
-                            class="inline-flex items-center gap-3 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                            <span>Ouvrir le Builder</span>
-                            <i class="fas fa-external-link-alt"></i>
-                        </a>
-
-                        <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r w-full">
-                            <div class="flex">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-info-circle text-blue-500 dark:text-blue-400"></i>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm text-blue-700 dark:text-blue-300">
-                                        Regardez les tutoriels à droite pour apprendre à maîtriser l'outil.
-                                    </p>
-                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
+                                    <code>META_KEYWORDS</code>
+                                </p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Column: Tutorials -->
-                    <div
-                        class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden flex flex-col transition-colors duration-300">
-                        <div
-                            class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 flex justify-between items-center transition-colors duration-300">
-                            <h3 class="font-semibold text-slate-800 dark:text-white">Tutoriels Vidéo</h3>
-                            <span
-                                class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Playlist
-                                YouTube</span>
-                        </div>
-                        <div class="flex-1 bg-black relative group">
-                            <iframe width="100%" height="100%"
-                                src="https://www.youtube-nocookie.com/embed/videoseries?si=YyePOX9RjcazflwN&amp;list=PL4vVqpngzeT4Bfs_D25xNi_qNMY99R928"
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
-                                class="absolute inset-0 w-full h-full">
-                            </iframe>
-                        </div>
+                    <div class="border-t dark:border-slate-700 pt-4">
+                        <h4 class="text-sm font-medium text-slate-900 dark:text-white mb-4">Maintenance</h4>
+                        <button type="button" onclick="clearCache()"
+                            class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
+                            <i class="fas fa-broom"></i> Vider le Cache
+                        </button>
+                        <p id="cache-status" class="text-xs text-slate-500 mt-2"></p>
                     </div>
-                </div>
+                </form>
             </div>
+        </div>
 
-
-            <!-- VIEW: HELP (FAQ Accordion) -->
-            <div id="view-help" class="view-section hidden space-y-6">
+        <!-- VIEW: BUILDER -->
+        <div id="view-builder" class="view-section hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-6 h-[calc(100vh-12rem)]">
+                <!-- Left Column: Instructions & Button -->
                 <div
-                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 transition-colors duration-300">
-                    <h3 class="font-semibold text-slate-800 dark:text-white mb-6 text-xl">Foire Aux Questions</h3>
-                    <div class="space-y-4">
+                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 flex flex-col justify-center items-start space-y-8 transition-colors duration-300">
+                    <div>
+                        <div
+                            class="w-16 h-16 bg-purple-100 dark:bg-purple-900/50 rounded-2xl flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6">
+                            <i class="fas fa-paint-brush text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-3">Éditeur Visuel</h3>
+                        <p class="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
+                            Utilisez notre éditeur visuel avancé pour personnaliser l'apparence de votre site.
+                            L'interface s'ouvrira dans un nouvel onglet pour vous offrir un espace de travail
+                            optimal.
+                        </p>
+                    </div>
 
-                        <!-- Item 1 -->
-                        <details
-                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
-                            <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
-                                <span
-                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Qu'est-ce
-                                    que
-                                    iziWebCMS ?</span>
-                                <span class="transition group-open:rotate-180">
-                                    <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
-                                </span>
-                            </summary>
-                            <div
-                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
-                                iziWebCMS est un CMS Headless moderne qui connecte vos sources de données existantes
-                                (Substack, YouTube, Podcast) à un frontend ultra-rapide. Il vous permet de gérer
-                                votre
-                                contenu centralisé sans base de données complexe.
+                    <a id="builder-tab-btn" href="#" target="_blank"
+                        class="inline-flex items-center gap-3 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <span>Ouvrir le Builder</span>
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+
+                    <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r w-full">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-info-circle text-blue-500 dark:text-blue-400"></i>
                             </div>
-                        </details>
-
-                        <!-- Item 2 -->
-                        <details
-                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
-                            <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
-                                <span
-                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Comment
-                                    mettre à
-                                    jour mon contenu ?</span>
-                                <span class="transition group-open:rotate-180">
-                                    <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
-                                </span>
-                            </summary>
-                            <div
-                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
-                                C'est automatique ! iziWebCMS se synchronise avec vos flux RSS (Substack, YouTube,
-                                Anchor). Dès que vous publiez sur ces plateformes, votre site est mis à jour après
-                                expiration du cache (environ 3 minutes). Vous pouvez forcer la mise à jour avec le
-                                bouton "Vider le Cache".
+                            <div class="ml-3">
+                                <p class="text-sm text-blue-700 dark:text-blue-300">
+                                    Regardez les tutoriels à droite pour apprendre à maîtriser l'outil.
+                                </p>
                             </div>
-                        </details>
+                        </div>
+                    </div>
+                </div>
 
-                        <!-- Item 3 -->
-                        <details
-                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
-                            <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
-                                <span
-                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Comment
-                                    changer
-                                    le
-                                    nom de mon site ?</span>
-                                <span class="transition group-open:rotate-180">
-                                    <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
-                                </span>
-                            </summary>
-                            <div
-                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
-                                Le nom de votre site est défini par la variable d'environnement
-                                <code>META_TITLE</code>
-                                dans Cloudflare Pages. Vous pouvez le modifier dans les paramètres de votre projet
-                                Cloudflare > Settings > Environment Variables.
-                            </div>
-                        </details>
-
-                        <!-- Item 4 -->
-                        <details
-                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
-                            <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
-                                <span
-                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Le
-                                    Frontend
-                                    Builder
-                                    ne fonctionne pas</span>
-                                <span class="transition group-open:rotate-180">
-                                    <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
-                                </span>
-                            </summary>
-                            <div
-                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
-                                Le Builder ouvre votre site en mode édition. Assurez-vous d'avoir configuré la variable
-                                <code>FRONTEND_BUILDER_URL</code> avec l'URL de votre éditeur (ex:
-                                https://builder.webstudio.so). Si la page reste blanche, vérifiez si votre navigateur
-                                ne
-                                bloque pas les pop-ups.
-                            </div>
-                        </details>
-
-                        <!-- Item 5 -->
-                        <details
-                            class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
-                            <summary
-                                class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
-                                <span
-                                    class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Mes
-                                    images ne
-                                    s'affichent pas</span>
-                                <span class="transition group-open:rotate-180">
-                                    <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
-                                </span>
-                            </summary>
-                            <div
-                                class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
-                                iziWebCMS utilise un proxy intelligent pour afficher votre site Webstudio sur votre
-                                propre domaine. Si des images manquent, c'est souvent lié à une configuration DNS ou
-                                CSP. Le système gère, cependant, automatiquement la plupart des cas via le proxy
-                                intégré.
-                            </div>
-                        </details>
-
+                <!-- Right Column: Tutorials -->
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden flex flex-col transition-colors duration-300">
+                    <div
+                        class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 flex justify-between items-center transition-colors duration-300">
+                        <h3 class="font-semibold text-slate-800 dark:text-white">Tutoriels Vidéo</h3>
+                        <span
+                            class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Playlist
+                            YouTube</span>
+                    </div>
+                    <div class="flex-1 bg-black relative group">
+                        <iframe width="100%" height="100%"
+                            src="https://www.youtube-nocookie.com/embed/videoseries?si=YyePOX9RjcazflwN&amp;list=PL4vVqpngzeT4Bfs_D25xNi_qNMY99R928"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
+                            class="absolute inset-0 w-full h-full">
+                        </iframe>
                     </div>
                 </div>
             </div>
+        </div>
+
+
+        <!-- VIEW: HELP (FAQ Accordion) -->
+        <div id="view-help" class="view-section hidden space-y-6">
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 transition-colors duration-300">
+                <h3 class="font-semibold text-slate-800 dark:text-white mb-6 text-xl">Foire Aux Questions</h3>
+                <div class="space-y-4">
+
+                    <!-- Item 1 -->
+                    <details
+                        class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
+                        <summary
+                            class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                            <span
+                                class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Qu'est-ce
+                                que
+                                iziWebCMS ?</span>
+                            <span class="transition group-open:rotate-180">
+                                <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
+                            </span>
+                        </summary>
+                        <div
+                            class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
+                            iziWebCMS est un CMS Headless moderne qui connecte vos sources de données existantes
+                            (Substack, YouTube, Podcast) à un frontend ultra-rapide. Il vous permet de gérer
+                            votre
+                            contenu centralisé sans base de données complexe.
+                        </div>
+                    </details>
+
+                    <!-- Item 2 -->
+                    <details
+                        class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
+                        <summary
+                            class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                            <span
+                                class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Comment
+                                mettre à
+                                jour mon contenu ?</span>
+                            <span class="transition group-open:rotate-180">
+                                <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
+                            </span>
+                        </summary>
+                        <div
+                            class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
+                            C'est automatique ! iziWebCMS se synchronise avec vos flux RSS (Substack, YouTube,
+                            Anchor). Dès que vous publiez sur ces plateformes, votre site est mis à jour après
+                            expiration du cache (environ 3 minutes). Vous pouvez forcer la mise à jour avec le
+                            bouton "Vider le Cache".
+                        </div>
+                    </details>
+
+                    <!-- Item 3 -->
+                    <details
+                        class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
+                        <summary
+                            class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                            <span
+                                class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Comment
+                                changer
+                                le
+                                nom de mon site ?</span>
+                            <span class="transition group-open:rotate-180">
+                                <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
+                            </span>
+                        </summary>
+                        <div
+                            class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
+                            Le nom de votre site est défini par la variable d'environnement
+                            <code>META_TITLE</code>
+                            dans Cloudflare Pages. Vous pouvez le modifier dans les paramètres de votre projet
+                            Cloudflare > Settings > Environment Variables.
+                        </div>
+                    </details>
+
+                    <!-- Item 4 -->
+                    <details
+                        class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
+                        <summary
+                            class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                            <span
+                                class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Le
+                                Frontend
+                                Builder
+                                ne fonctionne pas</span>
+                            <span class="transition group-open:rotate-180">
+                                <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
+                            </span>
+                        </summary>
+                        <div
+                            class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
+                            Le Builder ouvre votre site en mode édition. Assurez-vous d'avoir configuré la variable
+                            <code>FRONTEND_BUILDER_URL</code> avec l'URL de votre éditeur (ex:
+                            https://builder.webstudio.so). Si la page reste blanche, vérifiez si votre navigateur
+                            ne
+                            bloque pas les pop-ups.
+                        </div>
+                    </details>
+
+                    <!-- Item 5 -->
+                    <details
+                        class="group border border-slate-200 dark:border-slate-700 rounded-lg open:border-purple-200 dark:open:border-purple-900 transition">
+                        <summary
+                            class="flex items-center justify-between p-4 cursor-pointer list-none bg-slate-50 dark:bg-slate-700/50 rounded-lg group-open:bg-purple-50 dark:group-open:bg-purple-900/20 group-open:text-purple-700 dark:group-open:text-purple-400 transition">
+                            <span
+                                class="font-medium text-slate-700 dark:text-slate-300 group-open:text-purple-700 dark:group-open:text-purple-400">Mes
+                                images ne
+                                s'affichent pas</span>
+                            <span class="transition group-open:rotate-180">
+                                <i class="fas fa-chevron-down text-slate-400 group-open:text-purple-500"></i>
+                            </span>
+                        </summary>
+                        <div
+                            class="p-4 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 group-open:border-purple-100 dark:group-open:border-purple-900/50">
+                            iziWebCMS utilise un proxy intelligent pour afficher votre site Webstudio sur votre
+                            propre domaine. Si des images manquent, c'est souvent lié à une configuration DNS ou
+                            CSP. Le système gère, cependant, automatiquement la plupart des cas via le proxy
+                            intégré.
+                        </div>
+                    </details>
+
+                </div>
+            </div>
+        </div>
 
         </div>
     </main>
@@ -1662,6 +1561,198 @@
             </div>
             <div id="modal-content" class="p-8 overflow-y-auto prose prose-purple dark:prose-invert max-w-none">
                 <!-- Content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Wizard Modal -->
+    <div id="wizard-modal"
+        class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+            class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden relative">
+
+            <!-- Modal Header with Close -->
+            <button onclick="closeWizard()"
+                class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 z-50">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+
+            <!-- Wizard Content (Re-injected here) -->
+            <div id="wizard-container" class="overflow-y-auto p-8">
+
+                <!-- Wizard Progress -->
+                <div class="max-w-4xl mx-auto mb-8">
+                    <div class="flex items-center justify-between relative">
+                        <div
+                            class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 dark:bg-slate-700 -z-10">
+                        </div>
+                        <!-- Step 1 -->
+                        <div class="flex flex-col items-center gap-2 bg-slate-50 dark:bg-slate-900 px-4 z-10">
+                            <div id="step-marker-1"
+                                class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold shadow-lg ring-4 ring-white dark:ring-slate-900 transition-colors">
+                                1</div>
+                            <span class="text-sm font-medium text-emerald-600 dark:text-emerald-400">Déclencheur</span>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="flex flex-col items-center gap-2 bg-slate-50 dark:bg-slate-900 px-4 z-10">
+                            <div id="step-marker-2"
+                                class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold ring-4 ring-white dark:ring-slate-900 transition-colors">
+                                2</div>
+                            <span class="text-sm font-medium text-slate-500">Intelligence</span>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="flex flex-col items-center gap-2 bg-slate-50 dark:bg-slate-900 px-4 z-10">
+                            <div id="step-marker-3"
+                                class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold ring-4 ring-white dark:ring-slate-900 transition-colors">
+                                3</div>
+                            <span class="text-sm font-medium text-slate-500">Validation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 1: IDENTITY -->
+                <div id="wizard-step-1" class="transition-all duration-300">
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2">Définition de l'Agent</h2>
+                    <p class="text-slate-500 dark:text-slate-400 mb-6">Commencez par nommer votre agent et décrire sa
+                        mission.</p>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Nom de
+                                l'Agent</label>
+                            <input type="text" id="agent-name" placeholder="ex: LinkedIn Auto-Post"
+                                class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Objectif
+                                (Prompt)</label>
+                            <div class="relative">
+                                <textarea id="agent-prompt" rows="6"
+                                    class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition resize-none"
+                                    placeholder="Ex: Récupère le dernier article de mon blog via le flux RSS..."></textarea>
+                                <div class="absolute bottom-3 right-3 text-emerald-600 dark:text-emerald-400"><i
+                                        class="fas fa-magic"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: EXECUTION -->
+                <div id="wizard-step-2" class="hidden transition-all duration-300">
+                    <div class="text-center mb-8">
+                        <div
+                            class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                            <i class="fab fa-google"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Code Google Apps Script</h2>
+                        <p class="text-slate-500 dark:text-slate-400">Générez, copiez et déployez le code sur script.new
+                        </p>
+                        <button onclick="generateGasCode()"
+                            class="mt-4 px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg font-bold shadow-lg shadow-purple-500/30 transition transform hover:scale-105 flex items-center mx-auto gap-2">
+                            <i class="fas fa-magic"></i> Générer le code avec Gemini
+                        </button>
+                    </div>
+
+                    <!-- Code View && Config -->
+                    <div
+                        class="bg-slate-900 rounded-xl p-4 overflow-hidden mb-6 relative group border border-slate-700">
+                        <div class="absolute top-2 right-4 text-xs text-slate-500 font-mono">Code.gs</div>
+                        <pre class="text-xs font-mono text-blue-300 overflow-x-auto p-2 h-64 whitespace-pre-wrap">
+function doPost(e) {
+  var data = JSON.parse(e.postData.contents);
+  if (data.token !== "SECRET_TOKEN_XYZ") return;
+  // ... Code generated here ...
+  return ContentService.createTextOutput("OK");
+}</pre>
+                    </div>
+
+                    <div
+                        class="space-y-4 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL de
+                                déploiement (Web App)</label>
+                            <input type="text" id="gas-url" placeholder="https://script.google.com/macros/s/..."
+                                class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none font-mono text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Token
+                                Secret</label>
+                            <input type="text" id="gas-token" value="SECRET_TOKEN_XYZ" readonly
+                                class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 bg-slate-100 text-slate-500 outline-none font-mono text-xs cursor-not-allowed">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: SCHEDULING -->
+                <div id="wizard-step-3" class="hidden transition-all duration-300">
+                    <div class="text-center mb-8">
+                        <div
+                            class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Planification</h2>
+                        <p class="text-slate-500 dark:text-slate-400">Quand votre agent doit-il s'exécuter ?</p>
+                    </div>
+
+                    <div class="max-w-2xl mx-auto">
+                        <div class="flex border-b border-slate-200 dark:border-slate-700 mb-6">
+                            <button onclick="setScheduleMode('simple')" id="tab-simple"
+                                class="px-6 py-2 border-b-2 border-emerald-500 text-emerald-600 font-bold bg-slate-50 dark:bg-slate-800/50 rounded-t-lg transition">Simple</button>
+                            <button onclick="setScheduleMode('advanced')" id="tab-advanced"
+                                class="px-6 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 transition">Avance
+                                (Cron)</button>
+                        </div>
+
+                        <!-- Simple -->
+                        <div id="schedule-simple" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Fréquence</label>
+                                    <select id="sched-frequency"
+                                        class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none">
+                                        <option value="daily">Tous les jours</option>
+                                        <option value="hourly">Toutes les heures</option>
+                                        <option value="weekly">Toutes les semaines</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Heure
+                                        (UTC)</label>
+                                    <input type="time" id="sched-time" value="09:00"
+                                        class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Advanced -->
+                        <div id="schedule-advanced" class="hidden space-y-6">
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Expression
+                                    CRON</label>
+                                <input type="text" id="cron-expression" placeholder="* * * * *"
+                                    class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none font-mono text-lg tracking-widest text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Navigation -->
+                <div
+                    class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                    <button id="btn-back" onclick="wizardBack()"
+                        class="px-4 py-2 text-slate-500 hidden hover:text-slate-700 font-medium transition">Retour</button>
+                    <div class="ml-auto">
+                        <button onclick="closeWizard()"
+                            class="px-4 py-2 text-slate-500 hover:text-slate-700 font-medium transition mr-2">Annuler</button>
+                        <button id="btn-next" onclick="wizardNext()"
+                            class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold shadow-lg transition transform hover:scale-105">
+                            Suivant <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
