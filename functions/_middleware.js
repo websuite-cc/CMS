@@ -113,6 +113,36 @@ export async function onRequest(context) {
     // Routes locales : /api/*, /admin/*, /core/*
     // IMPORTANT : Cette vérification doit être AVANT toute autre logique
     
+    // Route simple pour IDE à la racine (pour test)
+    if (url.pathname === '/IDE.html' || url.pathname === '/ide.html' || url.pathname === '/IDE' || url.pathname === '/ide') {
+        console.log(`[IDE Root] Serving IDE from root: ${url.pathname}`);
+        const idePaths = ['/IDE.html', '/ide.html', 'IDE.html', 'ide.html'];
+        for (const idePath of idePaths) {
+            let ideUrl = new URL(idePath.startsWith('/') ? idePath : '/' + idePath, request.url);
+            const ideRequest = new Request(ideUrl.toString(), { method: 'GET', headers: request.headers });
+            let ideResponse = await env.ASSETS.fetch(ideRequest);
+            
+            // Suivre les redirections
+            let redirectCount = 0;
+            while ((ideResponse.status === 308 || ideResponse.status === 301 || ideResponse.status === 302) && redirectCount < 5) {
+                const location = ideResponse.headers.get('Location');
+                if (location) {
+                    const redirectUrl = location.startsWith('http') ? new URL(location) : new URL(location, request.url);
+                    ideResponse = await env.ASSETS.fetch(new Request(redirectUrl.toString(), { method: 'GET', headers: request.headers }));
+                    redirectCount++;
+                } else {
+                    break;
+                }
+            }
+            
+            if (ideResponse.status === 200) {
+                console.log(`[IDE Root] ✓ Successfully loaded from: ${idePath}`);
+                return ideResponse;
+            }
+        }
+        return new Response(`IDE not found at root. Tried: ${idePaths.join(', ')}`, { status: 404 });
+    }
+    
     // Route spéciale : /admin/dashboard/ide → servir admin/ide.html
     if (url.pathname === '/admin/dashboard/ide' || url.pathname === '/admin/dashboard/ide/') {
         console.log(`[IDE Route] Handling /admin/dashboard/ide request`);
