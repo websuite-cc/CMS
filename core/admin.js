@@ -1017,7 +1017,7 @@ function buildCronFromSimpleUI() {
     // Default to daily if specific logic missing
     return `${minute} ${hour} * * *`;
 }
-}
+
 
 function wizardBack() {
     if (currentWizardStep > 1) {
