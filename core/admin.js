@@ -782,7 +782,10 @@ async function checkAgentsConfig() {
     if (createBtn) createBtn.disabled = true;
 
     try {
-        const raw = await fetch('/api/config');
+        const authKey = localStorage.getItem('stackpages_auth');
+        const raw = await fetch('/api/config', {
+            headers: { 'X-Auth-Key': authKey }
+        });
         if (!raw.ok) {
             console.error("Config fetch failed:", raw.status);
             if (warning) {
