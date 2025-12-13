@@ -162,7 +162,6 @@ function showView(viewName) {
     if (viewName === 'agents') loadAgents();
 }
 
-
 // Data Loading
 async function loadData() {
     try {
@@ -900,6 +899,81 @@ async function loadAgents() {
             </td>
         </tr>
     `).join('');
+}
+
+
+// ====================================================================
+// WIZARD LOGIC
+// ====================================================================
+let currentWizardStep = 1;
+
+function wizardNext() {
+    if (currentWizardStep < 3) {
+        // Validation per step
+        if (currentWizardStep === 1) {
+            const name = document.getElementById('agent-name').value;
+            const prompt = document.getElementById('agent-prompt').value;
+            if (!name.trim() || !prompt.trim()) {
+                alert("Veuillez remplir le nom et l'objectif de l'agent.");
+                return;
+            }
+        }
+
+        if (currentWizardStep === 2) {
+            const gasUrl = document.getElementById('gas-url').value;
+            if (!gasUrl.trim()) {
+                alert("Veuillez entrer l'URL de votre déploiement Google Apps Script.");
+                return;
+            }
+        }
+
+        currentWizardStep++;
+        updateWizardUI();
+    } else {
+        // Final Step: Create / Save
+        // Determine Schedule
+        let cron = "";
+        const mode = document.getElementById('tab-simple').classList.contains('border-emerald-500') ? 'simple' : 'advanced';
+
+        if (mode === 'advanced') {
+            cron = document.getElementById('cron-expression').value;
+            if (!cron.trim()) {
+                alert("Expression Cron requise.");
+                return;
+            }
+        } else {
+            // Logic to build cron from simple UI would go here
+            // For now, simple mock
+            const freq = document.getElementById('sched-frequency').value;
+            cron = freq + " (Mock)";
+        }
+
+        alert(`Création de l'agent...\n- Stockage sur GitHub\n- Planification sur CronJob.org: ${cron}`);
+
+        // Mock Save to mockAgents for UI feedback
+        mockAgents.push({
+            name: document.getElementById('agent-name').value || "New Agent",
+            id: "agent_" + Date.now(),
+            status: "active",
+            trigger: "cron",
+            schedule: cron,
+            lastRun: null
+        });
+
+        showView('agents');
+        currentWizardStep = 1; // Reset
+        updateWizardUI();
+
+        // Refresh Agent List
+        loadAgents();
+    }
+}
+
+function wizardBack() {
+    if (currentWizardStep > 1) {
+        currentWizardStep--;
+        updateWizardUI();
+    }
 }
 
 // Scheduler UI Logic
