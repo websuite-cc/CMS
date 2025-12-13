@@ -162,10 +162,6 @@ function showView(viewName) {
 
     // Special handlers per view
     if (viewName === 'agents') loadAgents();
-    if (viewName === 'agent-create') {
-        currentWizardStep = 1;
-        updateWizardUI();
-    }
 }
 
 // Data Loading
@@ -911,7 +907,25 @@ async function loadAgents() {
 // ====================================================================
 // WIZARD LOGIC
 // ====================================================================
-// currentWizardStep declared at top
+
+function openAgentWizard() {
+    const modal = document.getElementById('agent-wizard-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        currentWizardStep = 1;
+        updateWizardUI();
+    }
+}
+
+function closeAgentWizard() {
+    const modal = document.getElementById('agent-wizard-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
 async function wizardNext() {
     if (currentWizardStep < 3) {
         // Validation per step
@@ -983,7 +997,7 @@ async function wizardNext() {
                 // Success
                 alert("🎉 Agent créé avec succès !\n\nProxy déployé sur GitHub et job planifié.");
 
-                showView('agents');
+                closeAgentWizard();
                 currentWizardStep = 1;
                 updateWizardUI();
 
