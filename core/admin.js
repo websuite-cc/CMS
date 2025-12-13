@@ -831,7 +831,8 @@ async function checkAgentsConfig() {
 
         // Success
         if (warning) warning.classList.add('hidden');
-        if (createBtn) createBtn.disabled = false;
+        // Temporarily disabled: agent creation feature not ready
+        // if (createBtn) createBtn.disabled = false;
 
         return true;
     } catch (e) {
