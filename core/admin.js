@@ -835,14 +835,20 @@ let currentWizardStep = 1;
 
 function wizardNext() {
     if (currentWizardStep < 3) {
-        // Validation simple
+        // Validation per step
         if (currentWizardStep === 1) {
-            // Check trigger
-        }
-        if (currentWizardStep === 2) {
+            const name = document.getElementById('agent-name').value;
             const prompt = document.getElementById('agent-prompt').value;
-            if (!prompt.trim()) {
-                alert("Veuillez décrire la tâche.");
+            if (!name.trim() || !prompt.trim()) {
+                alert("Veuillez remplir le nom et l'objectif de l'agent.");
+                return;
+            }
+        }
+
+        if (currentWizardStep === 2) {
+            const gasUrl = document.getElementById('gas-url').value;
+            if (!gasUrl.trim()) {
+                alert("Veuillez entrer l'URL de votre déploiement Google Apps Script.");
                 return;
             }
         }
@@ -851,27 +857,26 @@ function wizardNext() {
         updateWizardUI();
     } else {
         // Final Step: Create / Save
-        const gasUrl = document.getElementById('gas-url').value;
-        if (!gasUrl) {
-            alert("Veuillez entrer l'URL de votre web app Google Apps Script.");
-            return;
-        }
+        const frequency = document.getElementById('agent-frequency').value;
 
-        alert("Agent enregistré avec succès !");
+        alert(`Création de l'agent...\n- Stockage sur GitHub\n- Planification sur CronJob.org (${frequency})`);
 
-        // Mock Save
+        // Mock Save to mockAgents for UI feedback
         mockAgents.push({
             name: document.getElementById('agent-name').value || "New Agent",
             id: "agent_" + Date.now(),
             status: "active",
             trigger: "cron",
-            schedule: "0 8 * * *",
+            schedule: frequency,
             lastRun: null
         });
 
         showView('agents');
         currentWizardStep = 1; // Reset
         updateWizardUI();
+
+        // Refresh Agent List
+        loadAgents();
     }
 }
 
@@ -897,17 +902,19 @@ function updateWizardUI() {
 
     if (currentWizardStep === 1) {
         btnBack.classList.add('hidden');
-        btnNext.innerHTML = 'Suivant <i class="fas fa-arrow-right ml-2"></i>';
+        btnNext.innerHTML = 'Générer le Code <i class="fas fa-code ml-2"></i>';
+        btnNext.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+        btnNext.classList.add('bg-purple-600', 'hover:bg-purple-700');
     } else {
         btnBack.classList.remove('hidden');
         if (currentWizardStep === 3) {
-            btnNext.innerHTML = '<i class="fas fa-save mr-2"></i> Enregistrer l\'Agent';
-            btnNext.classList.remove('bg-emerald-600', 'bg-purple-600', 'hover:bg-purple-700');
+            btnNext.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Activer l\'Agent';
+            btnNext.classList.remove('bg-purple-600', 'hover:bg-purple-700');
             btnNext.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
         } else {
-            btnNext.innerHTML = 'Générer le Code GAS <i class="fas fa-code ml-2"></i>';
-            btnNext.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
-            btnNext.classList.add('bg-purple-600', 'hover:bg-purple-700');
+            btnNext.innerHTML = 'Configurer le Planning <i class="fas fa-clock ml-2"></i>';
+            btnNext.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+            btnNext.classList.remove('bg-purple-600', 'hover:bg-purple-700');
         }
     }
 
