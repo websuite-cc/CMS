@@ -21,7 +21,10 @@ export async function onRequestGet(context) {
             metaTitle: env.META_TITLE || "",
             metaDescription: env.META_DESCRIPTION || "",
             metaKeywords: env.META_KEYWORDS || ""
-        }
+        },
+        hasGithub: !!env.GITHUB_TOKEN && !!env.GITHUB_REPO,
+        hasCronJob: !!env.CRONJOB_API_KEY,
+        hasGoogleAI: !!env.GOOGLE_AI_KEY // Optional for now, but good to check
     };
 
     return jsonResponse(config);

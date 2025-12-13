@@ -772,6 +772,49 @@ async function clearCache() {
 // AGENTS LOGIC
 // ====================================================================
 
+// Configuration Check
+async function checkAgentsConfig() {
+    try {
+        const raw = await fetch('/api/config');
+        if (!raw.ok) return false;
+        const conf = await raw.json();
+
+        const warning = document.getElementById('agents-config-warning');
+        const listContainer = document.getElementById('agents-list-container');
+        const createBtn = document.querySelector('button[onclick="showView(\'agent-create\')"]');
+
+        // Reset
+        warning.classList.add('hidden');
+        listContainer.classList.remove('opacity-50', 'pointer-events-none');
+        createBtn.disabled = false;
+        createBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+        let missing = [];
+        if (!conf.hasGithub) {
+            document.getElementById('missing-github').classList.remove('hidden');
+            missing.push('github');
+        }
+        if (!conf.hasCronJob) {
+            document.getElementById('missing-cronjob').classList.remove('hidden');
+            missing.push('cronjob');
+        }
+        // Google AI is optional but requested
+
+        if (missing.length > 0) {
+            warning.classList.remove('hidden');
+            // We don't hide the list, but we disable creation
+            createBtn.disabled = true;
+            createBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            createBtn.title = "Configuration requise";
+            return false;
+        }
+        return true;
+    } catch (e) {
+        console.error("Config Check Error", e);
+        return false;
+    }
+}
+
 // Mock Data for agents
 const mockAgents = [
     {
@@ -785,9 +828,11 @@ const mockAgents = [
     }
 ];
 
-function loadAgents() {
+async function loadAgents() {
     const tbody = document.getElementById('agents-table');
     if (!tbody) return;
+
+    await checkAgentsConfig();
 
     // TODO: Fetch from /api/agents
 
@@ -857,9 +902,24 @@ function wizardNext() {
         updateWizardUI();
     } else {
         // Final Step: Create / Save
-        const frequency = document.getElementById('agent-frequency').value;
+        // Determine Schedule
+        let cron = "";
+        const mode = document.getElementById('tab-simple').classList.contains('border-emerald-500') ? 'simple' : 'advanced';
 
-        alert(`Création de l'agent...\n- Stockage sur GitHub\n- Planification sur CronJob.org (${frequency})`);
+        if (mode === 'advanced') {
+            cron = document.getElementById('cron-expression').value;
+            if (!cron.trim()) {
+                alert("Expression Cron requise.");
+                return;
+            }
+        } else {
+            // Logic to build cron from simple UI would go here
+            // For now, simple mock
+            const freq = document.getElementById('sched-frequency').value;
+            cron = freq + " (Mock)";
+        }
+
+        alert(`Création de l'agent...\n- Stockage sur GitHub\n- Planification sur CronJob.org: ${cron}`);
 
         // Mock Save to mockAgents for UI feedback
         mockAgents.push({
@@ -867,7 +927,7 @@ function wizardNext() {
             id: "agent_" + Date.now(),
             status: "active",
             trigger: "cron",
-            schedule: frequency,
+            schedule: cron,
             lastRun: null
         });
 
@@ -885,6 +945,39 @@ function wizardBack() {
         currentWizardStep--;
         updateWizardUI();
     }
+}
+
+// Scheduler UI Logic
+function setScheduleMode(mode) {
+    const simpleTab = document.getElementById('tab-simple');
+    const advTab = document.getElementById('tab-advanced');
+    const simpleView = document.getElementById('schedule-simple');
+    const advView = document.getElementById('schedule-advanced');
+
+    if (mode === 'simple') {
+        simpleTab.classList.add('border-emerald-500', 'text-emerald-600', 'bg-slate-50', 'dark:bg-slate-800/50', 'font-bold');
+        simpleTab.classList.remove('border-transparent', 'text-slate-500');
+        advTab.classList.remove('border-emerald-500', 'text-emerald-600', 'bg-slate-50', 'dark:bg-slate-800/50', 'font-bold');
+        advTab.classList.add('border-transparent', 'text-slate-500');
+
+        simpleView.classList.remove('hidden');
+        advView.classList.add('hidden');
+    } else {
+        advTab.classList.add('border-emerald-500', 'text-emerald-600', 'bg-slate-50', 'dark:bg-slate-800/50', 'font-bold');
+        advTab.classList.remove('border-transparent', 'text-slate-500');
+        simpleTab.classList.remove('border-emerald-500', 'text-emerald-600', 'bg-slate-50', 'dark:bg-slate-800/50', 'font-bold');
+        simpleTab.classList.add('border-transparent', 'text-slate-500');
+
+        advView.classList.remove('hidden');
+        simpleView.classList.add('hidden');
+    }
+}
+
+function toggleDay(btn, dayIdx) {
+    btn.classList.toggle('bg-emerald-500');
+    btn.classList.toggle('text-white');
+    btn.classList.toggle('border-emerald-500');
+    // ... logic to build state
 }
 
 function updateWizardUI() {
