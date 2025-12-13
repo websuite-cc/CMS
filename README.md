@@ -30,7 +30,7 @@
 │  ✓ index.html       │  ✓ /api/posts     │
 │  ✓ admin/           │  ✓ /api/videos    │
 │  ✓ core/admin.js    │  ✓ /api/podcasts  │
-│                     │  ✓ /api/login      │
+│                     │  ✓ /api/login     │
 └─────────────────────┴───────────────────┘
 ```
 
@@ -62,6 +62,7 @@ cd StackPagesCMS/ProdBeta
    - **Build command** : (laisser vide)
    - **Build output** : `/` (racine)
 5. **Déployer** !
+6. **Cliquer sur Custom domain** → **Setup custom domain** → Entrez votre nom de domaine (monsitepro.com)
 
 #### Option B : Via CLI
 
@@ -123,22 +124,12 @@ ProdBeta/
 │   └── frontend.js         # Utilitaires frontend
 ├── functions/
 │   └── _middleware.js      # API Backend (Pages Functions)
-├── _worker.js              # Worker standalone (backup)
-├── wrangler.toml           # Configuration Wrangler
 ├── .dev.vars.example       # Template variables env
 └── .gitignore              # Protection secrets
 ```
 
 ---
 
-## 📖 Documentation
-
-- 📘 [**Guide Déploiement Cloudflare Pages**](./CLOUDFLARE_PAGES_DEPLOY.md) - Déploiement détaillé
-- 📗 [**Guide Démarrage Rapide**](./QUICK_START.md) - Setup en 5 minutes
-- 📙 [**Configuration Mode Local**](./MODE_LOCAL_CONFIG.md) - Développement local
-- 📕 [**Changelog**](./CHANGELOG.md) - Historique des modifications
-
----
 
 ## 🔌 API Endpoints
 
@@ -214,9 +205,12 @@ PODCAST_FEED_URL=https://anchor.fm/s/VOTRE_ID/podcast/rss
 
 Compatible avec :
 - Anchor.fm
+- Substack
 - Spotify for Podcasters
+- Ausha
 - Apple Podcasts
 - RSS standards
+- Etc.
 
 ---
 
