@@ -23,6 +23,84 @@ import {
 export async function onRequest(context) {
     const { request, next, env } = context;
     const url = new URL(request.url);
+    
+    // Helper pour charger un fichier depuis les assets
+    async function loadAsset(path) {
+        try {
+            // Construire l'URL complète en utilisant l'origin de la requête
+            // Si path est relatif, utiliser l'origin de request.url
+            let assetUrl;
+            if (path.startsWith('/')) {
+                // Chemin absolu : utiliser l'origin de la requête
+                assetUrl = new URL(path, request.url);
+            } else {
+                // Chemin relatif : utiliser l'origin de la requête
+                assetUrl = new URL('/' + path, request.url);
+            }
+            
+            const assetRequest = new Request(assetUrl.toString(), {
+                method: 'GET',
+                headers: request.headers
+            });
+            
+            let response = await env.ASSETS.fetch(assetRequest);
+            
+            // Suivre les redirections (308, 301, 302)
+            let redirectCount = 0;
+            while ((response.status === 308 || response.status === 301 || response.status === 302) && redirectCount < 5) {
+                const location = response.headers.get('Location');
+                if (location) {
+                    // Construire l'URL de redirection (peut être relative ou absolue)
+                    let redirectUrl;
+                    if (location.startsWith('http://') || location.startsWith('https://')) {
+                        redirectUrl = new URL(location);
+                    } else {
+                        // Si c'est une URL relative, utiliser l'origin de la requête originale
+                        redirectUrl = new URL(location, request.url);
+                    }
+                    
+                    // Créer une nouvelle requête pour la redirection
+                    const redirectRequest = new Request(redirectUrl.toString(), {
+                        method: 'GET',
+                        headers: request.headers
+                    });
+                    
+                    response = await env.ASSETS.fetch(redirectRequest);
+                    redirectCount++;
+                } else {
+                    // Pas de header Location, peut-être que c'est une redirection vers le même chemin avec un slash
+                    // Essayer d'ajouter un slash final si ce n'est pas déjà le cas
+                    if (!path.endsWith('/')) {
+                        const pathWithSlash = path + '/';
+                        const retryUrl = new URL(pathWithSlash, request.url);
+                        const retryRequest = new Request(retryUrl.toString(), {
+                            method: 'GET',
+                            headers: request.headers
+                        });
+                        response = await env.ASSETS.fetch(retryRequest);
+                        redirectCount++;
+                    } else {
+                        break;
+                    }
+                }
+            }
+            
+            if (response.status === 200) {
+                return await response.text();
+            }
+            
+            // Log pour débogage avec plus de détails
+            console.log(`loadAsset failed for ${path}: Status ${response.status}`);
+            if (response.status === 308) {
+                const location = response.headers.get('Location');
+                console.log(`  → Redirect Location: ${location}`);
+            }
+            return null;
+        } catch (error) {
+            console.error(`loadAsset error for ${path}:`, error);
+            return null;
+        }
+    }
 
     // Gérer les requêtes OPTIONS (CORS preflight)
     if (request.method === 'OPTIONS') {
@@ -67,23 +145,44 @@ export async function onRequest(context) {
         
         // Charger le template frontend/index.html (OBLIGATOIRE)
         // Ne jamais utiliser index.html racine comme fallback
-        const templateRequest = new Request(new URL('/frontend/index.html', request.url), request);
-        const templateResponse = await env.ASSETS.fetch(templateRequest);
-        
+        // Note: Cloudflare Pages peut rediriger (308), donc on suit les redirections
         let template = null;
         
-        if (templateResponse.status === 200) {
-            template = await templateResponse.text();
-        } else {
-            // frontend/index.html n'existe pas - ERREUR
-            // Ne pas utiliser index.html racine comme fallback
-            console.error('ERROR: frontend/index.html not found! Status:', templateResponse.status);
-            console.error('Request URL:', templateRequest.url);
+        // Essayer plusieurs chemins possibles pour frontend/index.html
+        // Note: Cloudflare Pages peut servir les fichiers différemment selon la configuration
+        const possiblePaths = [
+            '/frontend/index.html',
+            '/frontend/index.html/',  // Avec slash final (peut être requis)
+            'frontend/index.html',    // Sans slash initial (chemin relatif)
+        ];
+        
+        for (const templatePath of possiblePaths) {
+            template = await loadAsset(templatePath);
+            if (template) {
+                console.log(`✓ Template loaded successfully from: ${templatePath}`);
+                break; // Template trouvé, sortir de la boucle
+            } else {
+                console.log(`✗ Failed to load from: ${templatePath}`);
+            }
+        }
+        
+        // Si aucun template trouvé après avoir essayé tous les chemins
+        if (!template) {
+            console.error('ERROR: frontend/index.html not found after trying all paths!');
+            console.error('Tried paths:', possiblePaths);
+            console.error('Current request URL:', request.url);
+            console.error('Current pathname:', url.pathname);
             
-            // Pour les routes HTML, retourner une erreur explicite
+            // Pour les routes HTML, retourner une erreur explicite avec plus de détails
             if (url.pathname === '/' || url.pathname.endsWith('.html') || !url.pathname.includes('.')) {
                 return new Response(
-                    `frontend/index.html not found. Please ensure the file exists at /frontend/index.html. Status: ${templateResponse.status}`,
+                    `frontend/index.html not found.\n\n` +
+                    `Tried paths: ${possiblePaths.join(', ')}\n` +
+                    `Status 308 indicates a redirect - Cloudflare Pages may be redirecting the file.\n` +
+                    `Please check:\n` +
+                    `1. The file exists at /frontend/index.html in your repository\n` +
+                    `2. Cloudflare Pages build settings include the frontend folder\n` +
+                    `3. Check Cloudflare Pages logs for more details\n`,
                     { 
                         status: 500,
                         headers: { 'Content-Type': 'text/plain' }
@@ -93,19 +192,6 @@ export async function onRequest(context) {
             
             // Pour les assets statiques, servir normalement
             return env.ASSETS.fetch(request);
-        }
-        
-        // Si aucun template trouvé, vérifier si c'est un asset statique
-        if (!template) {
-            // Si c'est un fichier avec extension (image, CSS, JS, etc.), servir normalement
-            if (url.pathname.includes('.') && !url.pathname.endsWith('.html')) {
-                return env.ASSETS.fetch(request);
-            }
-            // Pour les routes HTML sans template, retourner 404
-            return new Response('Template not found. Please ensure frontend/index.html exists.', { 
-                status: 404,
-                headers: { 'Content-Type': 'text/plain' }
-            });
         }
         
         // Détecter si c'est une requête HTMX
