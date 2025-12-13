@@ -95,11 +95,28 @@ export async function onRequest(context) {
             sha = fileData.sha;
         }
 
+        // Detect Default Branch
+        let branch = 'main';
+        try {
+            const repoInfoRes = await fetch(`https://api.github.com/repos/${repo}`, {
+                headers: {
+                    'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
+                    'User-Agent': 'StackPagesCMS'
+                }
+            });
+            if (repoInfoRes.ok) {
+                const repoInfo = await repoInfoRes.json();
+                branch = repoInfo.default_branch || 'main';
+            }
+        } catch (e) {
+            console.warn("Failed to detect branch, defaulting to main", e);
+        }
+
         // Commit (Create or Update)
         const commitPayload = {
             message: `[Agent] Create/Update ${name}`,
             content: btoa(proxyScriptContent),
-            branch: 'main' // or master, should probably be configurable or auto-detected
+            branch: branch
         };
         if (sha) commitPayload.sha = sha;
 
