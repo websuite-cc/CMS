@@ -907,7 +907,7 @@ async function loadAgents() {
 // ====================================================================
 let currentWizardStep = 1;
 
-function wizardNext() {
+async function wizardNext() {
     if (currentWizardStep < 3) {
         // Validation per step
         if (currentWizardStep === 1) {
@@ -931,6 +931,9 @@ function wizardNext() {
         updateWizardUI();
     } else {
         // Final Step: Create / Save
+        const createBtn = document.getElementById('btn-wizard-next');
+        const originalBtnText = createBtn.innerHTML;
+
         // Determine Schedule
         let cron = "";
         const mode = document.getElementById('tab-simple').classList.contains('border-emerald-500') ? 'simple' : 'advanced';
@@ -942,30 +945,84 @@ function wizardNext() {
                 return;
             }
         } else {
-            // Logic to build cron from simple UI would go here
-            // For now, simple mock
-            const freq = document.getElementById('sched-frequency').value;
-            cron = freq + " (Mock)";
+            cron = buildSimpleCron();
         }
 
-        alert(`Création de l'agent...\n- Stockage sur GitHub\n- Planification sur CronJob.org: ${cron}`);
+        // Gather Data
+        const payload = {
+            name: document.getElementById('agent-name').value,
+            prompt: document.getElementById('agent-prompt').value,
+            gasUrl: document.getElementById('gas-url').value,
+            gasToken: document.getElementById('gas-token').value, // Assuming input id is 'gas-token'
+            schedule: cron
+        };
 
-        // Mock Save to mockAgents for UI feedback
-        mockAgents.push({
-            name: document.getElementById('agent-name').value || "New Agent",
-            id: "agent_" + Date.now(),
-            status: "active",
-            trigger: "cron",
-            schedule: cron,
-            lastRun: null
-        });
+        // UI Loading State
+        createBtn.disabled = true;
+        createBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Création...';
 
-        showView('agents');
-        currentWizardStep = 1; // Reset
-        updateWizardUI();
+        try {
+            const authKey = localStorage.getItem('stackpages_auth');
+            const res = await fetch('/api/agent/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Auth-Key': authKey
+                },
+                body: JSON.stringify(payload)
+            });
 
-        // Refresh Agent List
-        loadAgents();
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+                // Success
+                alert("🎉 Agent créé avec succès !\n\nProxy déployé sur GitHub et job planifié.");
+
+                showView('agents');
+                currentWizardStep = 1;
+                updateWizardUI();
+
+                // Refresh list
+                loadAgents();
+            } else {
+                throw new Error(data.error || "Erreur inconnue");
+            }
+
+        } catch (e) {
+            console.error("Agent Create Error", e);
+            alert("Erreur lors de la création de l'agent :\n" + e.message);
+        } finally {
+            createBtn.disabled = false;
+            createBtn.innerHTML = originalBtnText;
+        }
+    }
+}
+
+function buildSimpleCron() {
+    const freq = document.getElementById('sched-frequency').value;
+    const time = document.getElementById('sched-time').value; // HH:MM
+    const days = Array.from(document.querySelectorAll('#sched-days input:checked')).map(cb => cb.value);
+
+    // Default time parts
+    let [hour, minute] = time ? time.split(':') : ['09', '00'];
+
+    // Map frequency to cron
+    // Simplified mapping for MVP
+    switch (freq) {
+        case 'hourly':
+            return `${minute} * * * *`;
+        case 'daily':
+            return `${minute} ${hour} * * *`;
+        case 'weekly':
+            // CronJob.org uses standard cron: min hour day month weekday
+            // Note: Cloudflare Cron Triggers use standard Cron too.
+            // weekday: 0-6 (Sun-Sat) or 1-7. Let's assume standard 0-6.
+            const dayStr = days.length > 0 ? days.join(',') : '*';
+            return `${minute} ${hour} * * ${dayStr}`;
+        case 'monthly':
+            return `${minute} ${hour} 1 * *`; // 1st of month
+        default:
+            return `${minute} ${hour} * * *`;
     }
 }
 
