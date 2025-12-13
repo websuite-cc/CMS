@@ -77,7 +77,7 @@ Dashboard → Settings → Environment variables
 ```env
 ADMIN_EMAIL = admin@example.com
 ADMIN_PASSWORD = votre_password_securise
-SUBSTACK_FEED_URL = https://votrecompte.substack.com/feed
+BLOG_FEED_URL = https://votrecompte.substack.com/feed
 YOUTUBE_FEED_URL = https://www.youtube.com/feeds/videos.xml?channel_id=VOTRE_ID
 PODCAST_FEED_URL = https://anchor.fm/s/VOTRE_ID/podcast/rss
 ```
@@ -311,10 +311,10 @@ MIT License - Voir [LICENSE](LICENSE) pour plus de détails.
 
 ## 📞 Support
 
-- 📧 **Email** : support@stackpages.net
+- 📧 **Email** : cms@iziweb.page
 - 💬 **Discord** : [Rejoindre la communauté](#)
-- 📖 **Documentation** : https://docs.stackpages.net
-- 🐛 **Issues** : [GitHub Issues](https://github.com/VOTRE_USERNAME/StackPagesCMS/issues)
+- 📖 **Documentation** : https://cms.iziweb.page
+- 🐛 **Issues** : [GitHub Issues](https://github.com/iziweb-studio/CMS/issues)
 
 ---
 
