@@ -4,7 +4,7 @@
 // GET /api/frontend/preview - Servir le template depuis le cache pour prévisualisation
 // ====================================================================
 
-import { isAuthenticated, errorResponse } from '../shared/utils.js';
+import { isAuthenticated, errorResponse } from '../../shared/utils.js';
 
 const CACHE_KEY = 'frontend_template_preview';
 

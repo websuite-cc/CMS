@@ -5,7 +5,7 @@
 // GET /api/frontend/template/preview - Récupérer template depuis le cache
 // ====================================================================
 
-import { isAuthenticated, jsonResponse, errorResponse } from '../../shared/utils.js';
+import { isAuthenticated, jsonResponse, errorResponse } from '../../../shared/utils.js';
 
 // Clé pour le cache Cloudflare KV (ou Cache API)
 const CACHE_KEY = 'frontend_template_preview';

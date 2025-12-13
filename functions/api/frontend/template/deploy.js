@@ -4,7 +4,7 @@
 // POST /api/frontend/template/deploy - Déployer template vers frontend/index.html
 // ====================================================================
 
-import { isAuthenticated, jsonResponse, errorResponse } from '../../shared/utils.js';
+import { isAuthenticated, jsonResponse, errorResponse } from '../../../shared/utils.js';
 
 export async function onRequestPost(context) {
     const { request, env } = context;
