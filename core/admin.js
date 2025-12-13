@@ -142,6 +142,7 @@ function showView(viewName) {
         'podcasts': 'Podcasts',
         'agents': 'Agents IA & Automatisations',
         'agent-create': 'Nouveau Worker IA',
+        'agent-connections': 'Connexions & Services',
         'config': 'Configuration',
         'help': 'Aide & Support'
     };
@@ -157,6 +158,10 @@ function showView(viewName) {
         activeBtn.classList.add('bg-purple-50', 'dark:bg-slate-700', 'text-purple-600', 'dark:text-purple-400');
         activeBtn.classList.remove('text-slate-600', 'dark:text-slate-300');
     }
+
+    // Special handlers per view
+    if (viewName === 'agents') loadAgents();
+    if (viewName === 'agent-connections') loadConnections();
 }
 
 // Data Loading
@@ -836,6 +841,86 @@ function loadAgents() {
 
 
 // ====================================================================
+// CONNECTIONS LOGIC (MOCK)
+// ====================================================================
+const mockConnections = [
+    { id: 'conn_1', service: 'openai', name: 'Mon OpenAI (Pro)', created: '2023-10-01' },
+    { id: 'conn_2', service: 'linkedin', name: 'Profil LinkedIn - CTO', created: '2023-11-15' }
+];
+
+function loadConnections() {
+    const list = document.getElementById('connections-list');
+    if (!list) return;
+
+    if (mockConnections.length === 0) {
+        list.innerHTML = '<div class="p-8 text-center text-slate-500">Aucune connexion active. Ajoutez-en une à droite.</div>';
+        return;
+    }
+
+    list.innerHTML = mockConnections.map(conn => `
+        <div class="p-4 flex justify-between items-center hover:bg-slate-50 dark:hover:bg-slate-700/50 transition">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center text-xl shadow-sm">
+                    ${getServiceIcon(conn.service)}
+                </div>
+                <div>
+                    <h5 class="font-bold text-slate-800 dark:text-white">${conn.name}</h5>
+                    <p class="text-xs text-slate-500 capitalize">${conn.service} • Ajouté le ${conn.created}</p>
+                </div>
+            </div>
+            <button onclick="deleteConnection('${conn.id}')" class="text-slate-400 hover:text-red-500 transition p-2">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </div>
+    `).join('');
+}
+
+function getServiceIcon(service) {
+    const map = {
+        'openai': '<i class="fas fa-brain text-green-500"></i>',
+        'linkedin': '<i class="fab fa-linkedin text-blue-600"></i>',
+        'twitter': '<i class="fab fa-twitter text-sky-500"></i>',
+        'gmail': '<i class="fas fa-envelope text-red-500"></i>',
+        'notion': '<i class="fas fa-book text-slate-800 dark:text-white"></i>',
+        'custom': '<i class="fas fa-plug text-purple-500"></i>'
+    };
+    return map[service] || '<i class="fas fa-globe"></i>';
+}
+
+function saveConnection() {
+    const name = document.getElementById('new-connection-name').value;
+    const key = document.getElementById('new-connection-key').value;
+    const service = document.getElementById('new-connection-service').value;
+
+    if (!name || !key) {
+        alert("Veuillez remplir le nom et la clé API.");
+        return;
+    }
+
+    // Mock Save
+    mockConnections.push({
+        id: 'conn_' + Date.now(),
+        service: service,
+        name: name,
+        created: new Date().toLocaleDateString('fr-FR')
+    });
+
+    document.getElementById('new-connection-name').value = '';
+    document.getElementById('new-connection-key').value = '';
+
+    loadConnections();
+    alert("Connexion enregistrée (Simulation)");
+}
+
+function deleteConnection(id) {
+    if (!confirm("Supprimer cette connexion ?")) return;
+    const idx = mockConnections.findIndex(c => c.id === id);
+    if (idx > -1) mockConnections.splice(idx, 1);
+    loadConnections();
+}
+
+
+// ====================================================================
 // WIZARD LOGIC
 // ====================================================================
 let currentWizardStep = 1;
@@ -881,6 +966,26 @@ function updateWizardUI() {
 
     // Show current step
     document.getElementById(`wizard-step-${currentWizardStep}`).classList.remove('hidden');
+
+    // If entering Step 2, populate connections
+    if (currentWizardStep === 2) {
+        const wizardList = document.getElementById('wizard-connections-list');
+        if (mockConnections.length === 0) {
+            wizardList.innerHTML = '<div class="text-center text-sm text-slate-400 italic">Aucune connexion configurée. <a href="#" onclick="showView(\'agent-connections\')" class="text-emerald-500 hover:underline">Ajouter une connexion</a></div>';
+        } else {
+            wizardList.innerHTML = mockConnections.map(conn => `
+                <label class="flex items-center gap-3 p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer transition">
+                    <input type="checkbox" name="agentConnections" value="${conn.id}" class="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500">
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 rounded bg-white dark:bg-slate-700 flex items-center justify-center text-sm shadow-sm border border-slate-200 dark:border-slate-600">
+                             ${getServiceIcon(conn.service)}
+                        </div>
+                        <span class="text-sm font-medium text-slate-700 dark:text-slate-300">${conn.name}</span>
+                    </div>
+                </label>
+            `).join('');
+        }
+    }
 
     // Update Buttons
     const btnBack = document.getElementById('btn-back');
