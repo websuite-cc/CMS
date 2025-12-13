@@ -200,7 +200,7 @@ export async function onRequest(context) {
         
         // Configuration par défaut (peut être améliorée avec des variables d'env)
         const siteConfig = {
-            site: { name: "StackPages CMS" },
+            site: { name: "iziWebCMS" },
             seo: {
                 metaDescription: "",
                 keywords: ""
