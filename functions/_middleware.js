@@ -550,7 +550,79 @@ export async function onRequest(context) {
         }
         
         // Pour les autres assets (images, CSS, JS), servir normalement
-        return env.ASSETS.fetch(request);
+        // Mais vérifier que ce n'est pas l'index racine
+        const assetResponse = await env.ASSETS.fetch(request);
+        
+        // Vérifier si la réponse est l'index racine (même avec status 200)
+        if (assetResponse.status === 200) {
+            const contentType = assetResponse.headers.get('Content-Type');
+            const responseUrl = assetResponse.url || request.url;
+            
+            // Si c'est du HTML et que l'URL pointe vers index.html racine, c'est suspect
+            if (contentType && contentType.includes('text/html')) {
+                if (responseUrl.includes('/index.html') && 
+                    !responseUrl.includes('/admin/') && 
+                    !responseUrl.includes('/core/') &&
+                    !responseUrl.includes('/frontend/') &&
+                    path !== '/' && 
+                    path !== '/index.html') {
+                    // C'est probablement l'index racine servi par défaut pour un 404
+                    console.log(`[SSR] 404 - Asset response is root index.html: ${path}`);
+                    const notFoundHtml = injectContent(template, `
+                        <div class="p-8 text-center">
+                            <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-200 mb-4">404 - Page non trouvée</h1>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4">La page <code class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">${path}</code> n'existe pas.</p>
+                            <a href="/" class="text-purple-600 dark:text-purple-400 hover:underline">Retour à l'accueil</a>
+                        </div>
+                    `, {
+                        title: `404 - Page non trouvée - ${siteName}`,
+                        description: siteDescription,
+                        keywords: siteKeywords,
+                        siteName: siteName
+                    });
+                    return new Response(notFoundHtml, {
+                        status: 404,
+                        statusText: 'Not Found',
+                        headers: { 
+                            'Content-Type': 'text/html; charset=utf-8',
+                            'Cache-Control': 'no-cache'
+                        }
+                    });
+                }
+            }
+        }
+        
+        // Si c'est un 404, retourner un vrai 404
+        if (assetResponse.status === 404) {
+            console.log(`[SSR] 404 - Asset not found: ${path}`);
+            // Pour les routes HTML, retourner un 404 avec le template
+            if (isHtmlRoute) {
+                const notFoundHtml = injectContent(template, `
+                    <div class="p-8 text-center">
+                        <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-200 mb-4">404 - Page non trouvée</h1>
+                        <p class="text-slate-600 dark:text-slate-400 mb-4">La page <code class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">${path}</code> n'existe pas.</p>
+                        <a href="/" class="text-purple-600 dark:text-purple-400 hover:underline">Retour à l'accueil</a>
+                    </div>
+                `, {
+                    title: `404 - Page non trouvée - ${siteName}`,
+                    description: siteDescription,
+                    keywords: siteKeywords,
+                    siteName: siteName
+                });
+                return new Response(notFoundHtml, {
+                    status: 404,
+                    statusText: 'Not Found',
+                    headers: { 
+                        'Content-Type': 'text/html; charset=utf-8',
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+            }
+            // Pour les autres assets, retourner le 404 tel quel
+            return assetResponse;
+        }
+        
+        return assetResponse;
     }
 
     // Si WSTD_STAGING_URL est défini, proxy vers Webstudio
