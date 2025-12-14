@@ -23,23 +23,42 @@ export async function onRequestPost(context) {
 
         // Option 1: Déployer via GitHub API (recommandé pour production)
         if (deployToGitHub) {
-            const ghConfig = JSON.parse(env.GITHUB_CONFIG || '{}');
+            // Utiliser les variables d'environnement séparées (comme les autres APIs)
+            const owner = env.GITHUB_USER;
+            const repo = env.GITHUB_REPO;
+            const token = env.GITHUB_TOKEN;
             
-            if (!ghConfig.owner || !ghConfig.repo || !ghConfig.token) {
-                return errorResponse("Configuration GitHub manquante", 400);
+            // Fallback: essayer aussi GITHUB_CONFIG si les variables séparées ne sont pas définies
+            let ghConfig = null;
+            if (!owner || !repo || !token) {
+                try {
+                    ghConfig = JSON.parse(env.GITHUB_CONFIG || '{}');
+                } catch (e) {
+                    console.error('Error parsing GITHUB_CONFIG:', e);
+                }
+            }
+            
+            const finalOwner = owner || ghConfig?.owner;
+            const finalRepo = repo || ghConfig?.repo;
+            const finalToken = token || ghConfig?.token;
+            const branch = ghConfig?.branch || 'main';
+            
+            if (!finalOwner || !finalRepo || !finalToken) {
+                return errorResponse("Configuration GitHub manquante. Veuillez configurer GITHUB_USER, GITHUB_REPO et GITHUB_TOKEN dans les variables d'environnement.", 400);
             }
 
             const path = 'frontend/index.html';
             const contentBase64 = btoa(unescape(encodeURIComponent(html)));
-            const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${path}`;
+            const url = `https://api.github.com/repos/${finalOwner}/${finalRepo}/contents/${path}`;
 
             // Vérifier si le fichier existe pour obtenir le SHA
             let sha = null;
             try {
                 const checkRes = await fetch(url, {
                     headers: {
-                        'Authorization': `token ${ghConfig.token}`,
-                        'Accept': 'application/vnd.github.v3+json'
+                        'Authorization': `Bearer ${finalToken}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'User-Agent': 'iziWebCMS'
                     }
                 });
 
@@ -55,23 +74,25 @@ export async function onRequestPost(context) {
             const githubBody = {
                 message: `Deploy frontend template - ${new Date().toISOString()}`,
                 content: contentBase64,
-                branch: ghConfig.branch || 'main'
+                branch: branch
             };
             if (sha) githubBody.sha = sha;
 
             const res = await fetch(url, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `token ${ghConfig.token}`,
+                    'Authorization': `Bearer ${finalToken}`,
                     'Accept': 'application/vnd.github.v3+json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'User-Agent': 'iziWebCMS'
                 },
                 body: JSON.stringify(githubBody)
             });
 
             if (!res.ok) {
-                const error = await res.json();
-                throw new Error(error.message || 'Erreur lors de la publication GitHub');
+                const errorData = await res.json().catch(() => ({ message: 'Unknown error' }));
+                console.error('GitHub API Error:', res.status, errorData);
+                throw new Error(errorData.message || `Erreur GitHub API: ${res.status}`);
             }
 
             return jsonResponse({

@@ -584,9 +584,24 @@
             }
 
             try {
-                // Déployer via GitHub si configuré, sinon sauvegarder localement
-                const ghConfig = JSON.parse(localStorage.getItem('stackpages_github_config') || '{}');
-                const deployToGitHub = !!(ghConfig.owner && ghConfig.repo && ghConfig.token);
+                // Vérifier si GitHub est configuré via l'API (variables d'environnement)
+                let deployToGitHub = false;
+                try {
+                    const configResponse = await fetch('/api/config', {
+                        headers: {
+                            'X-Auth-Key': getAuthToken()
+                        }
+                    });
+                    if (configResponse.ok) {
+                        const config = await configResponse.json();
+                        deployToGitHub = config.hasGithub || false;
+                    }
+                } catch (e) {
+                    console.warn('Could not check GitHub config via API, falling back to localStorage:', e);
+                    // Fallback: vérifier localStorage (ancien système)
+                    const ghConfig = JSON.parse(localStorage.getItem('stackpages_github_config') || '{}');
+                    deployToGitHub = !!(ghConfig.owner && ghConfig.repo && ghConfig.token);
+                }
 
                 const response = await fetch('/api/frontend/template/deploy', {
                     method: 'POST',
