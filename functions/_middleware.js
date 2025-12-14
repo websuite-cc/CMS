@@ -199,64 +199,7 @@ export async function onRequest(context) {
         }
         
         // Sinon, servir preview/index.html normalement (chargement initial depuis localStorage)
-        console.log(`[Preview Route] Serving preview/index.html static file`);
-        
-        // Essayer plusieurs chemins possibles pour preview/index.html
-        const previewPaths = [
-            '/preview/index.html',
-            '/preview/index.html/',
-            'preview/index.html',
-            'preview/index.html/'
-        ];
-        
-        for (const previewPath of previewPaths) {
-            let previewUrl;
-            if (previewPath.startsWith('/')) {
-                previewUrl = new URL(previewPath, request.url);
-            } else {
-                previewUrl = new URL('/' + previewPath, request.url);
-            }
-            
-            const previewRequest = new Request(previewUrl.toString(), request);
-            let previewResponse = await env.ASSETS.fetch(previewRequest);
-            
-            // Suivre les redirections si nécessaire
-            let redirectCount = 0;
-            while ((previewResponse.status === 308 || previewResponse.status === 301 || previewResponse.status === 302) && redirectCount < 5) {
-                const location = previewResponse.headers.get('Location');
-                if (location) {
-                    const redirectUrl = location.startsWith('http') ? new URL(location) : new URL(location, request.url);
-                    previewResponse = await env.ASSETS.fetch(new Request(redirectUrl.toString(), request));
-                    redirectCount++;
-                } else {
-                    break;
-                }
-            }
-            
-            if (previewResponse.status === 200) {
-                console.log(`[Preview Route] ✓ Successfully loaded from: ${previewPath}`);
-                return previewResponse;
-            }
-        }
-        
-        // Si pas trouvé avec ASSETS.fetch, essayer avec loadAsset
-        const previewContent = await loadAsset('/preview/index.html');
-        if (previewContent) {
-            console.log(`[Preview Route] ✓ Successfully loaded via loadAsset`);
-            return new Response(previewContent, {
-                headers: {
-                    'Content-Type': 'text/html; charset=utf-8'
-                }
-            });
-        }
-        
-        // Si toujours pas trouvé, retourner une erreur explicite
-        console.error(`[Preview Route] Failed to load preview/index.html from all paths`);
-        return new Response(
-            `preview/index.html not found. Please ensure the file exists in the preview/ directory.\n\n` +
-            `Tried paths: ${previewPaths.join(', ')}`,
-            { status: 404, headers: { 'Content-Type': 'text/plain' } }
-        );
+        return env.ASSETS.fetch(request);
     }
     
     // Intercepter les requêtes HTMX depuis la prévisualisation API (ancien système)
@@ -305,69 +248,16 @@ export async function onRequest(context) {
     }
     
     // Route spéciale : /admin/dashboard/ide → servir admin/ide.html
-    // IMPORTANT : Cette route doit être AVANT la route générale /admin/*
-    // Vérifier aussi les variations avec ou sans slash final
     if (url.pathname === '/admin/dashboard/ide' || 
         url.pathname === '/admin/dashboard/ide/' ||
         url.pathname.startsWith('/admin/dashboard/ide?')) {
-        console.log(`[IDE Route] Handling /admin/dashboard/ide request`);
-        
-        // Essayer plusieurs chemins possibles pour ide.html
-        const idePaths = [
-            '/admin/ide.html',
-            '/admin/IDE.html',
-            'admin/ide.html',
-            'admin/IDE.html'
-        ];
-        
-        for (const idePath of idePaths) {
-            let ideUrl;
-            if (idePath.startsWith('/')) {
-                ideUrl = new URL(idePath, request.url);
-            } else {
-                ideUrl = new URL('/' + idePath, request.url);
-            }
-            
-            const ideRequest = new Request(ideUrl.toString(), {
-                method: 'GET',
-                headers: request.headers
-            });
-            
-            console.log(`[IDE Route] Trying to fetch: ${ideUrl.toString()}`);
-            let ideResponse = await env.ASSETS.fetch(ideRequest);
-            
-            // Suivre les redirections si nécessaire
-            let redirectCount = 0;
-            while ((ideResponse.status === 308 || ideResponse.status === 301 || ideResponse.status === 302) && redirectCount < 5) {
-                const location = ideResponse.headers.get('Location');
-                if (location) {
-                    const redirectUrl = location.startsWith('http') ? new URL(location) : new URL(location, request.url);
-                    console.log(`[IDE Route] Following redirect to: ${redirectUrl.toString()}`);
-                    ideResponse = await env.ASSETS.fetch(new Request(redirectUrl.toString(), {
-                        method: 'GET',
-                        headers: request.headers
-                    }));
-                    redirectCount++;
-                } else {
-                    break;
-                }
-            }
-            
-            if (ideResponse.status === 200) {
-                console.log(`[IDE Route] ✓ Successfully loaded IDE from: ${idePath}`);
-                return ideResponse;
-            } else {
-                console.log(`[IDE Route] ✗ Failed to load from ${idePath}, status: ${ideResponse.status}`);
-            }
-        }
-        
-        // Si aucun chemin n'a fonctionné, retourner une erreur explicite
-        console.error(`[IDE Route] ERROR: Could not load IDE from any path. Tried: ${idePaths.join(', ')}`);
-        return new Response(
-            `IDE not found. Tried paths: ${idePaths.join(', ')}\n` +
-            `Please ensure admin/ide.html exists in the project.`,
-            { status: 404, headers: { 'Content-Type': 'text/plain' } }
-        );
+        // Rediriger vers admin/ide.html
+        const ideUrl = new URL('/admin/ide.html', request.url);
+        const ideRequest = new Request(ideUrl.toString(), {
+            method: 'GET',
+            headers: request.headers
+        });
+        return env.ASSETS.fetch(ideRequest);
     }
     
     if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/admin/') || url.pathname.startsWith('/core/')) {
