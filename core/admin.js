@@ -337,8 +337,63 @@ async function loadConfig() {
     }
 }
 
-// Config Saving (Disabled)
-// La configuration est gérée par les variables d'environnement.
+// Config Saving
+async function saveConfig() {
+    const statusEl = document.getElementById('config-status');
+    if (statusEl) {
+        statusEl.textContent = 'Sauvegarde en cours...';
+        statusEl.className = 'text-xs text-purple-500 mt-2';
+    }
+
+    try {
+        const authKey = localStorage.getItem('websuite_auth');
+        
+        const config = {
+            siteName: document.getElementById('conf-siteName').value.trim(),
+            author: document.getElementById('conf-author').value.trim(),
+            blogRssUrl: document.getElementById('conf-substack').value.trim(),
+            youtubeRssUrl: document.getElementById('conf-youtube')?.value.trim() || '',
+            podcastFeedUrl: document.getElementById('conf-podcast')?.value.trim() || '',
+            wstdStagingUrl: document.getElementById('conf-wstd-staging')?.value.trim() || '',
+            analyticsEmbedUrl: appState.config.analyticsEmbedUrl || '',
+            frontendBuilderUrl: appState.config.frontendBuilderUrl || '',
+            seo: {
+                metaTitle: document.getElementById('conf-metaTitle').value.trim(),
+                metaDescription: document.getElementById('conf-metaDesc').value.trim(),
+                metaKeywords: document.getElementById('conf-metaKeywords').value.trim()
+            }
+        };
+
+        const response = await fetch(buildApiUrl('/api/config'), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Auth-Key': authKey
+            },
+            body: JSON.stringify(config)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            if (statusEl) {
+                statusEl.textContent = '✓ Configuration sauvegardée avec succès dans config.json';
+                statusEl.className = 'text-xs text-green-500 mt-2';
+            }
+            // Recharger la config pour s'assurer qu'elle est à jour
+            await loadConfig();
+        } else {
+            throw new Error(result.error || 'Erreur lors de la sauvegarde');
+        }
+    } catch (error) {
+        console.error('Save config error:', error);
+        if (statusEl) {
+            statusEl.textContent = `✗ Erreur: ${error.message}`;
+            statusEl.className = 'text-xs text-red-500 mt-2';
+        }
+        alert(`Erreur lors de la sauvegarde: ${error.message}`);
+    }
+}
 
 // Renderers
 function renderDashboard() {

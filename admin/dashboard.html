@@ -1387,29 +1387,28 @@
                         </div>
                     </div>
 
-                    <form id="config-form" class="space-y-6 opacity-75">
+                    <form id="config-form" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nom du
                                     Site</label>
-                                <input type="text" id="conf-siteName" readonly
-                                    class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                                <input type="text" id="conf-siteName"
+                                    class="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
                             </div>
                             <div>
                                 <label
                                     class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Auteur</label>
-                                <input type="text" id="conf-author" readonly
-                                    class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                                <input type="text" id="conf-author"
+                                    class="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
                                 RSS Blog</label>
-                            <input type="url" id="conf-substack" readonly
-                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                <code>BLOG_FEED_URL</code> (Substack,
+                            <input type="url" id="conf-substack"
+                                class="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">URL du flux RSS (Substack,
                                 WordPress, Ghost, Medium...)
                             </p>
                         </div>
@@ -1418,10 +1417,9 @@
                             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
                                 RSS
                                 YouTube</label>
-                            <input type="url" id="conf-youtube" readonly
-                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                <code>YOUTUBE_FEED_URL</code>
+                            <input type="url" id="conf-youtube"
+                                class="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">URL du flux RSS YouTube
                             </p>
                         </div>
 
@@ -1429,10 +1427,9 @@
                             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL Flux
                                 RSS
                                 Podcast</label>
-                            <input type="url" id="conf-podcast" readonly
-                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                <code>PODCAST_FEED_URL</code>
+                            <input type="url" id="conf-podcast"
+                                class="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">URL du flux RSS Podcast
                             </p>
                         </div>
 
@@ -1440,12 +1437,10 @@
                             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL
                                 Webstudio
                                 Staging</label>
-                            <input type="url" id="conf-wstd-staging" readonly
-                                class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                <code>WSTD_STAGING_URL</code>
-                                (Optionnel -
-                                Active le proxy vers Webstudio)
+                            <input type="url" id="conf-wstd-staging"
+                                class="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">URL Webstudio Staging
+                                (Optionnel - Active le proxy vers Webstudio)
                             </p>
                         </div>
 
@@ -1457,43 +1452,47 @@
                                     <label
                                         class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Titre
                                         Meta</label>
-                                    <input type="text" id="conf-metaTitle" readonly
-                                        class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                        <code>META_TITLE</code>
+                                    <input type="text" id="conf-metaTitle"
+                                        class="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Titre SEO pour les moteurs de recherche
                                     </p>
                                 </div>
                                 <div>
                                     <label
                                         class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Description
                                         Meta</label>
-                                    <textarea id="conf-metaDesc" rows="3" readonly
-                                        class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed"></textarea>
-                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                        <code>META_DESCRIPTION</code>
+                                    <textarea id="conf-metaDesc" rows="3"
+                                        class="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"></textarea>
+                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Description SEO pour les moteurs de recherche
                                     </p>
                                 </div>
                                 <div>
                                     <label
                                         class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Mots-clés
                                         Meta</label>
-                                    <input type="text" id="conf-metaKeywords" readonly
-                                        class="w-full bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Variable:
-                                        <code>META_KEYWORDS</code>
+                                    <input type="text" id="conf-metaKeywords"
+                                        class="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                                    <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Mots-clés séparés par des virgules
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="border-t dark:border-slate-700 pt-4">
-                            <h4 class="text-sm font-medium text-slate-900 dark:text-white mb-4">Maintenance</h4>
-                            <button type="button" onclick="clearCache()"
-                                class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
-                                <i class="fas fa-broom"></i> Vider le Cache
+                        <div class="border-t dark:border-slate-700 pt-4 flex justify-between items-center">
+                            <div>
+                                <h4 class="text-sm font-medium text-slate-900 dark:text-white mb-4">Maintenance</h4>
+                                <button type="button" onclick="clearCache()"
+                                    class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
+                                    <i class="fas fa-broom"></i> Vider le Cache
+                                </button>
+                                <p id="cache-status" class="text-xs text-slate-500 mt-2"></p>
+                            </div>
+                            <button type="button" onclick="saveConfig()"
+                                class="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-6 py-3 rounded-lg font-semibold transition shadow-lg shadow-purple-500/30 flex items-center gap-2">
+                                <i class="fas fa-save"></i> Sauvegarder la Configuration
                             </button>
-                            <p id="cache-status" class="text-xs text-slate-500 mt-2"></p>
                         </div>
+                        <p id="config-status" class="text-xs text-slate-500 mt-2"></p>
                     </form>
                 </div>
             </div>

@@ -468,14 +468,34 @@ export async function onRequest(context) {
         const isHtmx = isHtmxRequest(request);
         const path = url.pathname;
         
-        // Configuration par défaut (peut être améliorée avec des variables d'env)
-        const siteConfig = {
+        // Charger la configuration depuis config.json (GitHub) ou utiliser les valeurs par défaut
+        let siteConfig = {
             site: { name: "WebSuite" },
             seo: {
                 metaDescription: "",
                 keywords: ""
             }
         };
+        
+        // Essayer de charger config.json depuis GitHub
+        try {
+            const { readConfigFromGitHub } = await import('./shared/github-config.js');
+            const githubConfig = await readConfigFromGitHub(env);
+            if (githubConfig) {
+                siteConfig = {
+                    site: { 
+                        name: githubConfig.siteName || "WebSuite" 
+                    },
+                    seo: {
+                        metaDescription: githubConfig.seo?.metaDescription || "",
+                        keywords: githubConfig.seo?.metaKeywords || ""
+                    }
+                };
+            }
+        } catch (e) {
+            console.log('Could not load config.json, using defaults');
+        }
+        
         const siteName = siteConfig.site.name;
         const siteDescription = siteConfig.seo.metaDescription || "";
         const siteKeywords = siteConfig.seo.keywords || "";
