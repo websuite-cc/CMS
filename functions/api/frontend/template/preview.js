@@ -8,7 +8,7 @@
 import { isAuthenticated, jsonResponse, errorResponse } from '../../../shared/utils.js';
 
 // Clé pour le cache Cloudflare KV (ou Cache API)
-const CACHE_KEY = 'frontend_template_preview';
+const CACHE_KEY_PREFIX = 'frontend_template_';
 const CACHE_TTL = 3600; // 1 heure
 
 export async function onRequestPost(context) {
@@ -26,6 +26,10 @@ export async function onRequestPost(context) {
             return errorResponse("Le contenu HTML est requis", 400);
         }
 
+        // Utiliser le slug comme clé de cache, ou 'preview' par défaut
+        const slug = metadata.slug || 'preview';
+        const cacheKey = `${CACHE_KEY_PREFIX}${slug}`;
+
         const templateData = {
             html,
             metadata,
@@ -36,14 +40,14 @@ export async function onRequestPost(context) {
         // Sauvegarder dans Cloudflare KV si disponible
         if (env.FRONTEND_TEMPLATE_CACHE) {
             await env.FRONTEND_TEMPLATE_CACHE.put(
-                CACHE_KEY,
+                cacheKey,
                 JSON.stringify(templateData),
                 { expirationTtl: CACHE_TTL }
             );
         } else {
             // Fallback: utiliser Cache API
             const cache = caches.default;
-            const cacheRequest = new Request(`https://cache.local/${CACHE_KEY}`);
+            const cacheRequest = new Request(`https://cache.local/${cacheKey}`);
             const cacheResponse = new Response(JSON.stringify(templateData), {
                 headers: {
                     'Content-Type': 'application/json',

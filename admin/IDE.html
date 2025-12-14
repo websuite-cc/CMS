@@ -521,7 +521,7 @@
             }
         }
 
-        // Open preview in new tab - Utilise le cache
+        // Open preview in new tab - Utilise le slug
         async function previewPageNewTab() {
             const htmlContent = monacoEditor ? monacoEditor.getValue().trim() : '';
 
@@ -530,11 +530,24 @@
                 return;
             }
 
+            // Récupérer le slug
+            let slug = document.getElementById('page-slug')?.value.trim();
+            if (!slug) {
+                const title = document.getElementById('page-title')?.value.trim();
+                if (!title) {
+                    alert('Veuillez définir un titre ou un slug pour la prévisualisation');
+                    return;
+                }
+                slug = title.toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/(^-|-$)/g, '');
+            }
+
             // Sauvegarder d'abord en cache si pas déjà fait
             await savePage('draft');
 
-            // Ouvrir la prévisualisation depuis le cache
-            const previewUrl = `/api/frontend/preview?t=${Date.now()}`;
+            // Ouvrir la prévisualisation avec le slug
+            const previewUrl = `/api/admin/preview?slug=${encodeURIComponent(slug)}`;
             window.open(previewUrl, '_blank');
         }
 
