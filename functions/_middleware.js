@@ -314,17 +314,54 @@ export async function onRequest(context) {
         // Ne pas laisser Cloudflare Pages servir l'index racine par défaut
         if (assetResponse.status === 404) {
             console.log(`[Admin/Core Route] 404 - File not found: ${url.pathname}`);
+            // Vérifier que la réponse n'est pas l'index racine
+            const responseText = await assetResponse.clone().text().catch(() => '');
+            if (responseText.includes('<!DOCTYPE html') || responseText.includes('<html')) {
+                console.log(`[Admin/Core Route] WARNING: 404 response contains HTML, likely index.html root`);
+            }
             return new Response(
                 `404 - File not found: ${url.pathname}\n\n` +
                 `The requested file does not exist in the admin or core directory.`,
                 { 
                     status: 404,
+                    statusText: 'Not Found',
                     headers: { 
                         'Content-Type': 'text/plain',
-                        'Cache-Control': 'no-cache'
+                        'Cache-Control': 'no-cache',
+                        'X-Content-Type-Options': 'nosniff'
                     }
                 }
             );
+        }
+        
+        // Vérifier aussi si le contenu est l'index racine (même si status 200)
+        // Cela peut arriver si Cloudflare Pages redirige vers index.html
+        if (assetResponse.status === 200) {
+            const contentType = assetResponse.headers.get('Content-Type');
+            if (contentType && contentType.includes('text/html')) {
+                const responseUrl = assetResponse.url || request.url;
+                // Si l'URL de la réponse pointe vers index.html racine, c'est suspect
+                if (responseUrl.includes('/index.html') && 
+                    !responseUrl.includes('/admin/') && 
+                    !responseUrl.includes('/core/') &&
+                    !responseUrl.includes('/frontend/')) {
+                    console.log(`[Admin/Core Route] WARNING: Response URL points to root index.html: ${responseUrl}`);
+                    // Retourner un 404 au lieu de servir l'index racine
+                    return new Response(
+                        `404 - File not found: ${url.pathname}\n\n` +
+                        `The requested file does not exist in the admin or core directory.`,
+                        { 
+                            status: 404,
+                            statusText: 'Not Found',
+                            headers: { 
+                                'Content-Type': 'text/plain',
+                                'Cache-Control': 'no-cache',
+                                'X-Content-Type-Options': 'nosniff'
+                            }
+                        }
+                    );
+                }
+            }
         }
         
         // Log pour débogage
