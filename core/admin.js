@@ -101,21 +101,15 @@ async function checkAuth() {
     const publicPages = [
         '/admin',
         '/admin/',
-        '/admin/index.html',
-        '/admin/ide.html',
-        '/admin/IDE.html',
-        '/admin/dashboard/ide',
-        '/admin/dashboard/ide/'
+        '/admin/index.html'
     ];
     
-    // Vérifier si on est sur une page publique (login ou IDE)
-    // Utiliser startsWith pour être plus flexible avec les variations d'URL
-    const isPublicPage = publicPages.some(page => currentPath === page || currentPath.startsWith(page + '/')) ||
-                        currentPath.includes('/admin/dashboard/ide') ||
-                        currentPath.includes('/admin/ide');
+    // Vérifier si on est sur une page publique (login uniquement)
+    // L'IDE nécessite maintenant l'authentification comme le dashboard
+    const isPublicPage = publicPages.some(page => currentPath === page || currentPath.startsWith(page + '/'));
     
     if (isPublicPage) {
-        // We're on the login page or IDE, don't redirect
+        // We're on the login page, don't redirect
         return;
     }
 
