@@ -42,8 +42,63 @@
                 try {
                     const { html, metadata } = JSON.parse(templateData);
                     
-                    // Injecter le HTML dans la page
-                    document.body.innerHTML = html;
+                    // Parser le HTML pour extraire head et body
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    
+                    // Supprimer le loader
+                    document.querySelector('.preview-loader')?.remove();
+                    
+                    // Remplacer les éléments du head
+                    if (doc.head) {
+                        const currentHead = document.head;
+                        const newHeadElements = Array.from(doc.head.children);
+                        
+                        // Ajouter les éléments du template au head (CSS, scripts, etc.)
+                        newHeadElements.forEach(element => {
+                            // Ne pas dupliquer les scripts déjà présents (comme htmx)
+                            if (element.tagName === 'SCRIPT' && element.src) {
+                                const existing = document.querySelector(`script[src="${element.src}"]`);
+                                if (existing) {
+                                    return; // Skip si déjà présent
+                                }
+                            }
+                            // Ne pas dupliquer les styles déjà présents
+                            if (element.tagName === 'LINK' && element.rel === 'stylesheet' && element.href) {
+                                const existing = document.querySelector(`link[href="${element.href}"]`);
+                                if (existing) {
+                                    return; // Skip si déjà présent
+                                }
+                            }
+                            // Cloner l'élément avec tous ses attributs et son contenu
+                            const cloned = element.cloneNode(true);
+                            currentHead.appendChild(cloned);
+                        });
+                        
+                        // Mettre à jour le titre si disponible
+                        if (metadata && metadata.title) {
+                            document.title = metadata.title + ' - Preview';
+                        }
+                        
+                        // Mettre à jour les meta tags si disponibles
+                        if (metadata && metadata.metaDesc) {
+                            let metaDesc = document.querySelector('meta[name="description"]');
+                            if (!metaDesc) {
+                                metaDesc = document.createElement('meta');
+                                metaDesc.setAttribute('name', 'description');
+                                currentHead.appendChild(metaDesc);
+                            }
+                            metaDesc.setAttribute('content', metadata.metaDesc);
+                        }
+                    }
+                    
+                    // Remplacer le body
+                    if (doc.body) {
+                        document.body.innerHTML = doc.body.innerHTML;
+                    } else {
+                        // Fallback: injecter directement dans le body si pas de structure HTML complète
+                        document.body.innerHTML = html;
+                    }
                     
                     // Modifier tous les liens HTMX pour qu'ils pointent vers preview.html avec le slug
                     const allLinks = document.querySelectorAll('[hx-get], [hx-post], [hx-put], [hx-delete]');
@@ -103,14 +158,9 @@
                         }
                     });
                     
-                    // Initialiser HTMX
+                    // Initialiser HTMX après l'injection
                     if (typeof htmx !== 'undefined') {
                         htmx.process(document.body);
-                    }
-                    
-                    // Mettre à jour le titre si disponible
-                    if (metadata && metadata.title) {
-                        document.title = metadata.title + ' - Preview';
                     }
                 } catch (e) {
                     document.body.innerHTML = `
