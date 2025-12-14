@@ -194,18 +194,63 @@ export async function onRequest(context) {
         
         // Sinon, servir preview.html normalement (chargement initial depuis localStorage)
         console.log(`[Preview Route] Serving preview.html static file`);
-        const previewResponse = await env.ASSETS.fetch(request);
         
-        // Si le fichier n'est pas trouvé, retourner une erreur explicite
-        if (previewResponse.status !== 200) {
-            console.error(`[Preview Route] Failed to load preview.html. Status: ${previewResponse.status}`);
-            return new Response(
-                `preview.html not found. Please ensure the file exists at the root of the project.`,
-                { status: 404, headers: { 'Content-Type': 'text/plain' } }
-            );
+        // Essayer plusieurs méthodes pour charger le fichier
+        // 1. Utiliser loadAsset qui gère mieux les redirections Cloudflare
+        let previewContent = await loadAsset('/preview.html');
+        
+        if (!previewContent) {
+            // 2. Essayer avec différents chemins
+            const alternativePaths = ['preview.html', '/preview.html/', 'preview.html/'];
+            for (const altPath of alternativePaths) {
+                previewContent = await loadAsset(altPath);
+                if (previewContent) {
+                    console.log(`[Preview Route] Found preview.html at: ${altPath}`);
+                    break;
+                }
+            }
         }
         
-        return previewResponse;
+        // 3. Si toujours pas trouvé, essayer directement avec env.ASSETS.fetch
+        if (!previewContent) {
+            console.log(`[Preview Route] Trying direct ASSETS.fetch`);
+            const directRequest = new Request(new URL('/preview.html', request.url), request);
+            const directResponse = await env.ASSETS.fetch(directRequest);
+            
+            if (directResponse.status === 200) {
+                previewContent = await directResponse.text();
+                console.log(`[Preview Route] Found via direct ASSETS.fetch`);
+            } else {
+                // Suivre les redirections si nécessaire
+                if (directResponse.status === 308 || directResponse.status === 301 || directResponse.status === 302) {
+                    const location = directResponse.headers.get('Location');
+                    if (location) {
+                        const redirectUrl = location.startsWith('http') ? new URL(location) : new URL(location, request.url);
+                        const redirectResponse = await env.ASSETS.fetch(new Request(redirectUrl.toString(), request));
+                        if (redirectResponse.status === 200) {
+                            previewContent = await redirectResponse.text();
+                            console.log(`[Preview Route] Found via redirect: ${location}`);
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (previewContent) {
+            return new Response(previewContent, {
+                headers: {
+                    'Content-Type': 'text/html; charset=utf-8'
+                }
+            });
+        }
+        
+        // Si toujours pas trouvé, retourner une erreur explicite
+        console.error(`[Preview Route] Failed to load preview.html from all methods`);
+        return new Response(
+            `preview.html not found. Please ensure the file exists at the root of the project and is committed to the repository.\n\n` +
+            `The file should be at: /preview.html in your project root.`,
+            { status: 404, headers: { 'Content-Type': 'text/plain' } }
+        );
     }
     
     // Intercepter les requêtes HTMX depuis la prévisualisation API (ancien système)
