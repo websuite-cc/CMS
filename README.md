@@ -138,7 +138,7 @@ Tous les endpoints sont disponibles après déploiement :
 ### Public (pas d'auth)
 
 ```http
-GET  /api/metadata          # Infos du site
+GET  /api/siteinfos         # Infos du site (depuis config.json)
 GET  /api/posts             # Articles Substack
 GET  /api/post/:slug        # Article spécifique
 GET  /api/videos            # Vidéos YouTube

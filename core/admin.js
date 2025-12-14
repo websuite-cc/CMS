@@ -178,9 +178,9 @@ async function loadData() {
         // Force refresh on load
         const refreshParam = '?refresh=true';
 
-        // 1. Metadata
-        const metaRes = await fetch(buildApiUrl(`/api/metadata${refreshParam}`));
-        metadata = await metaRes.json();
+        // 1. Site Infos
+        const siteinfosRes = await fetch(buildApiUrl(`/api/siteinfos${refreshParam}`));
+        metadata = await siteinfosRes.json();
 
         // Update UI with Metadata
         // Update UI with Metadata
@@ -261,13 +261,20 @@ async function loadConfig() {
             headers: { 'X-Auth-Key': authKey }
         });
         const config = await configRes.json();
-        // Fetch metadata from Substack RSS (site name, author, SEO if any)
-        const metaRes = await fetch(buildApiUrl('/api/metadata'));
-        const metadata = await metaRes.json();
+        // Fetch site infos from config.json
+        const siteinfosRes = await fetch(buildApiUrl('/api/siteinfos'));
+        const metadata = await siteinfosRes.json();
 
         // Save to State
         appState.config = config;
         appState.metadata = metadata;
+
+        // Update Dashboard Greeting with author name
+        const greetingEl = document.getElementById('dashboard-greeting');
+        if (greetingEl) {
+            const authorName = config.author || metadata.author || 'Admin';
+            greetingEl.textContent = `Bonjour, ${authorName} 👋`;
+        }
 
         // Populate Config Form (Read-Only) with combined data
         document.getElementById('conf-siteName').value = config.siteName || metadata.siteName || '';

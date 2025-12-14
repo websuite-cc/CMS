@@ -93,8 +93,8 @@ export async function onRequestPost(context) {
         
         // Valider les données reçues
         const config = {
-            siteName: body.siteName || "WebSuite CMS",
-            author: body.author || "Admin",
+            siteName: body.siteName || "",
+            author: body.author || "",
             blogRssUrl: body.blogRssUrl || "",
             youtubeRssUrl: body.youtubeRssUrl || "",
             frontendBuilderUrl: body.frontendBuilderUrl || "",
