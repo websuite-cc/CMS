@@ -25,122 +25,41 @@ export async function onRequest(context) {
     const url = new URL(request.url);
     
     
-    // Helper robuste pour charger le template frontend/index.html
-    // Utilise le Cache API de Cloudflare + retries pour une fiabilité maximale
+    // Helper simple pour charger le template frontend/index.html
     async function loadFrontendTemplate() {
-        const CACHE_KEY = 'frontend_template_v1';
-        const cache = caches.default;
-        const cacheRequest = new Request(`https://cache.local/${CACHE_KEY}`);
-        
-        // Essayer de récupérer depuis le cache d'abord (plus rapide et fiable)
-        const cachedResponse = await cache.match(cacheRequest);
-        if (cachedResponse) {
-            try {
-                const cachedText = await cachedResponse.text();
-                if (cachedText && cachedText.length > 100 && cachedText.includes('<html')) {
-                    console.log('✓ Template loaded from cache');
-                    return cachedText;
-                }
-            } catch (e) {
-                console.log('Cache read error, will reload from assets');
-            }
-        }
-        
-        // Si pas dans le cache ou cache invalide, charger depuis les assets
-        // Essayer plusieurs chemins avec retries pour chaque chemin
-        const possiblePaths = [
-            '/frontend/index.html',
-            '/frontend/index.html/',
-            'frontend/index.html',
-        ];
-        
-        // Retry jusqu'à 3 fois pour chaque chemin
-        for (let retry = 0; retry < 3; retry++) {
-            for (const templatePath of possiblePaths) {
-                try {
-                    let assetUrl;
-                    if (templatePath.startsWith('/')) {
-                        assetUrl = new URL(templatePath, request.url);
-                    } else {
-                        assetUrl = new URL('/' + templatePath, request.url);
-                    }
-                    
-                    // Créer une requête simple sans headers complexes
-                    const assetRequest = new Request(assetUrl.toString(), {
+        try {
+            // Requête directe vers frontend/index.html
+            const templateUrl = new URL('/frontend/index.html', request.url);
+            const templateRequest = new Request(templateUrl.toString(), {
+                method: 'GET',
+                headers: request.headers
+            });
+            
+            let response = await env.ASSETS.fetch(templateRequest);
+            
+            // Suivre les redirections si nécessaire
+            if (response.status === 308 || response.status === 301 || response.status === 302) {
+                const location = response.headers.get('Location');
+                if (location) {
+                    const redirectUrl = location.startsWith('http') 
+                        ? new URL(location) 
+                        : new URL(location, request.url);
+                    response = await env.ASSETS.fetch(new Request(redirectUrl.toString(), {
                         method: 'GET',
-                        headers: {
-                            'Accept': 'text/html'
-                        }
-                    });
-                    
-                    let response = await env.ASSETS.fetch(assetRequest);
-                    
-                    // Suivre les redirections avec un maximum de 5 tentatives
-                    let redirectCount = 0;
-                    while ((response.status === 308 || response.status === 301 || response.status === 302) && redirectCount < 5) {
-                        const location = response.headers.get('Location');
-                        if (location) {
-                            const redirectUrl = location.startsWith('http') 
-                                ? new URL(location) 
-                                : new URL(location, request.url);
-                            
-                            response = await env.ASSETS.fetch(new Request(redirectUrl.toString(), {
-                                method: 'GET',
-                                headers: { 'Accept': 'text/html' }
-                            }));
-                            redirectCount++;
-                        } else {
-                            break;
-                        }
-                    }
-                    
-                    if (response.status === 200) {
-                        const templateText = await response.text();
-                        
-                        // Vérifier que le contenu est valide
-                        if (templateText && templateText.includes('<html') && templateText.length > 100) {
-                            // Mettre en cache pour les prochaines requêtes (TTL: 10 minutes)
-                            try {
-                                const cacheResponse = new Response(templateText, {
-                                    headers: {
-                                        'Content-Type': 'text/html',
-                                        'Cache-Control': 'public, max-age=600'
-                                    }
-                                });
-                                await cache.put(cacheRequest, cacheResponse);
-                            } catch (cacheError) {
-                                console.log('Cache write failed, but template loaded successfully');
-                            }
-                            
-                            console.log(`✓ Template loaded successfully from: ${templatePath} (attempt ${retry + 1})`);
-                            return templateText;
-                        }
-                    }
-                } catch (error) {
-                    console.error(`Error loading template from ${templatePath} (attempt ${retry + 1}):`, error);
-                    // Attendre un peu avant de réessayer (exponential backoff)
-                    if (retry < 2) {
-                        await new Promise(resolve => setTimeout(resolve, 50 * (retry + 1)));
-                    }
+                        headers: request.headers
+                    }));
                 }
             }
-        }
-        
-        // Si aucune tentative n'a réussi, essayer de retourner le cache même s'il est ancien
-        if (cachedResponse) {
-            try {
-                const cachedText = await cachedResponse.text();
-                if (cachedText && cachedText.length > 100) {
-                    console.log('⚠ Using stale cache as last resort fallback');
-                    return cachedText;
-                }
-            } catch (e) {
-                // Cache invalide, continuer
+            
+            if (response.status === 200) {
+                return await response.text();
             }
+            
+            return null;
+        } catch (error) {
+            console.error('Error loading frontend template:', error);
+            return null;
         }
-        
-        console.error('ERROR: Could not load frontend/index.html from any path after all retries');
-        return null;
     }
     
     // Helper pour charger d'autres assets (moins critique)
@@ -523,75 +442,27 @@ export async function onRequest(context) {
         // IMPORTANT : Toujours charger frontend/index.html en priorité
         // Ne jamais servir directement index.html racine
         
-        // Exclure preview/ et admin/ de la logique SSR (déjà gérés plus haut)
+        // Exclure preview/ et admin/ de la logique SSR
         if (url.pathname.startsWith('/preview') || 
             url.pathname.startsWith('/admin') || 
             url.pathname.startsWith('/core')) {
-            const assetResponse = await env.ASSETS.fetch(request);
-            // Vérifier qu'on ne sert pas index.html racine
-            if (assetResponse.status === 200 && assetResponse.headers.get('Content-Type')?.includes('text/html')) {
-                const responseUrl = assetResponse.url || request.url;
-                if (responseUrl.includes('/index.html') && !responseUrl.includes('/frontend/') && !responseUrl.includes('/admin/') && !responseUrl.includes('/preview/')) {
-                    console.error('[Middleware] Blocked root index.html in admin/preview/core route');
-                    return new Response('Routing error', { status: 500 });
-                }
-            }
-            return assetResponse;
+            return env.ASSETS.fetch(request);
         }
         
         // Vérifier d'abord si c'est un asset statique (image, CSS, JS, etc.)
-        // Si oui, servir directement sans SSR
         if (url.pathname.includes('.') && 
             !url.pathname.endsWith('.html') && 
             !url.pathname.startsWith('/frontend/')) {
-            const assetResponse = await env.ASSETS.fetch(request);
-            
-            // PROTECTION : Bloquer index.html racine même pour les assets
-            const responseUrl = assetResponse.url || request.url;
-            if (responseUrl.includes('/index.html') && !responseUrl.includes('/frontend/')) {
-                console.error('[Middleware] Blocked root index.html in static asset route');
-                return new Response('Routing error', { status: 500 });
-            }
-            
-            return assetResponse;
+            return env.ASSETS.fetch(request);
         }
         
-        // Charger le template frontend/index.html (OBLIGATOIRE)
-        // Utiliser la fonction robuste avec cache et retries
-        let template = await loadFrontendTemplate();
+        // Charger le template frontend/index.html
+        const template = await loadFrontendTemplate();
         
-        // Si aucun template trouvé, essayer une dernière fois avec une requête directe simple
         if (!template) {
-            console.error('ERROR: frontend/index.html not found, trying direct fetch as last resort');
-            
-            // Dernière tentative : requête directe très simple
-            try {
-                const directUrl = new URL('/frontend/index.html', request.url);
-                const directRequest = new Request(directUrl.toString(), { method: 'GET' });
-                const directResponse = await env.ASSETS.fetch(directRequest);
-                
-                if (directResponse.status === 200) {
-                    const directText = await directResponse.text();
-                    if (directText && directText.includes('<html') && directText.length > 100) {
-                        console.log('✓ Template loaded on last resort attempt');
-                        template = directText;
-                    }
-                }
-            } catch (e) {
-                console.error('Last resort attempt failed:', e);
-            }
-        }
-        
-        // Si toujours pas de template, retourner une erreur
-        if (!template) {
-            console.error('ERROR: frontend/index.html not found after all attempts');
+            console.error('ERROR: frontend/index.html not found');
             return new Response(
-                `frontend/index.html not found.\n\n` +
-                `The frontend template is required for SSR but could not be loaded.\n` +
-                `Please check:\n` +
-                `1. The file exists at /frontend/index.html in your repository\n` +
-                `2. Cloudflare Pages build settings include the frontend folder\n` +
-                `3. Check Cloudflare Pages logs for more details\n`,
+                `frontend/index.html not found. Please ensure the file exists at /frontend/index.html`,
                 { 
                     status: 500,
                     headers: { 'Content-Type': 'text/plain' }
@@ -701,34 +572,7 @@ export async function onRequest(context) {
         }
         
         // Pour les autres assets (images, CSS, JS), servir normalement
-        // Mais vérifier qu'on ne sert pas index.html racine
-        const assetResponse = await env.ASSETS.fetch(request);
-        
-        // PROTECTION CRITIQUE : Bloquer TOUTE tentative de servir index.html racine
-        if (assetResponse.status === 200 || assetResponse.status === 301 || assetResponse.status === 302 || assetResponse.status === 308) {
-            const contentType = assetResponse.headers.get('Content-Type');
-            const responseUrl = assetResponse.url || request.url;
-            const location = assetResponse.headers.get('Location');
-            
-            // Vérifier si la réponse ou la redirection pointe vers index.html racine
-            const isRootIndex = (responseUrl.includes('/index.html') && !responseUrl.includes('/frontend/') && !responseUrl.includes('/admin/') && !responseUrl.includes('/preview/')) ||
-                               (location && location.includes('/index.html') && !location.includes('/frontend/') && !location.includes('/admin/') && !location.includes('/preview/'));
-            
-            if (isRootIndex || (contentType && contentType.includes('text/html') && isRootIndex)) {
-                console.error('[Middleware] CRITICAL: Blocked attempt to serve root index.html');
-                console.error(`  Request URL: ${request.url}`);
-                console.error(`  Response URL: ${responseUrl}`);
-                console.error(`  Location: ${location}`);
-                return new Response(
-                    `CRITICAL: Attempted to serve root index.html blocked.\n` +
-                    `Request: ${request.url}\n` +
-                    `This should never happen. The middleware must always use frontend/index.html for SSR.`,
-                    { status: 500, headers: { 'Content-Type': 'text/plain' } }
-                );
-            }
-        }
-        
-        return assetResponse;
+        return env.ASSETS.fetch(request);
     }
 
     // Si WSTD_STAGING_URL est défini, proxy vers Webstudio
