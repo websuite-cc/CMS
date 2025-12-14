@@ -112,7 +112,7 @@ export function generateOOB(metadata, request) {
     const hxTarget = request.headers.get("HX-Target");
     if (hxTarget && hxTarget !== "main-content") return "";
 
-    const title = metadata.title || "StackPages CMS";
+    const title = metadata.title || "WebSuite";
     const desc = metadata.description || "";
     const keywords = metadata.keywords || "";
 
@@ -210,7 +210,7 @@ export function handleHtmxCatchAll(request, path, fullTemplate, siteConfig = {},
 
     if (templateContent) {
         // Template trouvé ! Générer les métadonnées
-        const siteName = siteConfig?.site?.name || "StackPages CMS";
+        const siteName = siteConfig?.site?.name || "WebSuite";
         const siteDescription = siteConfig?.seo?.metaDescription || "";
         const siteKeywords = siteConfig?.seo?.keywords || "";
 

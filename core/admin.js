@@ -113,7 +113,7 @@ async function checkAuth() {
         return;
     }
 
-    const authKey = localStorage.getItem('stackpages_auth');
+    const authKey = localStorage.getItem('websuite_auth');
     if (!authKey) {
         window.location.href = '/admin';
         return;
@@ -126,7 +126,7 @@ async function checkAuth() {
         });
         const data = await res.json();
         if (!data.authenticated) {
-            localStorage.removeItem('stackpages_auth');
+            localStorage.removeItem('websuite_auth');
             window.location.href = '/admin';
         }
     } catch (e) {
@@ -255,7 +255,7 @@ async function loadData() {
 // Config Loading
 async function loadConfig() {
     try {
-        const authKey = localStorage.getItem('stackpages_auth');
+        const authKey = localStorage.getItem('websuite_auth');
         // Fetch config (environment variables)
         const configRes = await fetch(buildApiUrl('/api/config'), {
             headers: { 'X-Auth-Key': authKey }
@@ -757,7 +757,7 @@ async function clearCache() {
     const status = document.getElementById('cache-status');
     status.textContent = "Nettoyage...";
     try {
-        const authKey = localStorage.getItem('stackpages_auth');
+        const authKey = localStorage.getItem('websuite_auth');
         const res = await fetch(buildApiUrl('/api/clear-cache'), {
             method: 'POST',
             headers: { 'X-Auth-Key': authKey }
@@ -792,7 +792,7 @@ async function checkAgentsConfig() {
     if (createBtn) createBtn.disabled = true;
 
     try {
-        const authKey = localStorage.getItem('stackpages_auth');
+        const authKey = localStorage.getItem('websuite_auth');
         const raw = await fetch('/api/config', {
             headers: { 'X-Auth-Key': authKey }
         });

@@ -21,7 +21,7 @@ export async function onRequestGet(context) {
         const ghResponse = await fetch(url, {
             headers: {
                 'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
-                'User-Agent': 'StackPagesCMS'
+                'User-Agent': 'WebSuite'
             }
         });
 

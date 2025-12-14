@@ -33,7 +33,7 @@ WSTD_STAGING_URL=https://votre-projet.wstd.io
 FRONTEND_BUILDER_URL=https://apps.webstudio.is/dashboard
 
 # --- SEO & MÉTADONNÉES ---
-META_TITLE=Mon Site StackPages
+META_TITLE=Mon Site WebSuite
 META_DESCRIPTION=Portail de contenus agrégés depuis Substack, YouTube et Podcast
 META_KEYWORDS=blog,contenu,substack,youtube,podcast
 

@@ -58,7 +58,7 @@ export async function onRequestPost(context) {
                     headers: {
                         'Authorization': `Bearer ${finalToken}`,
                         'Accept': 'application/vnd.github.v3+json',
-                        'User-Agent': 'iziWebCMS'
+                        'User-Agent': 'WebSuite'
                     }
                 });
 

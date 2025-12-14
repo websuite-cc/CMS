@@ -170,7 +170,7 @@ export async function onRequest(context) {
                 
                 // Gérer la racine "/"
                 if (path === '/' || path === '/index.html') {
-                    const siteName = siteConfig.siteName || "iziWebCMS";
+                    const siteName = siteConfig.siteName || "WebSuite";
                     const metadata = {
                         title: siteName,
                         description: siteConfig.seo?.metaDescription || "",
@@ -470,7 +470,7 @@ export async function onRequest(context) {
         
         // Configuration par défaut (peut être améliorée avec des variables d'env)
         const siteConfig = {
-            site: { name: "iziWebCMS" },
+            site: { name: "WebSuite" },
             seo: {
                 metaDescription: "",
                 keywords: ""

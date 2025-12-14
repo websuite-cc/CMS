@@ -408,7 +408,8 @@
 
         // Get auth token for API calls
         function getAuthToken() {
-            return localStorage.getItem('stackpages_auth') || localStorage.getItem('admin_token') || 'admin';
+            // Priorité: websuite_auth (nouveau) puis stackpages_auth (ancien) pour compatibilité
+            return localStorage.getItem('websuite_auth') || localStorage.getItem('stackpages_auth') || localStorage.getItem('admin_token') || 'admin';
         }
 
         // Save page (draft or published) - Sauvegarde en cache pour prévisualisation

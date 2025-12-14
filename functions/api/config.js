@@ -9,7 +9,7 @@ export async function onRequestGet(context) {
     }
 
     const config = {
-        siteName: "iziWebCMS CMS",
+        siteName: "WebSuite CMS",
         author: "Admin",
         blogRssUrl: env.BLOG_FEED_URL || "",
         youtubeRssUrl: env.YOUTUBE_FEED_URL || "",
