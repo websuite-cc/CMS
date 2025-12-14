@@ -247,6 +247,29 @@ export async function onRequest(context) {
         }
     }
     
+    // Route explicite pour /admin/ide.html (doit être avant la logique générale)
+    if (url.pathname === '/admin/ide.html' || url.pathname === '/admin/IDE.html') {
+        // Essayer plusieurs chemins possibles
+        const idePaths = ['admin/ide.html', 'admin/IDE.html', '/admin/ide.html', '/admin/IDE.html'];
+        
+        for (const idePath of idePaths) {
+            const ideUrl = new URL(idePath, request.url);
+            const ideRequest = new Request(ideUrl.toString(), {
+                method: 'GET',
+                headers: request.headers
+            });
+            const ideResponse = await env.ASSETS.fetch(ideRequest);
+            
+            if (ideResponse.status === 200) {
+                console.log(`[IDE Route] Found ide.html at: ${idePath}`);
+                return ideResponse;
+            }
+        }
+        
+        // Si aucun chemin ne fonctionne, continuer vers la logique générale
+        console.log(`[IDE Route] ide.html not found, falling back to general routing`);
+    }
+    
     // Route spéciale : /admin/dashboard/ide → servir admin/ide.html
     if (url.pathname === '/admin/dashboard/ide' || 
         url.pathname === '/admin/dashboard/ide/' ||
@@ -276,22 +299,49 @@ export async function onRequest(context) {
         
         // Si 404, essayer avec des variations de chemin
         if (assetResponse.status === 404) {
-            const altPaths = [
-                url.pathname,
-                url.pathname + '/',
-                url.pathname.replace('/admin/', 'admin/'),
-                url.pathname.replace('/core/', 'core/')
-            ];
+            const altPaths = [];
+            
+            // Générer les variations de chemin
+            // 1. Sans slash initial (admin/ide.html au lieu de /admin/ide.html)
+            if (url.pathname.startsWith('/admin/')) {
+                altPaths.push(url.pathname.replace(/^\/admin\//, 'admin/'));
+            }
+            if (url.pathname.startsWith('/core/')) {
+                altPaths.push(url.pathname.replace(/^\/core\//, 'core/'));
+            }
+            
+            // 2. Avec slash final
+            altPaths.push(url.pathname + '/');
+            
+            // 3. Sans extension .html (pour les fichiers HTML)
+            if (url.pathname.endsWith('.html')) {
+                const withoutExt = url.pathname.replace(/\.html$/, '');
+                altPaths.push(withoutExt);
+                if (withoutExt.startsWith('/admin/')) {
+                    altPaths.push(withoutExt.replace(/^\/admin\//, 'admin/'));
+                }
+                if (withoutExt.startsWith('/core/')) {
+                    altPaths.push(withoutExt.replace(/^\/core\//, 'core/'));
+                }
+            }
+            
+            // 4. Essayer aussi avec la casse inversée pour ide.html
+            if (url.pathname.toLowerCase().includes('ide.html')) {
+                const lowerPath = url.pathname.toLowerCase();
+                altPaths.push(lowerPath);
+                altPaths.push(lowerPath.replace(/^\/admin\//, 'admin/'));
+            }
             
             for (const altPath of altPaths) {
                 if (altPath === url.pathname) continue; // Déjà essayé
                 
                 const altUrl = new URL(altPath, request.url);
                 const altRequest = new Request(altUrl.toString(), request);
-                assetResponse = await env.ASSETS.fetch(altRequest);
+                const testResponse = await env.ASSETS.fetch(altRequest);
                 
-                if (assetResponse.status === 200) {
+                if (testResponse.status === 200) {
                     console.log(`[Admin/Core Route] Found asset at alternative path: ${altPath}`);
+                    assetResponse = testResponse;
                     break;
                 }
             }
