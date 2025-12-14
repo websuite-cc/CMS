@@ -440,7 +440,16 @@ export async function onRequest(context) {
         if (url.pathname.startsWith('/preview') || 
             url.pathname.startsWith('/admin') || 
             url.pathname.startsWith('/core')) {
-            return env.ASSETS.fetch(request);
+            const assetResponse = await env.ASSETS.fetch(request);
+            // Vérifier qu'on ne sert pas index.html racine
+            if (assetResponse.status === 200 && assetResponse.headers.get('Content-Type')?.includes('text/html')) {
+                const responseUrl = assetResponse.url || request.url;
+                if (responseUrl.includes('/index.html') && !responseUrl.includes('/frontend/') && !responseUrl.includes('/admin/') && !responseUrl.includes('/preview/')) {
+                    console.error('[Middleware] Blocked root index.html in admin/preview/core route');
+                    return new Response('Routing error', { status: 500 });
+                }
+            }
+            return assetResponse;
         }
         
         // Vérifier d'abord si c'est un asset statique (image, CSS, JS, etc.)
@@ -499,7 +508,27 @@ export async function onRequest(context) {
             }
             
             // Pour les assets statiques, servir normalement
-            return env.ASSETS.fetch(request);
+            // Mais vérifier qu'on ne sert pas index.html racine
+            const assetResponse = await env.ASSETS.fetch(request);
+            
+            // Si la réponse est index.html racine, retourner une erreur
+            if (assetResponse.status === 200) {
+                const contentType = assetResponse.headers.get('Content-Type');
+                if (contentType && contentType.includes('text/html')) {
+                    // Vérifier si c'est index.html racine en vérifiant l'URL
+                    const responseUrl = assetResponse.url || request.url;
+                    if (responseUrl.includes('/index.html') && !responseUrl.includes('/frontend/')) {
+                        console.error('[Middleware] Blocked attempt to serve root index.html');
+                        return new Response(
+                            `Asset routing error: Attempted to serve root index.html.\n` +
+                            `This should never happen. Please check routing logic.`,
+                            { status: 500, headers: { 'Content-Type': 'text/plain' } }
+                        );
+                    }
+                }
+            }
+            
+            return assetResponse;
         }
         
         // Détecter si c'est une requête HTMX
@@ -604,67 +633,102 @@ export async function onRequest(context) {
         }
         
         // Pour les autres assets (images, CSS, JS), servir normalement
-        return env.ASSETS.fetch(request);
+        // Mais vérifier qu'on ne sert pas index.html racine
+        const assetResponse = await env.ASSETS.fetch(request);
+        
+        // Si la réponse est index.html racine, retourner une erreur
+        if (assetResponse.status === 200) {
+            const contentType = assetResponse.headers.get('Content-Type');
+            if (contentType && contentType.includes('text/html')) {
+                // Vérifier si c'est index.html racine en vérifiant l'URL
+                const responseUrl = assetResponse.url || request.url;
+                if (responseUrl.includes('/index.html') && !responseUrl.includes('/frontend/')) {
+                    console.error('[Middleware] Blocked attempt to serve root index.html');
+                    return new Response(
+                        `Asset routing error: Attempted to serve root index.html.\n` +
+                        `This should never happen. Please check routing logic.`,
+                        { status: 500, headers: { 'Content-Type': 'text/plain' } }
+                    );
+                }
+            }
+        }
+        
+        return assetResponse;
     }
 
-    try {
-        // Construire l'URL Webstudio
-        const webstudioUrl = new URL(url.pathname + url.search, WSTD_STAGING_URL);
+    // Si WSTD_STAGING_URL est défini, proxy vers Webstudio
+    if (WSTD_STAGING_URL) {
+        try {
+            // Construire l'URL Webstudio
+            const webstudioUrl = new URL(url.pathname + url.search, WSTD_STAGING_URL);
 
-        // Créer de nouveaux headers sans Referer/Origin du worker
-        const proxyHeaders = new Headers(request.headers);
-        proxyHeaders.delete('referer');
-        proxyHeaders.delete('origin');
-        proxyHeaders.set('host', new URL(WSTD_STAGING_URL).hostname);
+            // Créer de nouveaux headers sans Referer/Origin du worker
+            const proxyHeaders = new Headers(request.headers);
+            proxyHeaders.delete('referer');
+            proxyHeaders.delete('origin');
+            proxyHeaders.set('host', new URL(WSTD_STAGING_URL).hostname);
 
-        // Créer une nouvelle requête vers Webstudio
-        const webstudioRequest = new Request(webstudioUrl, {
-            method: request.method,
-            headers: proxyHeaders,
-            body: request.body,
-            redirect: 'follow'
-        });
+            // Créer une nouvelle requête vers Webstudio
+            const webstudioRequest = new Request(webstudioUrl, {
+                method: request.method,
+                headers: proxyHeaders,
+                body: request.body,
+                redirect: 'follow'
+            });
 
-        // Fetch depuis Webstudio
-        const webstudioResponse = await fetch(webstudioRequest);
+            // Fetch depuis Webstudio
+            const webstudioResponse = await fetch(webstudioRequest);
 
-        // Créer de nouveaux headers avec CORS ajoutés
-        const newHeaders = new Headers(webstudioResponse.headers);
+            // Créer de nouveaux headers avec CORS ajoutés
+            const newHeaders = new Headers(webstudioResponse.headers);
 
-        // Ajouter les headers CORS pour permettre le chargement cross-origin
-        newHeaders.set('Access-Control-Allow-Origin', '*');
-        newHeaders.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-        newHeaders.set('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Key');
+            // Ajouter les headers CORS pour permettre le chargement cross-origin
+            newHeaders.set('Access-Control-Allow-Origin', '*');
+            newHeaders.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+            newHeaders.set('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Key');
 
-        // Content Security Policy : autoriser images de TOUTES sources
-        newHeaders.set('Content-Security-Policy',
-            "default-src 'self'; " +
-            "img-src * data: blob: 'unsafe-inline'; " +  // Toutes les images OK
-            "media-src * data: blob:; " +                 // Toutes les vidéos OK
-            "font-src * data:; " +                        // Toutes les polices OK
-            "style-src 'self' 'unsafe-inline' *; " +     // Tous les styles OK
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' *; " + // Scripts OK
-            "connect-src *; " +                           // Fetch/XHR vers toutes sources
-            "frame-src *;"                                // iframes OK
-        );
+            // Content Security Policy : autoriser images de TOUTES sources
+            newHeaders.set('Content-Security-Policy',
+                "default-src 'self'; " +
+                "img-src * data: blob: 'unsafe-inline'; " +  // Toutes les images OK
+                "media-src * data: blob:; " +                 // Toutes les vidéos OK
+                "font-src * data:; " +                        // Toutes les polices OK
+                "style-src 'self' 'unsafe-inline' *; " +     // Tous les styles OK
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' *; " + // Scripts OK
+                "connect-src *; " +                           // Fetch/XHR vers toutes sources
+                "frame-src *;"                                // iframes OK
+            );
 
-        // Supprimer le CSP restrictif existant si présent
-        newHeaders.delete('X-Content-Security-Policy');
-        newHeaders.delete('X-WebKit-CSP');
+            // Supprimer le CSP restrictif existant si présent
+            newHeaders.delete('X-Content-Security-Policy');
+            newHeaders.delete('X-WebKit-CSP');
 
+            // Pour TOUS les types de contenu (HTML, images, CSS, JS, etc.)
+            // Retourner avec headers CORS
+            return new Response(webstudioResponse.body, {
+                status: webstudioResponse.status,
+                statusText: webstudioResponse.statusText,
+                headers: newHeaders
+            });
 
-        // Pour TOUS les types de contenu (HTML, images, CSS, JS, etc.)
-        // Retourner avec headers CORS
-        return new Response(webstudioResponse.body, {
-            status: webstudioResponse.status,
-            statusText: webstudioResponse.statusText,
-            headers: newHeaders
-        });
-
-    } catch (error) {
-        console.error('Erreur proxy Webstudio:', error);
-
-        // Fallback : servir index.html local si erreur
-        return env.ASSETS.fetch(new Request(url.origin + '/index.html'));
+        } catch (error) {
+            console.error('Erreur proxy Webstudio:', error);
+            // En cas d'erreur avec Webstudio, retourner une erreur plutôt que de servir index.html racine
+            return new Response(
+                `Webstudio proxy error: ${error.message}\n` +
+                `Unable to proxy request to ${WSTD_STAGING_URL}`,
+                { status: 502, headers: { 'Content-Type': 'text/plain' } }
+            );
+        }
     }
+    
+    // Si on arrive ici sans WSTD_STAGING_URL et sans avoir servi de réponse,
+    // c'est qu'il y a un problème dans la logique de routing
+    // Ne JAMAIS servir index.html racine comme fallback
+    console.error('[Middleware] Routing error - no response served');
+    return new Response(
+        `Routing error: Unable to serve request for ${url.pathname}.\n` +
+        `Please check the middleware routing logic.`,
+        { status: 500, headers: { 'Content-Type': 'text/plain' } }
+    );
 }
