@@ -183,10 +183,10 @@
                         Build, deploy, and automate with our all-in-one platform. CMS, AI Workers, and IDE - all powered by Cloudflare's global network.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/get-started" hx-get="/get-started" hx-target="#main-content" hx-push-url="true"
+                        <a href="/get-started" hx-get="/get-started" hx-target="#main-content" hx-push-url="true"
                     class="px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold rounded-md hover:from-purple-700 hover:to-purple-900 transition-all shadow-lg shadow-purple-600/30">
-                    Start Building
-                </a>
+                            Start Building
+                        </a>
                         <a href="/components" hx-get="/components" hx-target="#main-content" hx-push-url="true"
                             class="px-8 py-4 bg-white border-2 border-gray-300 text-gray-900 font-semibold rounded-md hover:border-purple-600 transition-colors">
                             Explore Components
@@ -260,7 +260,7 @@
                         </div>
                         <div class="w-16 h-16 bg-gradient-purple rounded-xl flex items-center justify-center mb-6">
                             <i class="fas fa-robot text-white text-2xl"></i>
-                        </div>
+                    </div>
                         <h3 class="text-2xl font-bold mb-3">AI Workers</h3>
                         <p class="text-gray-600 mb-6">
                             Intelligent automation agents. Connect to 30+ services and automate your workflows with AI.
@@ -271,13 +271,13 @@
                             <li class="flex items-center gap-2"><i class="fas fa-check text-purple-600"></i> Automated Workflows</li>
                             <li class="flex items-center gap-2"><i class="fas fa-check text-purple-600"></i> Serverless Functions</li>
                         </ul>
-                    </div>
+                        </div>
 
                     <!-- IDE Component -->
                     <div class="bg-white p-8 rounded-2xl border-2 border-gray-200 hover:border-purple-500 transition-all group shadow-lg hover:shadow-xl">
                         <div class="w-16 h-16 bg-gradient-purple rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                             <i class="fas fa-code text-white text-2xl"></i>
-                        </div>
+                    </div>
                         <h3 class="text-2xl font-bold mb-3">IDE / Page Builder</h3>
                         <p class="text-gray-600 mb-6">
                             Visual page builder with Monaco Editor. Code, preview, and deploy your frontend in one place.
@@ -288,7 +288,7 @@
                             <li class="flex items-center gap-2"><i class="fas fa-check text-purple-600"></i> AI Code Generation</li>
                             <li class="flex items-center gap-2"><i class="fas fa-check text-purple-600"></i> One-Click Deploy</li>
                         </ul>
-                    </div>
+                        </div>
                 </div>
             </div>
         </section>
@@ -310,9 +310,9 @@
                         <div class="flex items-center justify-between mb-6">
                             <div class="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center">
                                 <i class="fas fa-code-branch text-gray-700 text-2xl"></i>
-                            </div>
+                    </div>
                             <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-semibold">OPEN SOURCE</span>
-                        </div>
+                    </div>
                         <h3 class="text-2xl font-bold mb-3">Self-Hosted</h3>
                         <p class="text-gray-600 mb-6">
                             Deploy on your own Cloudflare account. Full control, unlimited customization.
@@ -369,7 +369,7 @@
                     Start building with WebSuite today. Deploy in 60 seconds on Cloudflare's global network.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="/get-started" hx-get="/get-started" hx-target="#main-content" hx-push-url="true"
+                <a href="/get-started" hx-get="/get-started" hx-target="#main-content" hx-push-url="true"
                         class="inline-block px-8 py-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors text-lg shadow-xl">
                         Get Started Free
                     </a>
@@ -700,6 +700,325 @@ export default {
     return env.ASSETS.fetch(req);
   }
 }</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <!-- Components Page Template -->
+    <template id="tpl-components">
+        <section class="pt-20 pb-12 bg-gradient-to-b from-white to-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-8">
+                        WebSuite <span class="text-gradient">Components</span>
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                        Three powerful components working together to give you everything you need for modern web development.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Components -->
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="max-w-6xl mx-auto space-y-20">
+                    <!-- CMS Detail -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <div class="w-20 h-20 bg-gradient-purple rounded-2xl flex items-center justify-center mb-6">
+                                <i class="fas fa-database text-white text-3xl"></i>
+                            </div>
+                            <h2 class="text-4xl font-bold mb-4">WebSuite CMS</h2>
+                            <p class="text-xl text-gray-600 mb-6">
+                                A modern headless CMS that aggregates content from multiple sources. Perfect for content creators who publish across platforms.
+                            </p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-purple-600 mt-1"></i>
+                                    <div>
+                                        <strong>RSS Aggregation</strong>
+                                        <p class="text-sm text-gray-600">Automatically pull content from Substack, YouTube, Podcasts, and more</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-purple-600 mt-1"></i>
+                                    <div>
+                                        <strong>REST API</strong>
+                                        <p class="text-sm text-gray-600">Full REST API for programmatic access to your content</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-purple-600 mt-1"></i>
+                                    <div>
+                                        <strong>HTMX Support</strong>
+                                        <p class="text-sm text-gray-600">Server-side rendering with HTMX for fast, dynamic pages</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-purple-600 mt-1"></i>
+                                    <div>
+                                        <strong>Smart Caching</strong>
+                                        <p class="text-sm text-gray-600">Intelligent caching with Cloudflare KV for instant content delivery</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-100 rounded-2xl p-8 border-2 border-gray-200">
+                            <div class="bg-white rounded-lg p-6 shadow-lg">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-rss text-purple-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold">RSS Feed Integration</div>
+                                        <div class="text-sm text-gray-500">Multiple sources, one API</div>
+                                    </div>
+                                </div>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-center gap-2 text-gray-600">
+                                        <i class="fas fa-circle text-green-500 text-xs"></i>
+                                        <span>Substack Blog</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-gray-600">
+                                        <i class="fas fa-circle text-red-500 text-xs"></i>
+                                        <span>YouTube Channel</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-gray-600">
+                                        <i class="fas fa-circle text-purple-500 text-xs"></i>
+                                        <span>Podcast Feed</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Workers Detail -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                        <div class="order-2 md:order-1 bg-gray-100 rounded-2xl p-8 border-2 border-gray-200">
+                            <div class="bg-white rounded-lg p-6 shadow-lg">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-robot text-purple-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold">AI Agent</div>
+                                        <div class="text-sm text-gray-500">Automated workflow</div>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-600 space-y-2">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-arrow-right text-purple-500"></i>
+                                        <span>Trigger: New blog post</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-arrow-right text-purple-500"></i>
+                                        <span>Action: Post to Twitter</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-arrow-right text-purple-500"></i>
+                                        <span>Action: Send email</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="order-1 md:order-2">
+                            <div class="w-20 h-20 bg-gradient-purple rounded-2xl flex items-center justify-center mb-6">
+                                <i class="fas fa-robot text-white text-3xl"></i>
+                            </div>
+                            <h2 class="text-4xl font-bold mb-4">AI Workers</h2>
+                            <p class="text-xl text-gray-600 mb-6">
+                                Intelligent automation agents that connect your services and automate workflows. Powered by AI.
+                            </p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-purple-600 mt-1"></i>
+                                    <div>
+                                        <strong>30+ Integrations</strong>
+                                        <p class="text-sm text-gray-600">Connect to GitHub, Gmail, Slack, Stripe, and more</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-purple-600 mt-1"></i>
+                                    <div>
+                                        <strong>AI-Powered</strong>
+                                        <p class="text-sm text-gray-600">Intelligent agents that understand context and make decisions</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-purple-600 mt-1"></i>
+                                    <div>
+                                        <strong>Serverless Functions</strong>
+                                        <p class="text-sm text-gray-600">Run on Cloudflare's edge network for global performance</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-purple-600 mt-1"></i>
+                                    <div>
+                                        <strong>Visual Builder</strong>
+                                        <p class="text-sm text-gray-600">Create workflows with our intuitive interface</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- IDE Detail -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <div class="w-20 h-20 bg-gradient-purple rounded-2xl flex items-center justify-center mb-6">
+                                <i class="fas fa-code text-white text-3xl"></i>
+                            </div>
+                            <h2 class="text-4xl font-bold mb-4">IDE / Page Builder</h2>
+                            <p class="text-xl text-gray-600 mb-6">
+                                A powerful visual page builder with code editor. Build, preview, and deploy your frontend in one place.
+                            </p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-purple-600 mt-1"></i>
+                                    <div>
+                                        <strong>Monaco Editor</strong>
+                                        <p class="text-sm text-gray-600">VS Code's editor in your browser with syntax highlighting</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-purple-600 mt-1"></i>
+                                    <div>
+                                        <strong>AI Code Generation</strong>
+                                        <p class="text-sm text-gray-600">Generate code with Google Gemini integration</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-purple-600 mt-1"></i>
+                                    <div>
+                                        <strong>Live Preview</strong>
+                                        <p class="text-sm text-gray-600">See your changes in real-time before deploying</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-purple-600 mt-1"></i>
+                                    <div>
+                                        <strong>One-Click Deploy</strong>
+                                        <p class="text-sm text-gray-600">Deploy directly to GitHub or Cloudflare Pages</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-100 rounded-2xl p-8 border-2 border-gray-200">
+                            <div class="bg-white rounded-lg p-6 shadow-lg">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-code text-purple-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold">Code Editor</div>
+                                        <div class="text-sm text-gray-500">Monaco Editor</div>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-900 rounded p-4 text-green-400 font-mono text-xs">
+                                    <div>&lt;template id="tpl-home"&gt;</div>
+                                    <div class="pl-4">&lt;h1&gt;Welcome&lt;/h1&gt;</div>
+                                    <div>&lt;/template&gt;</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <!-- Pricing Page Template -->
+    <template id="tpl-pricing">
+        <section class="pt-20 pb-12 bg-gradient-to-b from-white to-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-8">
+                        Simple <span class="text-gradient">Pricing</span>
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                        Choose the deployment option that works best for you
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    <!-- Self-Hosted -->
+                    <div class="bg-white p-8 rounded-2xl border-2 border-gray-200 shadow-lg">
+                        <div class="text-center mb-8">
+                            <h3 class="text-2xl font-bold mb-2">Self-Hosted</h3>
+                            <div class="text-4xl font-black text-gray-900 mb-2">Free</div>
+                            <p class="text-gray-600">Forever</p>
+                        </div>
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                                <span>Full Source Code</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                                <span>Deploy on Your Cloudflare</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                                <span>Unlimited Customization</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                                <span>Community Support</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                                <span>All Components Included</span>
+                            </li>
+                        </ul>
+                        <a href="https://github.com" target="_blank"
+                            class="block w-full py-4 bg-gray-900 text-white text-center font-bold rounded-lg hover:bg-gray-800 transition-colors">
+                            Fork on GitHub
+                        </a>
+                    </div>
+
+                    <!-- Managed -->
+                    <div class="bg-white p-8 rounded-2xl border-2 border-purple-500 shadow-xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-gradient-purple text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+                            RECOMMENDED
+                        </div>
+                        <div class="text-center mb-8">
+                            <h3 class="text-2xl font-bold mb-2">Managed</h3>
+                            <div class="text-4xl font-black text-purple-600 mb-2">Custom</div>
+                            <p class="text-gray-600">Pricing</p>
+                        </div>
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-purple-500"></i>
+                                <span>We Handle Deployment</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-purple-500"></i>
+                                <span>Automatic Updates</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-purple-500"></i>
+                                <span>24/7 Monitoring</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-purple-500"></i>
+                                <span>Priority Support</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-purple-500"></i>
+                                <span>Custom Domain Included</span>
+                            </li>
+                        </ul>
+                        <a href="/get-started" hx-get="/get-started" hx-target="#main-content" hx-push-url="true"
+                            class="block w-full py-4 bg-gradient-purple text-white text-center font-bold rounded-lg hover:opacity-90 transition-all shadow-lg shadow-purple-500/30">
+                            Contact Sales
+                        </a>
                     </div>
                 </div>
             </div>
