@@ -318,12 +318,7 @@
         let monacoEditor = null;
         window.monacoEditor = null;
         
-        // Simple auth check for IDE (optional - IDE can work without auth)
-        async function checkAuth() {
-            // IDE doesn't require authentication - it's a standalone tool
-            // Authentication is handled at API level when needed
-            return true;
-        }
+        // L'authentification est gérée par core/admin.js qui est chargé à la fin du fichier
 
         // Initialize Monaco Editor
         function initMonacoEditor(initialValue = '') {
@@ -864,7 +859,7 @@
 
         // Initialize on load
         document.addEventListener('DOMContentLoaded', async () => {
-            await checkAuth();
+            // L'authentification est gérée automatiquement par core/admin.js
 
             // Display site domain
             const domainEl = document.getElementById('site-domain');
@@ -943,6 +938,8 @@
         }
 
     </script>
+    <!-- Charger core/admin.js pour la même logique d'authentification que le dashboard -->
+    <script src="/core/admin.js"></script>
 </body>
 
 </html>

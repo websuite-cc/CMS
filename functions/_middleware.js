@@ -310,6 +310,23 @@ export async function onRequest(context) {
             }
         }
         
+        // IMPORTANT : Si c'est un 404, retourner un vrai 404 explicite
+        // Ne pas laisser Cloudflare Pages servir l'index racine par défaut
+        if (assetResponse.status === 404) {
+            console.log(`[Admin/Core Route] 404 - File not found: ${url.pathname}`);
+            return new Response(
+                `404 - File not found: ${url.pathname}\n\n` +
+                `The requested file does not exist in the admin or core directory.`,
+                { 
+                    status: 404,
+                    headers: { 
+                        'Content-Type': 'text/plain',
+                        'Cache-Control': 'no-cache'
+                    }
+                }
+            );
+        }
+        
         // Log pour débogage
         if (assetResponse.status !== 200) {
             console.log(`[Admin/Core Route] Asset fetch for ${url.pathname}: Status ${assetResponse.status}`);
