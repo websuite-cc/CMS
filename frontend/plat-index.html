@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forme Libre - Design qui compte.</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom font-family configuration for consistency, if desired, 
+       otherwise Tailwind's defaults are good for minimalism. */
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+  </style>
+  <!-- HTMX CDN -->
+  <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuCwmQiR1xpfgZJ7VfiSNat8Xh9gaHmzsiW<a>/DypGjILyLdENeOE8hHTA" crossorigin="anonymous"></script>
+</head>
+<body class="bg-white text-gray-900 font-sans leading-relaxed tracking-wide">
+
+  <!-- Global Header (Navigation) -->
+  <header class="py-8 px-4 max-w-7xl mx-auto">
+    <nav class="flex flex-col md:flex-row justify-between items-center">
+      <a href="/" hx-get="/" hx-target="#main-content" hx-push-url="true" class="text-3xl font-bold text-gray-900 mb-6 md:mb-0 hover:text-indigo-500 transition-colors">Forme Libre</a>
+      <ul class="flex space-x-8 text-lg">
+        <li><a href="/travaux" hx-get="/travaux" hx-target="#main-content" hx-push-url="true" class="text-gray-900 hover:text-indigo-500 transition-colors">Travaux</a></li>
+        <li><a href="/services" hx-get="/services" hx-target="#main-content" hx-push-url="true" class="text-gray-900 hover:text-indigo-500 transition-colors">Services</a></li>
+        <li><a href="/a-propos" hx-get="/a-propos" hx-target="#main-content" hx-push-url="true" class="text-gray-900 hover:text-indigo-500 transition-colors">À propos</a></li>
+        <li><a href="/contact" hx-get="/contact" hx-target="#main-content" hx-push-url="true" class="text-gray-900 hover:text-indigo-500 transition-colors">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content Area - HTMX target -->
+  <main id='main-content'>
+    <!-- Initial content for tpl-home will be rendered here by the backend -->
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="py-16 border-t border-gray-100 text-center text-gray-600 px-4">
+    <div class="mb-6 space-x-6 text-xl">
+      <a href="#" class="hover:text-indigo-500 transition-colors">Twitter</a>
+      <a href="#" class="hover:text-indigo-500 transition-colors">Instagram</a>
+      <a href="#" class="hover:text-indigo-500 transition-colors">LinkedIn</a>
+    </div>
+    <p>&copy; 2024 Forme Libre. Tous droits réservés.</p>
+  </footer>
+
+  <!-- TEMPLATES FOR STACKPAGES CMS -->
+
+  <!-- Default Homepage Content Template -->
+  <template id='tpl-home'>
+    <!-- Hero Section -->
+    <section class="py-24 text-center max-w-4xl mx-auto px-4">
+      <h1 class="text-5xl md:text-6xl font-bold mb-4">Design qui compte.</h1>
+      <p class="text-xl md:text-2xl text-gray-700 mb-8">Nous créons des expériences visuelles impactantes qui résonnent avec votre public et transforment les marques.</p>
+      <a href="/travaux" hx-get="/travaux" hx-target="#main-content" hx-push-url="true" class="text-lg text-indigo-500 hover:underline transition-all">Explorer nos projets &rarr;</a>
+    </section>
+
+    <!-- Portfolio Section (Galerie) - Initial placeholders -->
+    <section class="py-24 max-w-7xl mx-auto px-4">
+      <h2 class="text-4xl font-bold text-center mb-16">Nos Derniers Travaux</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+        <div class="bg-gray-800 h-96 rounded-lg shadow-lg flex items-center justify-center text-white text-xl p-8">
+          Projet #1 (Placeholder)
+        </div>
+        <div class="bg-gray-800 h-96 rounded-lg shadow-lg flex items-center justify-center text-white text-xl p-8">
+          Projet #2 (Placeholder)
+        </div>
+        <div class="bg-gray-800 h-96 rounded-lg shadow-lg flex items-center justify-center text-white text-xl p-8">
+          Projet #3 (Placeholder)
+        </div>
+      </div>
+    </section>
+
+    <!-- Philosophie/Manifeste Section -->
+    <section class="py-24 max-w-4xl mx-auto px-4 text-center">
+      <h2 class="text-4xl font-bold mb-8">Notre Philosophie</h2>
+      <p class="text-lg text-gray-700">
+        Chez Forme Libre, nous croyons que le design est une conversation. Chaque pixel, chaque ligne est une opportunité de raconter une histoire, de susciter une émotion et de construire des connexions durables. Nous fusionnons l'art et la stratégie pour donner vie à des identités mémorables, en privilégiant l'élégance intemporelle et la fonctionnalité intuitive.
+      </p>
+    </section>
+  </template>
+
+  <!-- Template for a single Blog Post Card -->
+  <template id='tpl-blog-card'>
+    <article class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100">
+      <img src='{{image}}' alt='{{title}}' class="w-full h-48 object-cover">
+      <div class="p-6">
+        <h3 class="text-2xl font-semibold mb-2">
+          <a href='/post/{{slug}}' hx-get='/post/{{slug}}' hx-target='#main-content' hx-push-url='true' class="text-gray-900 hover:text-indigo-500 transition-colors leading-tight">{{title}}</a>
+        </h3>
+        <p class="text-gray-700 text-base mb-4 line-clamp-3">{{description}}</p>
+        <div class="flex justify-between items-center text-sm text-gray-500">
+          <span>{{date}}</span>
+          <span>Par {{author}}</span>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <!-- Template for a single Video Card -->
+  <template id='tpl-video-card'>
+    <article class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100">
+      <img src='{{thumbnail}}' alt='{{title}}' class="w-full h-48 object-cover">
+      <div class="p-6">
+        <h3 class="text-2xl font-semibold mb-2">
+          <a href='/video/{{link}}' hx-get='/video/{{link}}' hx-target='#main-content' hx-push-url='true' class="text-gray-900 hover:text-indigo-500 transition-colors leading-tight">{{title}}</a>
+        </h3>
+        <div class="flex justify-between items-center text-sm text-gray-500 mt-4">
+          <span>Publié le {{date}}</span>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <!-- Template for a full Blog Post Detail -->
+  <template id='tpl-post-detail'>
+    <section class="py-24 max-w-4xl mx-auto px-4">
+      <img src='{{image}}' alt='{{title}}' class="w-full h-96 object-cover rounded-lg mb-12 shadow-md">
+      <h1 class="text-5xl font-bold mb-6 leading-tight">{{title}}</h1>
+      <p class="text-gray-600 text-lg mb-8">Par {{author}} le {{date}}</p>
+      <div class="prose prose-lg max-w-none text-gray-800 leading-relaxed space-y-6">
+        {{content}}
+      </div>
+      <div class="mt-16 pt-8 border-t border-gray-100">
+        <a href="/travaux" hx-get="/travaux" hx-target="#main-content" hx-push-url="true" class="text-indigo-500 hover:underline transition-colors">&larr; Retour aux projets</a>
+      </div>
+    </section>
+  </template>
+
+  <!-- Template for a full Video Detail -->
+  <template id='tpl-video-detail'>
+    <section class="py-24 max-w-4xl mx-auto px-4">
+      <h1 class="text-5xl font-bold mb-8 leading-tight">{{title}}</h1>
+      <div class="aspect-w-16 aspect-h-9 mb-12 rounded-lg overflow-hidden shadow-md">
+        <!-- The backend will render the iframe or embed code based on embedUrl -->
+        <!-- For a true iframe, the placeholder would be an iframe tag directly -->
+        <div class="relative w-full pb-[56.25%]"> <!-- 16:9 aspect ratio -->
+          <iframe 
+            class="absolute top-0 left-0 w-full h-full rounded-lg" 
+            src="{{embedUrl}}" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <p class="text-gray-600 text-lg mb-8">Publié le {{published}}</p>
+      <div class="prose prose-lg max-w-none text-gray-800 leading-relaxed space-y-6">
+        <h2 class="text-3xl font-semibold mb-4">Description</h2>
+        <p>{{description}}</p>
+      </div>
+      <div class="mt-16 pt-8 border-t border-gray-100 flex justify-between items-center">
+        <a href="/travaux" hx-get="/travaux" hx-target="#main-content" hx-push-url="true" class="text-indigo-500 hover:underline transition-colors">&larr; Retour aux projets</a>
+        <a href="{{link}}" target="_blank" rel="noopener noreferrer" class="text-indigo-500 hover:underline transition-colors">Voir sur la plateforme originale &rarr;</a>
+      </div>
+    </section>
+  </template>
+
+  <!-- Example templates for other navigation pages (Travaux, Services, About, Contact) -->
+  <template id='tpl-travaux'>
+    <section class="py-24 max-w-7xl mx-auto px-4 text-center">
+      <h1 class="text-5xl font-bold mb-6">Nos Travaux</h1>
+      <p class="text-xl text-gray-700 mb-12">
+        Découvrez une sélection de nos projets récents en design d'identité visuelle et numérique.
+      </p>
+      <!-- This section would typically load tpl-blog-card and tpl-video-card dynamically -->
+      <div hx-get="/api/publications" hx-trigger="load" hx-target="#publications-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-16">
+        <div id="publications-container" class="contents">
+          <!-- Blog/Video cards will be loaded here by HTMX -->
+          <div class="bg-gray-100 h-64 rounded-lg flex items-center justify-center text-gray-500">Chargement des projets...</div>
+          <div class="bg-gray-100 h-64 rounded-lg flex items-center justify-center text-gray-500"></div>
+          <div class="bg-gray-100 h-64 rounded-lg flex items-center justify-center text-gray-500"></div>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id='tpl-services'>
+    <section class="py-24 max-w-4xl mx-auto px-4 text-center">
+      <h1 class="text-5xl font-bold mb-6">Nos Services</h1>
+      <p class="text-xl text-gray-700 mb-12">
+        Nous offrons une gamme complète de services de design pour élever votre marque.
+      </p>
+      <div class="text-left space-y-10 text-lg text-gray-800">
+        <div class="bg-gray-50 p-8 rounded-lg shadow-sm">
+          <h2 class="text-3xl font-semibold text-gray-900 mb-4">Identité Visuelle</h2>
+          <p>Création de logos, chartes graphiques complètes, et lignes directrices pour une présence de marque cohérente et mémorable.</p>
+        </div>
+        <div class="bg-gray-50 p-8 rounded-lg shadow-sm">
+          <h2 class="text-3xl font-semibold text-gray-900 mb-4">Design Numérique</h2>
+          <p>Conception d'interfaces utilisateur (UI) et d'expériences utilisateur (UX) pour sites web, applications mobiles et plateformes interactives.</p>
+        </div>
+        <div class="bg-gray-50 p-8 rounded-lg shadow-sm">
+          <h2 class="text-3xl font-semibold text-gray-900 mb-4">Stratégie de Marque</h2>
+          <p>Définition de la vision, des valeurs et du positionnement de votre marque pour une communication efficace et authentique.</p>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id='tpl-a-propos'>
+    <section class="py-24 max-w-4xl mx-auto px-4 text-center">
+      <h1 class="text-5xl font-bold mb-6">À Propos de Forme Libre</h1>
+      <p class="text-xl text-gray-700 mb-12">
+        Forme Libre est un studio de design indépendant basé sur la conviction que la simplicité et la clarté sont les piliers d'un design puissant.
+      </p>
+      <div class="text-left text-lg text-gray-800 space-y-8">
+        <p>
+          Fondé sur la passion de l'esthétique et la précision fonctionnelle, nous collaborons étroitement avec nos clients pour transformer des idées en solutions visuelles distinctives. Notre approche est caractérisée par une écoute attentive, une recherche approfondie et une exécution impeccable.
+        </p>
+        <p>
+          Nous nous engageons à créer des designs qui non seulement captivent l'œil, mais qui remplissent également leur objectif stratégique, contribuant ainsi à la croissance et au succès durable de nos partenaires.
+        </p>
+      </div>
+    </section>
+  </template>
+
+  <template id='tpl-contact'>
+    <section class="py-24 max-w-2xl mx-auto px-4 text-center">
+      <h1 class="text-5xl font-bold mb-6">Contactez-nous</h1>
+      <p class="text-xl text-gray-700 mb-12">
+        Prêt à discuter de votre prochain projet ? Nous serions ravis d'entendre parler de vous.
+      </p>
+      <div class="space-y-6 text-lg text-gray-800">
+        <p>Email: <a href="mailto:bonjour@formelibre.com" class="text-indigo-500 hover:underline">bonjour@formelibre.com</a></p>
+        <p>Téléphone: <a href="tel:+33123456789" class="text-indigo-500 hover:underline">+33 (0)1 23 45 67 89</a></p>
+        <p>Suivez-nous sur les réseaux sociaux pour rester connecté.</p>
+      </div>
+      <!-- A simple contact form could be added here if desired -->
+      <form class="mt-16 p-8 bg-gray-50 rounded-lg shadow-sm text-left">
+        <div class="mb-6">
+          <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Votre Nom</label>
+          <input type="text" id="name" name="name" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="Votre nom complet">
+        </div>
+        <div class="mb-6">
+          <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Votre Email</label>
+          <input type="email" id="email" name="email" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="vous@exemple.com">
+        </div>
+        <div class="mb-6">
+          <label for="message" class="block text-gray-700 text-sm font-bold mb-2">Votre Message</label>
+          <textarea id="message" name="message" rows="6" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="Décrivez votre projet ou question..."></textarea>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors">Envoyer le Message</button>
+        </div>
+      </form>
+    </section>
+  </template>
+
+</body>
+</html>
