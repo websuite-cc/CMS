@@ -113,62 +113,18 @@ export async function onRequest(context) {
     // Routes locales : /api/*, /admin/*, /core/*
     // IMPORTANT : Cette vérification doit être AVANT toute autre logique
     
-    // Route de prévisualisation : /preview?slug=xxx → servir le template depuis le cache
-    // Les routes HTMX à l'intérieur fonctionneront car elles passeront par le middleware
-    if (url.pathname === '/preview' || url.pathname === '/preview/') {
-        const slug = url.searchParams.get('slug');
-        if (slug) {
-            console.log(`[Preview Route] Handling preview request for slug: ${slug}`);
-            
-            // Récupérer le template depuis le cache
-            const cacheKey = `frontend_template_${slug}`;
-            let templateData = null;
-            
-            if (env.FRONTEND_TEMPLATE_CACHE) {
-                const cached = await env.FRONTEND_TEMPLATE_CACHE.get(cacheKey);
-                if (cached) {
-                    templateData = JSON.parse(cached);
-                }
-            } else {
-                const cache = caches.default;
-                const cacheRequest = new Request(`https://cache.local/${cacheKey}`);
-                const cachedResponse = await cache.match(cacheRequest);
-                if (cachedResponse) {
-                    templateData = await cachedResponse.json();
-                }
-            }
-            
-            if (templateData && templateData.html) {
-                // Servir le template HTML directement
-                // Les routes HTMX à l'intérieur (hx-get="/", etc.) fonctionneront
-                // car elles passeront par le middleware SSR pour les requêtes suivantes
-                return new Response(templateData.html, {
-                    headers: {
-                        'Content-Type': 'text/html; charset=utf-8',
-                        'X-Preview-Slug': slug
-                    }
-                });
-            } else {
-                return new Response(
-                    `<html><body><h1>Template non trouvé</h1><p>Aucun template trouvé pour le slug: ${slug}</p></body></html>`,
-                    { status: 404, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
-                );
-            }
-        }
-    }
-    
-    // Intercepter les requêtes HTMX depuis la prévisualisation
-    // Si c'est une requête HTMX et qu'elle vient d'une page de prévisualisation,
+    // Intercepter les requêtes HTMX depuis la prévisualisation API
+    // Si c'est une requête HTMX et qu'elle vient de /api/admin/preview,
     // utiliser le template depuis le cache au lieu de frontend/index.html
     const isHtmx = request.headers.get('HX-Request') === 'true';
     const referer = request.headers.get('Referer');
-    if (isHtmx && referer && referer.includes('/preview?slug=')) {
+    if (isHtmx && referer && referer.includes('/api/admin/preview')) {
         // Extraire le slug depuis le referer
         const refererUrl = new URL(referer);
         const previewSlug = refererUrl.searchParams.get('slug');
         
         if (previewSlug) {
-            console.log(`[Preview HTMX] Handling HTMX request from preview with slug: ${previewSlug}`);
+            console.log(`[Preview HTMX] Handling HTMX request from API preview with slug: ${previewSlug}`);
             
             // Récupérer le template depuis le cache
             const cacheKey = `frontend_template_${previewSlug}`;
@@ -195,7 +151,9 @@ export async function onRequest(context) {
                 // Utiliser handleHtmxCatchAll pour générer le contenu HTMX
                 // avec le template du cache au lieu de frontend/index.html
                 const content = handleHtmxCatchAll(request, url.pathname, templateHtml, {});
-                return htmlResponse(content);
+                if (content) {
+                    return htmlResponse(content);
+                }
             }
         }
     }

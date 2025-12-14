@@ -546,8 +546,8 @@
             // Sauvegarder d'abord en cache si pas déjà fait
             await savePage('draft');
 
-            // Ouvrir la prévisualisation avec le slug via le middleware pour que HTMX fonctionne
-            const previewUrl = `/preview?slug=${encodeURIComponent(slug)}`;
+            // Ouvrir la prévisualisation avec le slug via l'API
+            const previewUrl = `/api/admin/preview?slug=${encodeURIComponent(slug)}`;
             window.open(previewUrl, '_blank');
         }
 
