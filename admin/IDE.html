@@ -318,45 +318,11 @@
         let monacoEditor = null;
         window.monacoEditor = null;
         
-        // Auth check - utilise la même logique que le dashboard
-        // Cette fonction sera remplacée par celle de core/admin.js si chargé
+        // Simple auth check for IDE (optional - IDE can work without auth)
         async function checkAuth() {
-            const currentPath = window.location.pathname;
-            
-            // Liste des pages qui ne nécessitent pas d'authentification
-            const publicPages = [
-                '/admin',
-                '/admin/',
-                '/admin/index.html'
-            ];
-            
-            // Vérifier si on est sur une page publique (login)
-            const isPublicPage = publicPages.some(page => currentPath === page || currentPath.startsWith(page + '/'));
-            
-            if (isPublicPage) {
-                // We're on the login page, don't redirect
-                return;
-            }
-
-            const authKey = localStorage.getItem('stackpages_auth');
-            if (!authKey) {
-                window.location.href = '/admin';
-                return;
-            }
-
-            // Optional: Verify with server if needed
-            try {
-                const res = await fetch('/api/check-auth', { 
-                    headers: { 'X-Auth-Key': authKey }
-                });
-                const data = await res.json();
-                if (!data.authenticated) {
-                    localStorage.removeItem('stackpages_auth');
-                    window.location.href = '/admin';
-                }
-            } catch (e) {
-                window.location.href = '/admin';
-            }
+            // IDE doesn't require authentication - it's a standalone tool
+            // Authentication is handled at API level when needed
+            return true;
         }
 
         // Initialize Monaco Editor
@@ -977,8 +943,6 @@
         }
 
     </script>
-    <!-- Charger core/admin.js pour la même logique d'authentification que le dashboard -->
-    <script src="/core/admin.js"></script>
 </body>
 
 </html>
