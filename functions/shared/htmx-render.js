@@ -50,6 +50,103 @@ export function replacePlaceholders(template, data) {
 }
 
 /**
+ * Génère les cards HTML pour une liste de posts (pour Load More)
+ * @param {string} fullTemplate - Template HTML complet
+ * @param {Array} posts - Liste des posts
+ * @returns {string} - HTML des cards
+ */
+export function generatePostCards(fullTemplate, posts) {
+    // Cherche automatiquement le template de carte
+    let cardTpl = extractTemplate(fullTemplate, 'tpl-blog-card') ||
+                   extractTemplate(fullTemplate, 'tpl-post-card') ||
+                   extractTemplate(fullTemplate, 'tpl-article-card');
+    
+    if (!cardTpl) {
+        // Fallback si aucun template trouvé
+        cardTpl = `
+        <article class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden hover:shadow-lg transition">
+            <a href="{{link}}" hx-get="{{link}}" hx-target="#main-content" hx-push-url="true" class="block h-48 overflow-hidden">
+                <img src="{{image}}" alt="{{title}}" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+            </a>
+            <div class="p-5">
+                <div class="text-xs text-slate-500 mb-2">{{date}}</div>
+                <h3 class="font-bold text-lg mb-2 leading-tight">
+                    <a href="{{link}}" hx-get="{{link}}" hx-target="#main-content" hx-push-url="true" class="hover:text-blue-600 transition">
+                        {{title}}
+                    </a>
+                </h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-3">{{description}}</p>
+            </div>
+        </article>`;
+    }
+    
+    let cardsHtml = '';
+    posts.forEach(post => {
+        const postDate = new Date(post.pubDate).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+        cardsHtml += replacePlaceholders(cardTpl, {
+            title: post.title,
+            description: post.description ? post.description.substring(0, 120) + '...' : '',
+            author: post.author || 'Inconnu',
+            date: postDate,
+            image: post.image || 'https://via.placeholder.com/600x400/edf2f7/4a5568?text=Image+Article',
+            slug: post.slug,
+            link: `/post/${post.slug}`
+        });
+    });
+    
+    return cardsHtml;
+}
+
+/**
+ * Génère les cards HTML pour une liste de vidéos (pour Load More)
+ * @param {string} fullTemplate - Template HTML complet
+ * @param {Array} videos - Liste des vidéos
+ * @returns {string} - HTML des cards
+ */
+export function generateVideoCards(fullTemplate, videos) {
+    // Cherche automatiquement le template de carte
+    let cardTpl = extractTemplate(fullTemplate, 'tpl-video-card') ||
+                   extractTemplate(fullTemplate, 'tpl-videos-card');
+    
+    if (!cardTpl) {
+        // Fallback si aucun template trouvé
+        cardTpl = `
+        <div class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden group">
+            <div class="relative aspect-video">
+                <img src="{{thumbnail}}" alt="{{title}}" class="w-full h-full object-cover">
+                <a href="{{link}}" hx-get="{{link}}" hx-target="#main-content" hx-push-url="true" class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </a>
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-sm mb-1 line-clamp-2">
+                    <a href="{{link}}" hx-get="{{link}}" hx-target="#main-content" hx-push-url="true" class="hover:text-red-600 transition">
+                        {{title}}
+                    </a>
+                </h3>
+                <div class="text-xs text-slate-500">{{published}}</div>
+            </div>
+        </div>`;
+    }
+    
+    let cardsHtml = '';
+    videos.forEach(video => {
+        const pubDate = new Date(video.published).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+        cardsHtml += replacePlaceholders(cardTpl, {
+            title: video.title,
+            thumbnail: video.thumbnail,
+            published: pubDate,
+            link: `/video/${video.id || video.link.split('v=')[1] || ''}`,
+            slug: video.id || video.link.split('v=')[1] || ''
+        });
+    });
+    
+    return cardsHtml;
+}
+
+/**
  * Injecte le contenu et les métadonnées dans un template HTML complet
  * @param {string} template - Template HTML complet
  * @param {string} content - Contenu à injecter dans #main-content
@@ -181,6 +278,152 @@ export function htmxResponse(request, htmlGenerator, jsonGenerator, data, metada
  * });
  * if (htmxCatchAll) return htmxCatchAll;
  */
+/**
+ * Détecte automatiquement si une route correspond à une API de contenu et génère le contenu approprié
+ * Système générique qui fonctionne avec n'importe quel nom de template
+ * Ne nécessite pas de modification du middleware pour chaque nouveau type de contenu
+ */
+export async function detectAndRenderContentRoute(request, path, fullTemplate, siteConfig) {
+    const slug = path.substring(1).replace(/\/$/, '');
+    const siteName = siteConfig?.site?.name || "WebSuite";
+    const siteDescription = siteConfig?.seo?.metaDescription || "";
+    const siteKeywords = siteConfig?.seo?.keywords || "";
+    
+    // ====================================================================
+    // DÉTECTION DES ROUTES DE DÉTAIL (item unique)
+    // ====================================================================
+    // Détecte automatiquement les patterns : /post/[slug], /video/[id], /podcast/[id]
+    const detailPatterns = [
+        { 
+            pattern: /^post\/(.+)$/, 
+            apiPath: (match) => `/api/post/${match[1]}`, 
+            generator: generatePostContent, 
+            type: 'post',
+            notFoundMsg: 'Article non trouvé'
+        },
+        { 
+            pattern: /^video\/(.+)$/, 
+            apiPath: (match) => `/api/video/${match[1]}`, 
+            generator: generateVideoDetailContent, 
+            type: 'video',
+            notFoundMsg: 'Vidéo non trouvée'
+        },
+        { 
+            pattern: /^podcast\/(.+)$/, 
+            apiPath: (match) => `/api/podcast/${match[1]}`, 
+            generator: null, // TODO: créer generatePodcastDetailContent si nécessaire
+            type: 'podcast',
+            notFoundMsg: 'Podcast non trouvé'
+        }
+    ];
+    
+    for (const { pattern, apiPath, generator, type, notFoundMsg } of detailPatterns) {
+        const match = slug.match(pattern);
+        if (match && generator) {
+            try {
+                const apiUrl = new URL(apiPath(match), request.url);
+                const response = await fetch(apiUrl.toString());
+                
+                if (response.ok) {
+                    const item = await response.json();
+                    const content = generator(fullTemplate, item, path);
+                    
+                    const metadata = {
+                        title: `${item.title} - ${siteName}`,
+                        description: item.description || siteDescription,
+                        keywords: siteKeywords,
+                        siteName: siteName
+                    };
+                    
+                    return { content, metadata };
+                } else if (response.status === 404) {
+                    // Item non trouvé
+                    return {
+                        content: `<div class="p-8 text-center"><h1 class="text-2xl font-bold mb-4">${notFoundMsg}</h1><p>Le contenu demandé n'existe pas.</p></div>`,
+                        metadata: {
+                            title: `${notFoundMsg} - ${siteName}`,
+                            description: siteDescription,
+                            keywords: siteKeywords,
+                            siteName: siteName
+                        },
+                        status: 404
+                    };
+                }
+            } catch (error) {
+                console.error(`Error loading ${type}:`, error);
+            }
+        }
+    }
+    
+    // ====================================================================
+    // DÉTECTION DES ROUTES DE LISTE (collections)
+    // ====================================================================
+    // Essaie intelligemment de détecter quelle API correspond à cette route
+    // en testant les APIs disponibles et en utilisant celle qui retourne des données
+    const listApis = [
+        { 
+            api: '/api/posts', 
+            generator: generatePublicationsContent, 
+            type: 'posts', 
+            title: 'Articles',
+            // Cherche des templates avec des noms variés
+            templateIds: ['tpl-announcements', 'tpl-publications', 'tpl-blog-list', 'tpl-posts', 'tpl-articles']
+        },
+        { 
+            api: '/api/videos', 
+            generator: generateVideosContent, 
+            type: 'videos', 
+            title: 'Vidéos',
+            templateIds: ['tpl-tutorials', 'tpl-videos', 'tpl-video-list']
+        },
+        { 
+            api: '/api/podcasts', 
+            generator: null, // TODO: créer generatePodcastsContent si nécessaire
+            type: 'podcasts', 
+            title: 'Podcasts',
+            templateIds: ['tpl-podcasts', 'tpl-podcast-list']
+        }
+    ];
+    
+    // Pour chaque API, on vérifie si elle retourne des données
+    // Si oui, on génère le contenu avec le template disponible (quel que soit son nom)
+    for (const { api, generator, type, title } of listApis) {
+        if (!generator) continue;
+        
+        try {
+            const apiUrl = new URL(api, request.url);
+            const response = await fetch(apiUrl.toString());
+            
+            if (response.ok) {
+                const items = await response.json();
+                // Si l'API retourne un tableau (même vide), on génère le contenu
+                if (Array.isArray(items)) {
+                    // Le générateur cherche automatiquement le bon template dans le HTML
+                    const content = generator(fullTemplate, items);
+                    
+                    // Si le contenu généré contient encore {{items}}, c'est qu'aucun template n'a été trouvé
+                    // Dans ce cas, on ne retourne pas ce résultat
+                    if (content && !content.includes('{{items}}')) {
+                        const metadata = {
+                            title: `${title} - ${siteName}`,
+                            description: siteDescription,
+                            keywords: siteKeywords,
+                            siteName: siteName
+                        };
+                        
+                        return { content, metadata };
+                    }
+                }
+            }
+        } catch (error) {
+            // Continuer à essayer les autres APIs
+            continue;
+        }
+    }
+    
+    return null;
+}
+
 export async function handleHtmxCatchAll(request, path, fullTemplate, siteConfig = {}, fallbackHandler = null, env = null) {
     // Ne traite que les requêtes HTMX
     if (!isHtmxRequest(request)) {
@@ -201,141 +444,13 @@ export async function handleHtmxCatchAll(request, path, fullTemplate, siteConfig
     }
 
     // Extraire le slug depuis le chemin
-    // Ex: "/ma-page" -> "ma-page" -> "tpl-ma-page"
-    const slug = path.substring(1).replace(/\/$/, ''); // Enlever le slash initial et final
+    const slug = path.substring(1).replace(/\/$/, '');
     
-    // Gérer les routes de détail : /post/[slug] et /video/[id]
-    if (slug.startsWith('post/')) {
-        const postSlug = slug.replace('post/', '');
-        try {
-            const apiUrl = new URL(`/api/post/${postSlug}`, request.url);
-            const postResponse = await fetch(apiUrl.toString());
-            
-            if (postResponse.ok) {
-                const post = await postResponse.json();
-                const content = generatePostContent(fullTemplate, post, path);
-                
-                const siteName = siteConfig?.site?.name || "WebSuite";
-                const siteDescription = siteConfig?.seo?.metaDescription || "";
-                const metadata = {
-                    title: `${post.title} - ${siteName}`,
-                    description: post.description || siteDescription,
-                    keywords: siteConfig?.seo?.keywords || "",
-                    siteName: siteName
-                };
-                
-                const oob = generateOOB(metadata, request);
-                return htmlResponse(content + oob);
-            } else {
-                // Article non trouvé
-                return new Response(`<div class="p-8 text-center"><h1 class="text-2xl font-bold mb-4">Article non trouvé</h1><p>L'article "${postSlug}" n'existe pas.</p></div>`, {
-                    status: 404,
-                    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-                });
-            }
-        } catch (error) {
-            console.error('Error loading post:', error);
-            return new Response(`<div class="p-8 text-center"><h1 class="text-2xl font-bold mb-4">Erreur</h1><p>Impossible de charger l'article.</p></div>`, {
-                status: 500,
-                headers: { 'Content-Type': 'text/html; charset=utf-8' }
-            });
-        }
-    }
-    
-    if (slug.startsWith('video/')) {
-        const videoId = slug.replace('video/', '');
-        try {
-            const apiUrl = new URL(`/api/video/${videoId}`, request.url);
-            const videoResponse = await fetch(apiUrl.toString());
-            
-            if (videoResponse.ok) {
-                const video = await videoResponse.json();
-                const content = generateVideoDetailContent(fullTemplate, video, path);
-                
-                const siteName = siteConfig?.site?.name || "WebSuite";
-                const siteDescription = siteConfig?.seo?.metaDescription || "";
-                const metadata = {
-                    title: `${video.title} - ${siteName}`,
-                    description: video.description || siteDescription,
-                    keywords: siteConfig?.seo?.keywords || "",
-                    siteName: siteName
-                };
-                
-                const oob = generateOOB(metadata, request);
-                return htmlResponse(content + oob);
-            } else {
-                // Vidéo non trouvée
-                return new Response(`<div class="p-8 text-center"><h1 class="text-2xl font-bold mb-4">Vidéo non trouvée</h1><p>La vidéo "${videoId}" n'existe pas.</p></div>`, {
-                    status: 404,
-                    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-                });
-            }
-        } catch (error) {
-            console.error('Error loading video:', error);
-            return new Response(`<div class="p-8 text-center"><h1 class="text-2xl font-bold mb-4">Erreur</h1><p>Impossible de charger la vidéo.</p></div>`, {
-                status: 500,
-                headers: { 'Content-Type': 'text/html; charset=utf-8' }
-            });
-        }
-    }
-    
-    const tplId = `tpl-${slug}`;
-
-    // Routes spéciales nécessitant des données dynamiques
-    if (slug === 'announcements' || slug === 'publications') {
-        try {
-            // Récupérer les articles depuis l'API
-            const apiUrl = new URL('/api/posts', request.url);
-            const postsResponse = await fetch(apiUrl.toString());
-            const posts = postsResponse.ok ? await postsResponse.json() : [];
-            
-            // Générer le contenu avec les données réelles
-            const content = generatePublicationsContent(fullTemplate, posts);
-            
-            // Générer les métadonnées
-            const siteName = siteConfig?.site?.name || "WebSuite";
-            const siteDescription = siteConfig?.seo?.metaDescription || "";
-            const metadata = {
-                title: `Announcements - ${siteName}`,
-                description: siteDescription,
-                keywords: siteConfig?.seo?.keywords || "",
-                siteName: siteName
-            };
-            
-            const oob = generateOOB(metadata, request);
-            return htmlResponse(content + oob);
-        } catch (error) {
-            console.error('Error loading announcements:', error);
-            // Fallback sur le template brut si erreur
-        }
-    }
-    
-    if (slug === 'tutorials' || slug === 'videos') {
-        try {
-            // Récupérer les vidéos depuis l'API
-            const apiUrl = new URL('/api/videos', request.url);
-            const videosResponse = await fetch(apiUrl.toString());
-            const videos = videosResponse.ok ? await videosResponse.json() : [];
-            
-            // Générer le contenu avec les données réelles
-            const content = generateVideosContent(fullTemplate, videos);
-            
-            // Générer les métadonnées
-            const siteName = siteConfig?.site?.name || "WebSuite";
-            const siteDescription = siteConfig?.seo?.metaDescription || "";
-            const metadata = {
-                title: `Video Tutorials - ${siteName}`,
-                description: siteDescription,
-                keywords: siteConfig?.seo?.keywords || "",
-                siteName: siteName
-            };
-            
-            const oob = generateOOB(metadata, request);
-            return htmlResponse(content + oob);
-        } catch (error) {
-            console.error('Error loading videos:', error);
-            // Fallback sur le template brut si erreur
-        }
+    // Détection automatique des routes de contenu (générique)
+    const contentResult = await detectAndRenderContentRoute(request, path, fullTemplate, siteConfig);
+    if (contentResult) {
+        const oob = generateOOB(contentResult.metadata, request);
+        return htmlResponse(contentResult.content + oob);
     }
 
     // Chercher le template correspondant
@@ -412,8 +527,18 @@ export function generateHomeContent(fullTemplate, metadata) {
  * Génère le contenu de la page des publications/articles
  */
 export function generatePublicationsContent(fullTemplate, posts) {
-    let listTpl = extractTemplate(fullTemplate, 'tpl-announcements') || extractTemplate(fullTemplate, 'tpl-blog-list');
-    let cardTpl = extractTemplate(fullTemplate, 'tpl-blog-card');
+    // Cherche automatiquement un template de liste pour les articles
+    // Essaie plusieurs noms possibles pour être générique
+    let listTpl = extractTemplate(fullTemplate, 'tpl-announcements') || 
+                   extractTemplate(fullTemplate, 'tpl-publications') ||
+                   extractTemplate(fullTemplate, 'tpl-blog-list') ||
+                   extractTemplate(fullTemplate, 'tpl-posts') ||
+                   extractTemplate(fullTemplate, 'tpl-articles');
+    
+    // Cherche automatiquement un template de carte pour les articles
+    let cardTpl = extractTemplate(fullTemplate, 'tpl-blog-card') ||
+                   extractTemplate(fullTemplate, 'tpl-post-card') ||
+                   extractTemplate(fullTemplate, 'tpl-article-card');
 
     // FALLBACKS for Modern/AI Themes
     if (!listTpl) {
@@ -467,8 +592,15 @@ export function generatePublicationsContent(fullTemplate, posts) {
  * Génère le contenu de la page des vidéos
  */
 export function generateVideosContent(fullTemplate, videos) {
-    let listTpl = extractTemplate(fullTemplate, 'tpl-tutorials') || extractTemplate(fullTemplate, 'tpl-video-list');
-    let cardTpl = extractTemplate(fullTemplate, 'tpl-video-card');
+    // Cherche automatiquement un template de liste pour les vidéos
+    // Essaie plusieurs noms possibles pour être générique
+    let listTpl = extractTemplate(fullTemplate, 'tpl-tutorials') || 
+                   extractTemplate(fullTemplate, 'tpl-videos') ||
+                   extractTemplate(fullTemplate, 'tpl-video-list');
+    
+    // Cherche automatiquement un template de carte pour les vidéos
+    let cardTpl = extractTemplate(fullTemplate, 'tpl-video-card') ||
+                   extractTemplate(fullTemplate, 'tpl-videos-card');
 
     // FALLBACKS
     if (!listTpl) {

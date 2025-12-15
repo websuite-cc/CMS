@@ -19,6 +19,7 @@ import {
     generateVideosContent,
     generatePostContent,
     generateVideoDetailContent,
+    detectAndRenderContentRoute,
     handleHtmxCatchAll
 } from './shared/htmx-render.js';
 
@@ -535,104 +536,19 @@ export async function onRequest(context) {
             
             const slug = path.substring(1).replace(/\/$/, '');
             
-            // Gérer les routes de détail : /post/[slug] et /video/[id]
-            if (slug.startsWith('post/')) {
-                const postSlug = slug.replace('post/', '');
-                try {
-                    const apiUrl = new URL(`/api/post/${postSlug}`, request.url);
-                    const postResponse = await fetch(apiUrl.toString());
-                    
-                    if (postResponse.ok) {
-                        const post = await postResponse.json();
-                        const content = generatePostContent(template, post, path);
-                        const metadata = {
-                            title: `${post.title} - ${siteName}`,
-                            description: post.description || siteDescription,
-                            keywords: siteKeywords,
-                            siteName: siteName
-                        };
-                        
-                        return htmlResponse(injectContent(template, content, metadata));
-                    } else {
-                        // Article non trouvé
-                        return new Response(`<div class="p-8 text-center"><h1 class="text-2xl font-bold mb-4">Article non trouvé</h1><p>L'article "${postSlug}" n'existe pas.</p></div>`, {
-                            status: 404,
-                            headers: { 'Content-Type': 'text/html; charset=utf-8' }
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error loading post:', error);
+            // Détection automatique des routes de contenu (générique)
+            // Utilise la même logique que handleHtmxCatchAll mais pour les requêtes non-HTMX
+            const contentResult = await detectAndRenderContentRoute(request, path, template, {
+                site: { name: siteName },
+                seo: {
+                    metaDescription: siteDescription,
+                    keywords: siteKeywords
                 }
-            }
+            });
             
-            if (slug.startsWith('video/')) {
-                const videoId = slug.replace('video/', '');
-                try {
-                    const apiUrl = new URL(`/api/video/${videoId}`, request.url);
-                    const videoResponse = await fetch(apiUrl.toString());
-                    
-                    if (videoResponse.ok) {
-                        const video = await videoResponse.json();
-                        const content = generateVideoDetailContent(template, video, path);
-                        const metadata = {
-                            title: `${video.title} - ${siteName}`,
-                            description: video.description || siteDescription,
-                            keywords: siteKeywords,
-                            siteName: siteName
-                        };
-                        
-                        return htmlResponse(injectContent(template, content, metadata));
-                    } else {
-                        // Vidéo non trouvée
-                        return new Response(`<div class="p-8 text-center"><h1 class="text-2xl font-bold mb-4">Vidéo non trouvée</h1><p>La vidéo "${videoId}" n'existe pas.</p></div>`, {
-                            status: 404,
-                            headers: { 'Content-Type': 'text/html; charset=utf-8' }
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error loading video:', error);
-                }
-            }
-            
-            // Routes spéciales nécessitant des données dynamiques
-            if (slug === 'announcements' || slug === 'publications') {
-                try {
-                    const apiUrl = new URL('/api/posts', request.url);
-                    const postsResponse = await fetch(apiUrl.toString());
-                    const posts = postsResponse.ok ? await postsResponse.json() : [];
-                    
-                    const content = generatePublicationsContent(template, posts);
-                    const metadata = {
-                        title: `Announcements - ${siteName}`,
-                        description: siteDescription,
-                        keywords: siteKeywords,
-                        siteName: siteName
-                    };
-                    
-                    return htmlResponse(injectContent(template, content, metadata));
-                } catch (error) {
-                    console.error('Error loading announcements:', error);
-                }
-            }
-            
-            if (slug === 'tutorials' || slug === 'videos') {
-                try {
-                    const apiUrl = new URL('/api/videos', request.url);
-                    const videosResponse = await fetch(apiUrl.toString());
-                    const videos = videosResponse.ok ? await videosResponse.json() : [];
-                    
-                    const content = generateVideosContent(template, videos);
-                    const metadata = {
-                        title: `Video Tutorials - ${siteName}`,
-                        description: siteDescription,
-                        keywords: siteKeywords,
-                        siteName: siteName
-                    };
-                    
-                    return htmlResponse(injectContent(template, content, metadata));
-                } catch (error) {
-                    console.error('Error loading videos:', error);
-                }
+            if (contentResult) {
+                // Requête normale : injecter dans le template complet
+                return htmlResponse(injectContent(template, contentResult.content, contentResult.metadata));
             }
             
             const tplId = `tpl-${slug}`;

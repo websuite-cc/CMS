@@ -100,3 +100,16 @@ export function jsonResponse(data, status = 200, additionalHeaders = {}) {
 export function errorResponse(message, status = 500) {
     return jsonResponse({ error: message }, status);
 }
+
+/**
+ * Retourne une réponse HTML avec headers appropriés
+ */
+export function htmlResponse(html, status = 200) {
+    return new Response(html, {
+        status,
+        headers: {
+            'Content-Type': 'text/html; charset=utf-8',
+            'Access-Control-Allow-Origin': '*'
+        }
+    });
+}
