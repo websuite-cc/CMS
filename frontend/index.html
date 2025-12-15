@@ -855,33 +855,33 @@
     </template>
 
     <div id="contact-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
+        <div class="bg-white dark:bg-slate-900 dark:text-slate-50 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative transition-colors duration-300">
             <button onclick="document.getElementById('contact-modal').classList.add('hidden')"
-                class="absolute top-4 right-4 text-gray-500 hover:text-gray-900">
+                class="absolute top-4 right-4 text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-100 transition-colors">
                 <i class="fas fa-times text-2xl"></i>
             </button>
             <div class="p-8">
                 <div class="text-center mb-8">
                     <h2 class="text-3xl font-bold mb-2">Get in touch</h2>
-                    <p class="text-gray-600">Have a question? We'd love to hear from you.</p>
+                    <p class="text-gray-600 dark:text-purple-200">Have a question? We'd love to hear from you.</p>
                 </div>
                 <form id="contact-form-modal" class="space-y-6">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-slate-100 mb-2">Full Name</label>
                         <input type="text" id="modal-name" name="name"
-                            class="w-full px-4 py-3 rounded-md border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all"
+                            class="w-full px-4 py-3 rounded-md border border-gray-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-500/40 outline-none transition-all"
                             required>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-slate-100 mb-2">Email</label>
                         <input type="email" id="modal-email" name="email"
-                            class="w-full px-4 py-3 rounded-md border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all"
+                            class="w-full px-4 py-3 rounded-md border border-gray-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-500/40 outline-none transition-all"
                             required>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Message</label>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-slate-100 mb-2">Message</label>
                         <textarea id="modal-message" name="message" rows="5"
-                            class="w-full px-4 py-3 rounded-md border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all"
+                            class="w-full px-4 py-3 rounded-md border border-gray-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-500/40 outline-none transition-all"
                             required></textarea>
                     </div>
                     <button type="submit"
@@ -889,6 +889,9 @@
                         Send Message
                     </button>
                 </form>
+                <p id="contact-modal-success" class="mt-4 text-sm text-green-500 hidden">
+                    Thanks! Your message has been recorded. We’ll get back to you shortly.
+                </p>
             </div>
         </div>
     </div>
@@ -2123,6 +2126,45 @@ export default {
                 const next = isDark ? 'light' : 'dark';
                 localStorage.setItem('websuite_theme', next);
                 applyTheme(next);
+            });
+        }
+
+        // Contact modal (Get Started)
+        const contactModal = document.getElementById('contact-modal');
+        const contactFormModal = document.getElementById('contact-form-modal');
+        const contactSuccess = document.getElementById('contact-modal-success');
+
+        if (contactFormModal) {
+            contactFormModal.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (contactSuccess) {
+                    contactSuccess.classList.remove('hidden');
+                }
+                contactFormModal.reset();
+                setTimeout(() => {
+                    if (contactModal) {
+                        contactModal.classList.add('hidden');
+                    }
+                    if (contactSuccess) {
+                        contactSuccess.classList.add('hidden');
+                    }
+                }, 1800);
+            });
+        }
+
+        if (contactModal) {
+            // Close when clicking outside the dialog
+            contactModal.addEventListener('click', (e) => {
+                if (e.target === contactModal) {
+                    contactModal.classList.add('hidden');
+                }
+            });
+
+            // Close on ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !contactModal.classList.contains('hidden')) {
+                    contactModal.classList.add('hidden');
+                }
             });
         }
 
