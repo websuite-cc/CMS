@@ -175,6 +175,9 @@
                 <a href="/get-started" hx-get="/get-started" hx-target="#main-content" hx-push-url="true"
                     class="px-6 py-2 bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold rounded-md hover:from-purple-700 hover:to-purple-900 transition-all shadow-lg shadow-purple-500/30">Get
                     Started</a>
+                
+                <!-- GTranslate Widget -->
+                <div class="gtranslate_wrapper"></div>
             </div>
 
             <button class="md:hidden" id="mobile-menu-button"><i class="fas fa-bars text-2xl"></i></button>
@@ -2106,6 +2109,10 @@ export default {
             setTimeout(initPagination, 100);
         });
     </script>
+    
+    <!-- GTranslate Widget -->
+    <script>window.gtranslateSettings = {"default_language":"fr","native_language_names":true,"detect_browser_language":true,"languages":["fr","en"],"wrapper_selector":".gtranslate_wrapper","switcher_horizontal_position":"right"}</script>
+    <script src="https://cdn.gtranslate.net/widgets/latest/dwf.js" defer></script>
 </body>
 
 </html>
