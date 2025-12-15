@@ -140,6 +140,25 @@
         #components-menu .group:hover .fa-chevron-down {
             transform: rotate(180deg);
         }
+
+        /* Navigation active state */
+        .nav-active {
+            color: rgb(168 85 247) !important; /* purple-500 */
+            font-weight: 600;
+        }
+
+        .dark .nav-active {
+            color: rgb(196 181 253) !important; /* purple-300 */
+        }
+
+        /* Pour les liens simples */
+        a.nav-active {
+            color: rgb(168 85 247) !important;
+        }
+
+        .dark a.nav-active {
+            color: rgb(196 181 253) !important;
+        }
     </style>
 </head>
 
@@ -2283,6 +2302,84 @@ export default {
         document.body.addEventListener('htmx:afterSwap', function() {
             setTimeout(initPagination, 100);
         });
+
+        // Fonction pour mettre à jour les liens actifs dans la navigation
+        function updateActiveNav() {
+            const currentPath = window.location.pathname;
+            
+            // Retirer toutes les classes actives des liens de navigation
+            document.querySelectorAll('header a[href^="/"], nav a[href^="/"], footer a[href^="/"]').forEach(link => {
+                // Ne pas toucher aux liens qui sont des boutons ou des CTA
+                if (!link.classList.contains('bg-gradient') && 
+                    !link.classList.contains('bg-white') && 
+                    !link.closest('.gradient-purple')) {
+                    link.classList.remove('nav-active');
+                }
+            });
+            
+            // Fonction helper pour normaliser les chemins
+            function normalizePath(path) {
+                return path.replace(/\/$/, '') || '/';
+            }
+            
+            const normalizedCurrent = normalizePath(currentPath);
+            
+            // Ajouter la classe active au lien correspondant
+            document.querySelectorAll('header a[href^="/"], nav a[href^="/"], footer a[href^="/"]').forEach(link => {
+                const href = link.getAttribute('href');
+                if (!href) return;
+                
+                // Ignorer les liens CTA et boutons
+                if (link.classList.contains('bg-gradient') || 
+                    link.classList.contains('bg-white') || 
+                    link.closest('.gradient-purple')) {
+                    return;
+                }
+                
+                const normalizedHref = normalizePath(href.split('?')[0]); // Enlever les query params
+                
+                // Correspondance exacte
+                if (normalizedCurrent === normalizedHref) {
+                    link.classList.add('nav-active');
+                }
+                // Correspondance pour les sous-pages (ex: /post/slug correspond à /post)
+                else if (normalizedHref !== '/' && normalizedCurrent.startsWith(normalizedHref + '/')) {
+                    link.classList.add('nav-active');
+                }
+            });
+            
+            // Gestion spéciale pour la page d'accueil
+            if (normalizedCurrent === '/') {
+                document.querySelectorAll('a[href="/"], a[href="/index.html"]').forEach(link => {
+                    if (!link.classList.contains('bg-gradient') && 
+                        !link.classList.contains('bg-white')) {
+                        link.classList.add('nav-active');
+                    }
+                });
+            }
+        }
+
+        // Mettre à jour au chargement initial
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', updateActiveNav);
+        } else {
+            updateActiveNav();
+        }
+
+        // Mettre à jour après chaque navigation HTMX
+        document.body.addEventListener('htmx:afterSwap', function() {
+            setTimeout(updateActiveNav, 50);
+        });
+        
+        document.body.addEventListener('htmx:historyRestore', function() {
+            setTimeout(updateActiveNav, 50);
+        });
+
+        // Mettre à jour lors des changements d'URL (navigation navigateur)
+        window.addEventListener('popstate', updateActiveNav);
+        
+        // Écouter aussi les changements d'URL via HTMX
+        document.body.addEventListener('htmx:pushedIntoHistory', updateActiveNav);
     </script>
     
     <!-- GTranslate Widget -->
