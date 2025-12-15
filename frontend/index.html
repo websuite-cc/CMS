@@ -2097,26 +2097,29 @@ export default {
                 root.classList.add('dark');
                 if (themeIcon) {
                     themeIcon.classList.remove('fa-moon');
-                    themeIcon.classList.add('fa-sun');
+                    themeIcon.classList.add('fa-lightbulb');
                 }
             } else {
                 root.classList.remove('dark');
                 if (themeIcon) {
-                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.remove('fa-lightbulb');
                     themeIcon.classList.add('fa-moon');
                 }
             }
         }
 
-        // Initial theme from localStorage or prefers-color-scheme
+        // Initial theme from localStorage or prefers-color-scheme (fallback: dark)
         (function initTheme() {
             const saved = localStorage.getItem('websuite_theme');
             if (saved === 'dark' || saved === 'light') {
                 applyTheme(saved);
             } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 applyTheme('dark');
-            } else {
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
                 applyTheme('light');
+            } else {
+                // Default to dark mode if no explicit preference
+                applyTheme('dark');
             }
         })();
 
