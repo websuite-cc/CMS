@@ -474,7 +474,8 @@ export async function handleHtmxCatchAll(request, path, fullTemplate, siteConfig
         return htmlResponse(contentResult.content + oob);
     }
 
-    // Chercher le template correspondant
+    // Chercher le template correspondant pour les pages statiques
+    const tplId = `tpl-${slug}`;
     const templateContent = extractTemplate(fullTemplate, tplId);
 
     if (templateContent) {
