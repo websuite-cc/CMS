@@ -81,31 +81,9 @@ export async function onRequestGet(context) {
         const blogData = await getCachedRSSData(feedUrl);
         let posts = blogData.posts;
         
-        // Si c'est une requête HTMX (Load More), retourner du HTML
-        if (isHtmxRequest) {
-            // Gérer la pagination avec offset et limit
-            const offset = parseInt(url.searchParams.get('offset') || '0');
-            const limit = parseInt(url.searchParams.get('limit') || '6');
-            
-            // Extraire les posts pour cette page
-            const paginatedPosts = posts.slice(offset, offset + limit);
-            
-            if (paginatedPosts.length === 0) {
-                return new Response('', { status: 204 }); // No Content
-            }
-            
-            // Charger le template pour générer les cards
-            const template = await loadFrontendTemplate(env, request.url);
-            if (template) {
-                const cardsHtml = generatePostCards(template, paginatedPosts);
-                return htmlResponse(cardsHtml);
-            } else {
-                // Fallback si le template n'est pas trouvé
-                return htmlResponse(paginatedPosts.map(post => 
-                    `<div class="p-4 border rounded">${post.title}</div>`
-                ).join(''));
-            }
-        }
+        // Les requêtes HTMX initiales sont gérées par htmx-render.js
+        // On ne fait plus de pagination côté serveur ici
+        // Le frontend gère tout l'affichage et la pagination
         
         // Sinon, retourner du JSON (comportement normal)
         return jsonResponse(posts);

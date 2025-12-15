@@ -53,6 +53,12 @@
             background-clip: text;
         }
 
+        /* Pagination côté client - Masquer les items cachés */
+        .blog-item-hidden,
+        .video-item-hidden {
+            display: none !important;
+        }
+
         /* Scrolling animations */
         @keyframes scroll-left {
             0% {
@@ -1976,65 +1982,95 @@ export default {
         if (closeMobileMenu) closeMobileMenu.addEventListener('click', toggleMenu);
         if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', toggleMenu);
 
-        // Load More Logic
-        let blogOffset = 6;
-        const blogLimit = 6;
-        let videoOffset = 6;
-        const videoLimit = 6;
-
-        async function loadMoreBlogs() {
-            const btn = document.querySelector('#blog-load-more button');
-            if (btn) btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-
-            try {
-                const response = await fetch(`/api/posts?offset=${blogOffset}&limit=${blogLimit}`, {
-                    headers: { 'HX-Request': 'true' }
-                });
-
-                if (response.ok) {
-                    const html = await response.text();
-                    if (html.trim()) {
-                        document.getElementById('publications-container').insertAdjacentHTML('beforeend', html);
-                        blogOffset += blogLimit;
-                        if (btn) btn.innerHTML = 'Load More Articles';
-                    } else {
-                        if (btn) btn.style.display = 'none';
-                    }
-                } else {
-                    if (btn) btn.innerHTML = 'Error loading articles';
+        // Load More Logic - Pagination côté client
+        // Toutes les données sont déjà chargées, on gère juste l'affichage
+        const itemsPerPage = 4;
+        
+        // Initialiser la pagination au chargement de la page
+        function initPagination() {
+            // Masquer tous les items après les 4 premiers pour les articles
+            const blogItems = document.querySelectorAll('.blog-item, .blog-item-hidden');
+            blogItems.forEach((item, index) => {
+                if (index >= itemsPerPage) {
+                    item.classList.add('blog-item-hidden');
+                    item.style.display = 'none';
                 }
-            } catch (e) {
-                console.error(e);
-                if (btn) btn.innerHTML = 'Error loading articles';
+            });
+            
+            // Masquer tous les items après les 4 premiers pour les vidéos
+            const videoItems = document.querySelectorAll('.video-item, .video-item-hidden');
+            videoItems.forEach((item, index) => {
+                if (index >= itemsPerPage) {
+                    item.classList.add('video-item-hidden');
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Vérifier si on doit afficher les boutons "Load More"
+            updateLoadMoreButtons();
+        }
+        
+        function updateLoadMoreButtons() {
+            const blogItems = document.querySelectorAll('.blog-item, .blog-item-hidden');
+            const blogHidden = document.querySelectorAll('.blog-item-hidden');
+            const blogLoadMore = document.getElementById('blog-load-more');
+            
+            if (blogLoadMore) {
+                if (blogHidden.length === 0 || blogItems.length <= itemsPerPage) {
+                    blogLoadMore.style.display = 'none';
+                } else {
+                    blogLoadMore.style.display = 'block';
+                }
+            }
+            
+            const videoItems = document.querySelectorAll('.video-item, .video-item-hidden');
+            const videoHidden = document.querySelectorAll('.video-item-hidden');
+            const videoLoadMore = document.getElementById('video-load-more');
+            
+            if (videoLoadMore) {
+                if (videoHidden.length === 0 || videoItems.length <= itemsPerPage) {
+                    videoLoadMore.style.display = 'none';
+                } else {
+                    videoLoadMore.style.display = 'block';
+                }
             }
         }
-
-        async function loadMoreVideos() {
-            const btn = document.querySelector('#video-load-more button');
-            if (btn) btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-
-            try {
-                const response = await fetch(`/api/videos?offset=${videoOffset}&limit=${videoLimit}`, {
-                    headers: { 'HX-Request': 'true' }
-                });
-
-                if (response.ok) {
-                    const html = await response.text();
-                    if (html.trim()) {
-                        document.getElementById('videos-container').insertAdjacentHTML('beforeend', html);
-                        videoOffset += videoLimit;
-                        if (btn) btn.innerHTML = 'Load More Videos';
-                    } else {
-                        if (btn) btn.style.display = 'none';
-                    }
-                } else {
-                    if (btn) btn.innerHTML = 'Error loading videos';
-                }
-            } catch (e) {
-                console.error(e);
-                if (btn) btn.innerHTML = 'Error loading videos';
+        
+        function loadMoreBlogs() {
+            const hiddenItems = document.querySelectorAll('.blog-item-hidden');
+            const itemsToShow = Math.min(itemsPerPage, hiddenItems.length);
+            
+            for (let i = 0; i < itemsToShow; i++) {
+                hiddenItems[i].classList.remove('blog-item-hidden');
+                hiddenItems[i].style.display = '';
             }
+            
+            updateLoadMoreButtons();
         }
+        
+        function loadMoreVideos() {
+            const hiddenItems = document.querySelectorAll('.video-item-hidden');
+            const itemsToShow = Math.min(itemsPerPage, hiddenItems.length);
+            
+            for (let i = 0; i < itemsToShow; i++) {
+                hiddenItems[i].classList.remove('video-item-hidden');
+                hiddenItems[i].style.display = '';
+            }
+            
+            updateLoadMoreButtons();
+        }
+        
+        // Initialiser la pagination au chargement
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPagination);
+        } else {
+            initPagination();
+        }
+        
+        // Réinitialiser après chaque navigation HTMX
+        document.body.addEventListener('htmx:afterSwap', function() {
+            setTimeout(initPagination, 100);
+        });
     </script>
 </body>
 

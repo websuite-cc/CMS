@@ -584,17 +584,14 @@ export function generatePublicationsContent(fullTemplate, posts) {
         </article>`;
     }
 
-    // Show only first 6 posts initially
-    const initialPosts = posts.slice(0, 6);
-    const hasMore = posts.length > 6;
-
+    // Envoyer TOUS les posts - le frontend gère l'affichage et la pagination
     let itemsHtml = '';
-    if (initialPosts.length === 0) {
+    if (posts.length === 0) {
         itemsHtml = `<p class="col-span-full text-center text-gray-600 p-8">Aucune publication trouvée.</p>`;
     } else {
-        initialPosts.forEach(post => {
+        posts.forEach((post, index) => {
             const postDate = new Date(post.pubDate).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
-            itemsHtml += replacePlaceholders(cardTpl, {
+            let cardHtml = replacePlaceholders(cardTpl, {
                 title: post.title,
                 description: post.description ? post.description.substring(0, 120) + '...' : '',
                 author: post.author || 'Inconnu',
@@ -603,6 +600,20 @@ export function generatePublicationsContent(fullTemplate, posts) {
                 slug: post.slug,
                 link: `/post/${post.slug}`
             });
+            
+            // Ajouter une classe pour la pagination côté client (masquer après les 4 premiers)
+            const itemClass = index >= 4 ? 'blog-item blog-item-hidden' : 'blog-item';
+            // Ajouter la classe au premier élément (article ou div)
+            cardHtml = cardHtml.replace(/<(article|div)([^>]*)>/i, (match, tag, attrs) => {
+                // Si l'élément a déjà une classe, l'ajouter, sinon créer l'attribut
+                if (attrs.includes('class=')) {
+                    return `<${tag}${attrs.replace(/class=["']([^"']*)["']/, `class="$1 ${itemClass}"`)}>`;
+                } else {
+                    return `<${tag}${attrs} class="${itemClass}">`;
+                }
+            });
+            
+            itemsHtml += cardHtml;
         });
     }
 
@@ -650,23 +661,34 @@ export function generateVideosContent(fullTemplate, videos) {
         </div>`;
     }
 
-    // Show only first 6 videos initially
-    const initialVideos = videos.slice(0, 6);
-    const hasMore = videos.length > 6;
-
+    // Envoyer TOUTES les vidéos - le frontend gère l'affichage et la pagination
     let itemsHtml = '';
-    if (initialVideos.length === 0) {
+    if (videos.length === 0) {
         itemsHtml = `<p class="col-span-full text-center text-gray-600 p-8">Aucune vidéo disponible.</p>`;
     } else {
-        initialVideos.forEach(video => {
+        videos.forEach((video, index) => {
             const pubDate = new Date(video.published).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
-            itemsHtml += replacePlaceholders(cardTpl, {
+            let cardHtml = replacePlaceholders(cardTpl, {
                 title: video.title,
                 thumbnail: video.thumbnail,
                 published: pubDate,
                 link: `/video/${video.id || video.link.split('v=')[1] || ''}`,
                 slug: video.id || video.link.split('v=')[1] || ''
             });
+            
+            // Ajouter une classe pour la pagination côté client (masquer après les 4 premiers)
+            const itemClass = index >= 4 ? 'video-item video-item-hidden' : 'video-item';
+            // Ajouter la classe au premier élément (div ou article)
+            cardHtml = cardHtml.replace(/<(div|article)([^>]*)>/i, (match, tag, attrs) => {
+                // Si l'élément a déjà une classe, l'ajouter, sinon créer l'attribut
+                if (attrs.includes('class=')) {
+                    return `<${tag}${attrs.replace(/class=["']([^"']*)["']/, `class="$1 ${itemClass}"`)}>`;
+                } else {
+                    return `<${tag}${attrs} class="${itemClass}">`;
+                }
+            });
+            
+            itemsHtml += cardHtml;
         });
     }
 
