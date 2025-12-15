@@ -1,11 +1,11 @@
 {
-  "siteName": "WebSuite.cc",
+  "siteName": "WebSuite",
   "author": "Ange Kacou Oi",
   "blogRssUrl": "https://kacouoi.substack.com/feed",
   "youtubeRssUrl": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJENBUs-Ij9ECImP0Ap7P9g",
   "frontendBuilderUrl": "",
   "podcastFeedUrl": "https://api.substack.com/feed/podcast/4620368.rss",
-  "wstdStagingUrl": "Non configuré (fichiers locaux)",
+  "wstdStagingUrl": "Non configurÃ© (fichiers locaux)",
   "analyticsEmbedUrl": "",
   "seo": {
     "metaTitle": "MON SIte",
