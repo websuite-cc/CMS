@@ -318,7 +318,7 @@ async function loadConfig() {
                 builderBtn.onclick = null; // Remove any previous onclick handler
             } else {
                 // Point vers la page de paiement Stripe pour Webstudio Builder Pro
-                builderBtn.href = "https://buy.stripe.com/test_aFa8wO0NF7sictFeus6EU00"; // URL à ajuster selon votre page Stripe
+                builderBtn.href = "https://urlz.fr/uZuu"; // URL à ajuster selon votre page Stripe
                 builderBtn.setAttribute('target', '_blank');
                 builderBtn.classList.remove('opacity-50', 'cursor-not-allowed');
                 builderBtn.querySelector('span').textContent = "Obtenir Webstudio Builder Pro";
