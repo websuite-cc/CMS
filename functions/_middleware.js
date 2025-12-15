@@ -17,6 +17,8 @@ import {
     generateHomeContent,
     generatePublicationsContent,
     generateVideosContent,
+    generatePostContent,
+    generateVideoDetailContent,
     handleHtmxCatchAll
 } from './shared/htmx-render.js';
 
@@ -532,6 +534,65 @@ export async function onRequest(context) {
             path !== '/index.html') {
             
             const slug = path.substring(1).replace(/\/$/, '');
+            
+            // Gérer les routes de détail : /post/[slug] et /video/[id]
+            if (slug.startsWith('post/')) {
+                const postSlug = slug.replace('post/', '');
+                try {
+                    const apiUrl = new URL(`/api/post/${postSlug}`, request.url);
+                    const postResponse = await fetch(apiUrl.toString());
+                    
+                    if (postResponse.ok) {
+                        const post = await postResponse.json();
+                        const content = generatePostContent(template, post, path);
+                        const metadata = {
+                            title: `${post.title} - ${siteName}`,
+                            description: post.description || siteDescription,
+                            keywords: siteKeywords,
+                            siteName: siteName
+                        };
+                        
+                        return htmlResponse(injectContent(template, content, metadata));
+                    } else {
+                        // Article non trouvé
+                        return new Response(`<div class="p-8 text-center"><h1 class="text-2xl font-bold mb-4">Article non trouvé</h1><p>L'article "${postSlug}" n'existe pas.</p></div>`, {
+                            status: 404,
+                            headers: { 'Content-Type': 'text/html; charset=utf-8' }
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error loading post:', error);
+                }
+            }
+            
+            if (slug.startsWith('video/')) {
+                const videoId = slug.replace('video/', '');
+                try {
+                    const apiUrl = new URL(`/api/video/${videoId}`, request.url);
+                    const videoResponse = await fetch(apiUrl.toString());
+                    
+                    if (videoResponse.ok) {
+                        const video = await videoResponse.json();
+                        const content = generateVideoDetailContent(template, video, path);
+                        const metadata = {
+                            title: `${video.title} - ${siteName}`,
+                            description: video.description || siteDescription,
+                            keywords: siteKeywords,
+                            siteName: siteName
+                        };
+                        
+                        return htmlResponse(injectContent(template, content, metadata));
+                    } else {
+                        // Vidéo non trouvée
+                        return new Response(`<div class="p-8 text-center"><h1 class="text-2xl font-bold mb-4">Vidéo non trouvée</h1><p>La vidéo "${videoId}" n'existe pas.</p></div>`, {
+                            status: 404,
+                            headers: { 'Content-Type': 'text/html; charset=utf-8' }
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error loading video:', error);
+                }
+            }
             
             // Routes spéciales nécessitant des données dynamiques
             if (slug === 'announcements' || slug === 'publications') {
