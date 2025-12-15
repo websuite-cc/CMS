@@ -327,7 +327,12 @@ export async function detectAndRenderContentRoute(request, path, fullTemplate, s
                 
                 if (response.ok) {
                     const item = await response.json();
-                    const content = generator(fullTemplate, item, path);
+                    // Passer siteConfig aux générateurs pour l'auteur par défaut
+                    const content = type === 'post' 
+                        ? generatePostContent(fullTemplate, item, path, siteConfig)
+                        : type === 'video'
+                        ? generateVideoDetailContent(fullTemplate, item, path)
+                        : generator(fullTemplate, item, path);
                     
                     const metadata = {
                         title: `${item.title} - ${siteName}`,
@@ -429,7 +434,7 @@ export async function detectAndRenderContentRoute(request, path, fullTemplate, s
                 // Passer siteConfig pour l'auteur par défaut
                 const content = contentType === 'posts'
                     ? generatePublicationsContent(fullTemplate, items, siteConfig)
-                    : apiConfig.generator(fullTemplate, items);
+                    : apiConfig.generator(fullTemplate, items, siteConfig);
                 
                 // Si le contenu généré contient encore {{items}}, c'est qu'aucun template n'a été trouvé
                 // Dans ce cas, on retourne null pour laisser le catch-all gérer
