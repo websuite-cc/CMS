@@ -145,61 +145,61 @@
 
 <body class="bg-white text-gray-900 dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 dark:bg-slate-900 dark:border-slate-800 transition-colors duration-300">
-        <nav class="container mx-auto px-6 py-4 flex items-center justify-between">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-purple-600/95 via-fuchsia-600/95 to-purple-800/95 border-b border-purple-400/40 dark:from-slate-950/95 dark:via-purple-900/95 dark:to-slate-950/95 dark:border-purple-500/40 backdrop-blur-md transition-colors duration-300">
+        <nav class="container mx-auto px-6 py-4 flex items-center justify-between text-white">
             <a href="/" class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-800 rounded-lg flex items-center justify-center">
+                <div class="w-10 h-10 bg-gradient-to-br from-white/10 to-white/5 rounded-lg flex items-center justify-center">
                     <i class="fas fa-plus text-white"></i>
                 </div>
-                <span id="header-site-name" class="text-xl font-bold text-gray-900 dark:text-purple-200">WebSuite</span>
-                <span class="text-xs px-2 py-1 bg-purple-100 text-purple-700 dark:bg-purple-900/60 dark:text-purple-200 rounded-full font-semibold">.cc</span>
+                <span id="header-site-name" class="text-xl font-bold text-white drop-shadow-sm">WebSuite</span>
+                <span class="text-xs px-2 py-1 bg-white/10 text-purple-100 rounded-full font-semibold border border-white/20">.cc</span>
             </a>
 
             <div class="hidden md:flex items-center gap-6">
                 <a href="/" hx-get="/" hx-target="#main-content" hx-push-url="true"
-                    class="text-sm font-medium text-gray-700 hover:text-purple-500 transition-colors">Home</a>
+                    class="text-sm font-medium text-white/80 hover:text-white transition-colors">Home</a>
                 
                 <!-- Components Mega Menu -->
                 <div class="relative group" id="components-menu">
-                    <button class="text-sm font-medium text-gray-700 hover:text-purple-500 transition-colors flex items-center gap-1">
+                    <button class="text-sm font-medium text-white/80 hover:text-white transition-colors flex items-center gap-1">
                         Components
                         <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
                     </button>
-                    <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                    <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-80 bg-slate-950/95 dark:bg-slate-950/95 rounded-xl shadow-2xl border border-purple-500/40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                         <div class="p-6">
                             <div class="mb-4">
                                 <a href="/components" hx-get="/components" hx-target="#main-content" hx-push-url="true"
-                                    class="text-sm font-semibold text-gray-900 hover:text-purple-600 transition-colors">All Components</a>
+                                    class="text-sm font-semibold text-slate-50 hover:text-purple-300 transition-colors">All Components</a>
                             </div>
-                            <div class="space-y-4 border-t border-gray-200 pt-4">
+                            <div class="space-y-4 border-t border-purple-500/30 pt-4">
                                 <a href="/cms" hx-get="/cms" hx-target="#main-content" hx-push-url="true"
-                                    class="flex items-start gap-3 p-3 rounded-lg hover:bg-purple-50 transition-colors group/item">
-                                    <div class="w-10 h-10 gradient-purple rounded-lg flex items-center justify-center flex-shrink-0">
+                                    class="flex items-start gap-3 p-3 rounded-lg hover:bg-purple-900/40 transition-colors group/item">
+                                    <div class="w-10 h-10 gradient-purple rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-600/40">
                                         <i class="fas fa-database text-white"></i>
                                     </div>
                                     <div>
-                                        <div class="font-semibold text-gray-900 group-hover/item:text-purple-600 transition-colors">WebSuite CMS</div>
-                                        <div class="text-xs text-gray-600 dark:text-purple-200 mt-1">Headless CMS with RSS aggregation</div>
+                                        <div class="font-semibold text-slate-50 group-hover/item:text-purple-300 transition-colors">WebSuite CMS</div>
+                                        <div class="text-xs text-purple-200 mt-1">Headless CMS with RSS aggregation</div>
                                     </div>
                                 </a>
                                 <a href="/ai-workers" hx-get="/ai-workers" hx-target="#main-content" hx-push-url="true"
-                                    class="flex items-start gap-3 p-3 rounded-lg hover:bg-purple-50 transition-colors group/item">
-                                    <div class="w-10 h-10 gradient-purple rounded-lg flex items-center justify-center flex-shrink-0">
+                                    class="flex items-start gap-3 p-3 rounded-lg hover:bg-purple-900/40 transition-colors group/item">
+                                    <div class="w-10 h-10 gradient-purple rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-600/40">
                                         <i class="fas fa-robot text-white"></i>
                                     </div>
                                     <div>
-                                        <div class="font-semibold text-gray-900 group-hover/item:text-purple-600 transition-colors">AI Workers</div>
-                                        <div class="text-xs text-gray-600 dark:text-purple-200 mt-1">Intelligent automation agents</div>
+                                        <div class="font-semibold text-slate-50 group-hover/item:text-purple-300 transition-colors">AI Workers</div>
+                                        <div class="text-xs text-purple-200 mt-1">Intelligent automation agents</div>
                                     </div>
                                 </a>
                                 <a href="/ide" hx-get="/ide" hx-target="#main-content" hx-push-url="true"
-                                    class="flex items-start gap-3 p-3 rounded-lg hover:bg-purple-50 transition-colors group/item">
-                                    <div class="w-10 h-10 gradient-purple rounded-lg flex items-center justify-center flex-shrink-0">
+                                    class="flex items-start gap-3 p-3 rounded-lg hover:bg-purple-900/40 transition-colors group/item">
+                                    <div class="w-10 h-10 gradient-purple rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-600/40">
                                         <i class="fas fa-code text-white"></i>
                                     </div>
                                     <div>
-                                        <div class="font-semibold text-gray-900 group-hover/item:text-purple-600 transition-colors">IDE / Page Builder</div>
-                                        <div class="text-xs text-gray-600 dark:text-purple-200 mt-1">Visual editor with Monaco</div>
+                                        <div class="font-semibold text-slate-50 group-hover/item:text-purple-300 transition-colors">IDE / Page Builder</div>
+                                        <div class="text-xs text-purple-200 mt-1">Visual editor with Monaco</div>
                                     </div>
                                 </a>
                             </div>
@@ -208,12 +208,12 @@
                 </div>
 
                 <a href="/integrations" hx-get="/integrations" hx-target="#main-content" hx-push-url="true"
-                    class="text-sm font-medium text-gray-700 hover:text-purple-500 transition-colors">Integrations</a>
+                    class="text-sm font-medium text-white/80 hover:text-white transition-colors">Integrations</a>
                 <a href="/serverless" hx-get="/serverless" hx-target="#main-content" hx-push-url="true"
-                    class="text-sm font-medium text-gray-700 hover:text-purple-500 transition-colors">Serverless</a>
+                    class="text-sm font-medium text-white/80 hover:text-white transition-colors">Serverless</a>
                 
                 <!-- Dark mode toggle -->
-                <button id="theme-toggle" class="w-9 h-9 border border-gray-300 dark:border-slate-600 rounded-full flex items-center justify-center text-gray-600 dark:text-slate-200 hover:border-purple-500 hover:text-purple-500 dark:hover:text-purple-300 transition-colors"
+                <button id="theme-toggle" class="w-9 h-9 border border-white/30 rounded-full flex items-center justify-center text-white hover:border-white hover:text-yellow-300 transition-colors"
                     aria-label="Toggle dark mode">
                     <i id="theme-toggle-icon" class="fas fa-moon text-sm"></i>
                 </button>
@@ -262,36 +262,36 @@
 
     <main id="main-content" class="pt-16"></main>
 
-    <footer class="bg-gray-50 border-t border-gray-200 dark:bg-slate-900 dark:border-slate-800 py-16 transition-colors duration-300">
+    <footer class="bg-gradient-to-r from-slate-900 via-purple-900 to-slate-950 border-t border-purple-500/30 py-16 transition-colors duration-300">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <!-- Column 1: Brand -->
-                <div class="dark:text-slate-100">
+                <div class="text-slate-100">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-800 rounded-lg flex items-center justify-center">
                             <i class="fas fa-plus text-white"></i>
                         </div>
-                        <span class="text-xl font-bold text-gray-900 dark:text-purple-200">WebSuite</span>
-                        <span class="text-xs px-2 py-1 bg-purple-100 text-purple-700 dark:bg-purple-900/60 dark:text-purple-200 rounded-full font-semibold">.cc</span>
+                        <span class="text-xl font-bold text-slate-50">WebSuite</span>
+                        <span class="text-xs px-2 py-1 bg-white/10 text-purple-100 rounded-full font-semibold border border-white/20">.cc</span>
                     </div>
-                    <p class="text-gray-600 dark:text-purple-200 mb-6 text-sm">The complete web platform for modern development. CMS, AI Workers, and IDE - all powered by Cloudflare.</p>
+                    <p class="text-purple-100 mb-6 text-sm">The complete web platform for modern development. CMS, AI Workers, and IDE - all powered by Cloudflare.</p>
                     <div class="flex gap-4">
                         <a href="#"
-                            class="w-10 h-10 bg-gray-200 dark:bg-slate-800 rounded-lg flex items-center justify-center text-gray-700 dark:text-slate-100 hover:bg-gradient-to-br hover:from-purple-600 hover:to-purple-800 hover:text-white transition-all"><i
+                            class="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center text-purple-100 hover:bg-gradient-to-br hover:from-purple-500 hover:to-fuchsia-600 hover:text-white transition-all border border-white/10"><i
                                 class="fab fa-github"></i></a>
                         <a href="#"
-                            class="w-10 h-10 bg-gray-200 dark:bg-slate-800 rounded-lg flex items-center justify-center text-gray-700 dark:text-slate-100 hover:bg-gradient-to-br hover:from-purple-600 hover:to-purple-800 hover:text-white transition-all"><i
+                            class="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center text-purple-100 hover:bg-gradient-to-br hover:from-purple-500 hover:to-fuchsia-600 hover:text-white transition-all border border-white/10"><i
                                 class="fab fa-twitter"></i></a>
                         <a href="#"
-                            class="w-10 h-10 bg-gray-200 dark:bg-slate-800 rounded-lg flex items-center justify-center text-gray-700 dark:text-slate-100 hover:bg-gradient-to-br hover:from-purple-600 hover:to-purple-800 hover:text-white transition-all"><i
+                            class="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center text-purple-100 hover:bg-gradient-to-br hover:from-purple-500 hover:to-fuchsia-600 hover:text-white transition-all border border-white/10"><i
                                 class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 
                 <!-- Column 2: Platform -->
-                <div class="dark:text-slate-100">
+                <div class="text-slate-100">
                     <h4 class="font-bold mb-4">Platform</h4>
-                    <ul class="space-y-3 text-gray-600 dark:text-purple-200">
+                    <ul class="space-y-3 text-purple-100">
                         <li><a href="/components" hx-get="/components" hx-target="#main-content" hx-push-url="true" class="hover:text-purple-500 transition-colors">Components</a></li>
                         <li><a href="/integrations" hx-get="/integrations" hx-target="#main-content" hx-push-url="true" class="hover:text-purple-500 transition-colors">Integrations</a></li>
                         <li><a href="/serverless" hx-get="/serverless" hx-target="#main-content" hx-push-url="true" class="hover:text-purple-500 transition-colors">Serverless</a></li>
@@ -300,9 +300,9 @@
                 </div>
                 
                 <!-- Column 3: Components -->
-                <div class="dark:text-slate-100">
+                <div class="text-slate-100">
                     <h4 class="font-bold mb-4">Components</h4>
-                    <ul class="space-y-3 text-gray-600 dark:text-purple-200">
+                    <ul class="space-y-3 text-purple-100">
                         <li><a href="/components" hx-get="/components" hx-target="#main-content" hx-push-url="true" class="hover:text-purple-500 transition-colors">All Components</a></li>
                         <li><a href="/cms" hx-get="/cms" hx-target="#main-content" hx-push-url="true" class="hover:text-purple-500 transition-colors">Headless CMS</a></li>
                         <li><a href="/ai-workers" hx-get="/ai-workers" hx-target="#main-content" hx-push-url="true" class="hover:text-purple-500 transition-colors">AI Workers</a></li>
@@ -311,9 +311,9 @@
                 </div>
                 
                 <!-- Column 4: Resources -->
-                <div class="dark:text-slate-100">
+                <div class="text-slate-100">
                     <h4 class="font-bold mb-4">Resources</h4>
-                    <ul class="space-y-3 text-gray-600 dark:text-purple-200">
+                    <ul class="space-y-3 text-purple-100">
                         <li><a href="/announcements" hx-get="/announcements" hx-target="#main-content" hx-push-url="true" class="hover:text-purple-500 transition-colors">Announcements</a></li>
                         <li><a href="/tutorials" hx-get="/tutorials" hx-target="#main-content" hx-push-url="true" class="hover:text-purple-500 transition-colors">Tutorials</a></li>
                         <li><a href="https://docs.websuite.cc" target="_blank" class="hover:text-purple-500 transition-colors">Documentation</a></li>
@@ -321,10 +321,10 @@
                     <!-- GTranslate Widget -->
                     <div class="mt-6">
                         <div class="gtranslate_wrapper"></div>
-                    </div>
+            </div>
                 </div>
             </div>
-            <div class="border-t border-gray-200 pt-8 text-center text-gray-500 text-sm">
+            <div class="border-t border-purple-500/40 pt-8 text-center text-purple-200 text-sm">
                 <p>© 2025 <span id="footer-site-name-copyright">WebSuite</span>. All rights reserved. Built on Cloudflare.</p>
             </div>
         </div>
