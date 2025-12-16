@@ -11,7 +11,47 @@ const LIBRETRANSLATE_INSTANCES = [
 ];
 
 /**
- * Traduit un texte en utilisant LibreTranslate
+ * Traduit un texte en utilisant MyMemory API (plus fiable que LibreTranslate)
+ */
+async function translateWithMyMemory(text, targetLanguage, sourceLanguage = 'auto') {
+    try {
+        // MyMemory API - gratuit jusqu'à 10K mots/jour, pas de clé requise
+        const langPair = sourceLanguage === 'auto' ? `en|${targetLanguage}` : `${sourceLanguage}|${targetLanguage}`;
+        const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langPair}`;
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+            throw new Error(`MyMemory API error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.responseStatus === 200 && data.responseData && data.responseData.translatedText) {
+            return {
+                translatedText: data.responseData.translatedText,
+                detectedLanguage: data.responseData.detectedSourceLanguage || sourceLanguage
+            };
+        }
+        
+        throw new Error('MyMemory API returned invalid response');
+        
+    } catch (error) {
+        console.error('MyMemory translation error:', error.message);
+        throw error;
+    }
+}
+
+/**
+ * Traduit un texte en utilisant LibreTranslate (fallback)
  */
 async function translateWithLibreTranslate(text, targetLanguage, sourceLanguage = 'auto', instanceIndex = 0) {
     if (instanceIndex >= LIBRETRANSLATE_INSTANCES.length) {
@@ -115,17 +155,39 @@ export async function onRequestPost(context) {
             return errorResponse("Text too long. Maximum 5000 characters.", 400);
         }
         
-        // Traduire avec LibreTranslate
-        console.log(`Translating: "${text.substring(0, 50)}..." to ${targetLanguage}`);
-        const result = await translateWithLibreTranslate(text, targetLanguage, sourceLanguage);
-        console.log(`Translation result: "${result.translatedText.substring(0, 50)}..."`);
+        // Essayer d'abord MyMemory (plus fiable), puis LibreTranslate en fallback
+        let result;
+        let usedService = 'unknown';
+        
+        try {
+            console.log(`[MyMemory] Translating: "${text.substring(0, 50)}..." to ${targetLanguage}`);
+            result = await translateWithMyMemory(text, targetLanguage, sourceLanguage);
+            usedService = 'MyMemory';
+            console.log(`[MyMemory] Translation result: "${result.translatedText.substring(0, 50)}..."`);
+        } catch (myMemoryError) {
+            console.warn(`[MyMemory] Failed, trying LibreTranslate:`, myMemoryError.message);
+            
+            try {
+                console.log(`[LibreTranslate] Translating: "${text.substring(0, 50)}..." to ${targetLanguage}`);
+                result = await translateWithLibreTranslate(text, targetLanguage, sourceLanguage);
+                usedService = 'LibreTranslate';
+                console.log(`[LibreTranslate] Translation result: "${result.translatedText.substring(0, 50)}..."`);
+            } catch (libreError) {
+                console.error("Both translation services failed:", {
+                    myMemory: myMemoryError.message,
+                    libreTranslate: libreError.message
+                });
+                throw new Error(`Translation services unavailable: ${myMemoryError.message}`);
+            }
+        }
         
         return jsonResponse({
             success: true,
             translatedText: result.translatedText,
             detectedLanguage: result.detectedLanguage,
             targetLanguage: targetLanguage,
-            sourceLanguage: result.detectedLanguage
+            sourceLanguage: result.detectedLanguage,
+            service: usedService
         });
         
     } catch (error) {

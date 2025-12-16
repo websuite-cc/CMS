@@ -485,7 +485,7 @@
                             <option value="zh">中文</option>
                             <option value="ar">العربية</option>
                         </select>
-                    </div>
+            </div>
                 </div>
             </div>
             <div class="border-t border-gray-200 pt-8 text-center text-gray-500 dark:text-purple-200 text-sm">
@@ -2988,7 +2988,7 @@ export default {
                         targetLanguage: targetLang 
                     })
                 });
-                
+
                 if (response.ok) {
                     const data = await response.json();
                     if (data.success && data.translatedText) {
@@ -3168,7 +3168,7 @@ export default {
             }
             
             // Obtenir tous les éléments à traduire automatiquement
-            const elementsToTranslate = getTextElementsToTranslate();
+            let elementsToTranslate = getTextElementsToTranslate();
             
             console.log(`[Translation] Found ${elementsToTranslate.length} elements to translate to ${targetLang}`);
             
@@ -3176,6 +3176,25 @@ export default {
                 console.warn('[Translation] No elements found to translate');
                 hideTranslationLoading();
                 return;
+            }
+            
+            // Limiter le nombre d'éléments à traduire pour éviter de surcharger l'API
+            // Prioriser les éléments les plus importants (titres, paragraphes, boutons)
+            const MAX_ELEMENTS = 50; // Limite raisonnable
+            if (elementsToTranslate.length > MAX_ELEMENTS) {
+                console.warn(`[Translation] Limiting to ${MAX_ELEMENTS} elements (found ${elementsToTranslate.length})`);
+                
+                // Trier par priorité : h1-h6, puis p, puis a/button, puis le reste
+                const priority = { 'h1': 1, 'h2': 2, 'h3': 3, 'h4': 4, 'h5': 5, 'h6': 6, 'p': 7, 'a': 8, 'button': 8 };
+                elementsToTranslate.sort((a, b) => {
+                    const aTag = a.element.tagName.toLowerCase();
+                    const bTag = b.element.tagName.toLowerCase();
+                    const aPriority = priority[aTag] || 99;
+                    const bPriority = priority[bTag] || 99;
+                    return aPriority - bPriority;
+                });
+                
+                elementsToTranslate = elementsToTranslate.slice(0, MAX_ELEMENTS);
             }
             
             // Traduire par batch pour éviter de surcharger l'API
