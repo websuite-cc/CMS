@@ -2973,7 +2973,7 @@ export default {
             }
             
             // Vérifier le cache
-            const cacheKey = `${text}_${targetLang}`;
+            const cacheKey = `translate_${text.substring(0, 50)}_${targetLang}`;
             const cached = sessionStorage.getItem(cacheKey);
             if (cached) {
                 return cached;
@@ -2991,14 +2991,26 @@ export default {
                 
                 if (response.ok) {
                     const data = await response.json();
-                    const translated = data.translatedText || text;
-                    
-                    // Mettre en cache
-                    sessionStorage.setItem(cacheKey, translated);
-                    return translated;
+                    if (data.success && data.translatedText) {
+                        const translated = data.translatedText;
+                        
+                        // Mettre en cache
+                        try {
+                            sessionStorage.setItem(cacheKey, translated);
+                        } catch (e) {
+                            // Si le cache est plein, continuer sans cache
+                        }
+                        
+                        return translated;
+                    } else {
+                        console.warn('Translation API returned no translation:', data);
+                    }
+                } else {
+                    const errorText = await response.text();
+                    console.error('Translation API error:', response.status, errorText);
                 }
             } catch (error) {
-                console.error('Translation error:', error);
+                console.error('Translation fetch error:', error);
             }
             
             return text; // Fallback au texte original
@@ -3047,42 +3059,53 @@ export default {
                     parent = parent.parentElement;
                 }
                 
-                // Récupérer le texte (sans les enfants)
-                const text = getDirectText(element);
+                // Ignorer si c'est déjà traduit (a l'attribut data-translated)
+                if (element.hasAttribute('data-translated')) return;
+                
+                // Récupérer le texte complet de l'élément
+                const text = element.textContent ? element.textContent.trim() : '';
                 
                 // Ignorer si pas de texte ou seulement des espaces
-                if (!text || text.trim().length === 0) return;
+                if (!text || text.length === 0) return;
                 
                 // Ignorer si c'est une URL, email, ou code
                 if (isUrlOrCode(text)) return;
                 
                 // Ignorer si c'est un nombre seul
-                if (/^\d+$/.test(text.trim())) return;
+                if (/^\d+$/.test(text)) return;
                 
                 // Ignorer les textes trop courts (probablement des icônes ou symboles)
-                if (text.trim().length < 2) return;
+                if (text.length < 2) return;
                 
-                // Ignorer si c'est déjà traduit (a l'attribut data-translated)
-                if (element.hasAttribute('data-translated')) return;
+                // Ignorer si le texte contient seulement des caractères spéciaux
+                if (/^[^\w\s]+$/.test(text)) return;
                 
                 elementsToTranslate.push({
                     element: element,
-                    text: text.trim()
+                    text: text
                 });
             });
             
             return elementsToTranslate;
         }
         
-        // Obtenir uniquement le texte direct d'un élément (sans les enfants)
+        // Obtenir le texte d'un élément (texte direct + texte des enfants)
         function getDirectText(element) {
-            let text = '';
-            for (let node of element.childNodes) {
-                if (node.nodeType === Node.TEXT_NODE) {
-                    text += node.textContent;
+            // Si l'élément a des enfants HTML, utiliser textContent pour tout le texte
+            // Sinon, utiliser seulement le texte direct
+            if (element.children.length > 0) {
+                // Pour les éléments avec enfants, on veut le texte complet
+                return element.textContent.trim();
+            } else {
+                // Pour les éléments simples, seulement le texte direct
+                let text = '';
+                for (let node of element.childNodes) {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        text += node.textContent;
+                    }
                 }
+                return text.trim();
             }
-            return text.trim();
         }
         
         // Vérifier si le texte est une URL, email ou code
@@ -3147,16 +3170,25 @@ export default {
             // Obtenir tous les éléments à traduire automatiquement
             const elementsToTranslate = getTextElementsToTranslate();
             
+            console.log(`[Translation] Found ${elementsToTranslate.length} elements to translate to ${targetLang}`);
+            
             if (elementsToTranslate.length === 0) {
+                console.warn('[Translation] No elements found to translate');
+                hideTranslationLoading();
                 return;
             }
             
             // Traduire par batch pour éviter de surcharger l'API
-            const batchSize = 8;
+            // Réduire la taille des batches et ajouter des délais pour éviter les rate limits
+            const batchSize = 3; // Encore plus petit pour éviter les erreurs 500
+            let successCount = 0;
+            let errorCount = 0;
+            
             for (let i = 0; i < elementsToTranslate.length; i += batchSize) {
                 const batch = elementsToTranslate.slice(i, i + batchSize);
                 
-                await Promise.all(batch.map(async ({ element, text }) => {
+                // Traduire séquentiellement dans chaque batch pour éviter les rate limits
+                for (const { element, text } of batch) {
                     try {
                         // Vérifier si on a déjà le texte original sauvegardé
                         let originalText = element.getAttribute('data-original-text');
@@ -3170,22 +3202,37 @@ export default {
                         
                         // Remplacer le texte si traduit
                         if (translated && translated !== originalText) {
-                            // Vérifier si l'élément a des enfants HTML
-                            const hasHtmlChildren = Array.from(element.children).length > 0;
+                            // Sauvegarder la structure HTML si elle existe
+                            const hasHtmlChildren = element.children.length > 0;
                             
                             if (hasHtmlChildren) {
-                                // Si l'élément a des enfants, remplacer uniquement le texte direct
-                                let textNodeFound = false;
-                                for (let node of element.childNodes) {
-                                    if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+                                // Pour les éléments avec enfants HTML, remplacer seulement les nœuds texte
+                                // en gardant la structure HTML intacte
+                                const walker = document.createTreeWalker(
+                                    element,
+                                    NodeFilter.SHOW_TEXT,
+                                    null,
+                                    false
+                                );
+                                
+                                let node;
+                                let replaced = false;
+                                while (node = walker.nextNode()) {
+                                    if (node.textContent.trim() === originalText.trim()) {
                                         node.textContent = translated;
-                                        textNodeFound = true;
+                                        replaced = true;
                                         break;
                                     }
                                 }
-                                // Si pas de nœud texte trouvé, ajouter le texte traduit au début
-                                if (!textNodeFound) {
-                                    element.insertBefore(document.createTextNode(translated), element.firstChild);
+                                
+                                // Si pas trouvé, remplacer le premier nœud texte
+                                if (!replaced) {
+                                    const firstTextNode = Array.from(element.childNodes).find(
+                                        n => n.nodeType === Node.TEXT_NODE && n.textContent.trim()
+                                    );
+                                    if (firstTextNode) {
+                                        firstTextNode.textContent = translated;
+                                    }
                                 }
                             } else {
                                 // Si l'élément n'a pas d'enfants HTML, remplacer tout le contenu
@@ -3194,17 +3241,25 @@ export default {
                             
                             // Marquer comme traduit
                             element.setAttribute('data-translated', 'true');
+                            successCount++;
                         }
                     } catch (error) {
-                        console.error('Error translating element:', error);
+                        console.error('Error translating element:', error, element);
+                        errorCount++;
+                        // Continuer même en cas d'erreur pour traduire les autres éléments
                     }
-                }));
+                    
+                    // Délai entre chaque élément pour éviter les rate limits
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
                 
-                // Petit délai entre les batches pour ne pas surcharger l'API
+                // Délai plus long entre les batches
                 if (i + batchSize < elementsToTranslate.length) {
-                    await new Promise(resolve => setTimeout(resolve, 150));
+                    await new Promise(resolve => setTimeout(resolve, 500));
                 }
             }
+            
+            console.log(`[Translation] Completed: ${successCount} successful, ${errorCount} errors`);
         }
         
         // Initialiser au chargement

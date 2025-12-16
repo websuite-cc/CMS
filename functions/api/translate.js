@@ -21,6 +21,10 @@ async function translateWithLibreTranslate(text, targetLanguage, sourceLanguage 
     const instanceUrl = LIBRETRANSLATE_INSTANCES[instanceIndex];
     
     try {
+        // Timeout de 10 secondes pour éviter les attentes infinies
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        
         const response = await fetch(instanceUrl, {
             method: 'POST',
             headers: {
@@ -31,21 +35,36 @@ async function translateWithLibreTranslate(text, targetLanguage, sourceLanguage 
                 source: sourceLanguage === 'auto' ? 'auto' : sourceLanguage,
                 target: targetLanguage,
                 format: 'text'
-            })
+            }),
+            signal: controller.signal
         });
         
+        clearTimeout(timeoutId);
+        
         if (!response.ok) {
+            const errorText = await response.text().catch(() => 'Unknown error');
+            console.error(`LibreTranslate instance ${instanceIndex} error: ${response.status} - ${errorText}`);
+            
             // Si erreur, essayer l'instance suivante
             if (instanceIndex < LIBRETRANSLATE_INSTANCES.length - 1) {
                 return translateWithLibreTranslate(text, targetLanguage, sourceLanguage, instanceIndex + 1);
             }
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
         }
         
         const data = await response.json();
         
         if (data.error) {
+            console.error(`LibreTranslate API error: ${data.error}`);
+            // Si erreur API, essayer l'instance suivante
+            if (instanceIndex < LIBRETRANSLATE_INSTANCES.length - 1) {
+                return translateWithLibreTranslate(text, targetLanguage, sourceLanguage, instanceIndex + 1);
+            }
             throw new Error(data.error);
+        }
+        
+        if (!data.translatedText) {
+            throw new Error('No translated text in response');
         }
         
         return {
@@ -54,6 +73,12 @@ async function translateWithLibreTranslate(text, targetLanguage, sourceLanguage 
         };
         
     } catch (error) {
+        if (error.name === 'AbortError') {
+            console.error(`LibreTranslate instance ${instanceIndex} timeout`);
+        } else {
+            console.error(`LibreTranslate instance ${instanceIndex} error:`, error.message);
+        }
+        
         // Si erreur réseau, essayer l'instance suivante
         if (instanceIndex < LIBRETRANSLATE_INSTANCES.length - 1) {
             return translateWithLibreTranslate(text, targetLanguage, sourceLanguage, instanceIndex + 1);
@@ -69,6 +94,9 @@ export async function onRequestPost(context) {
     if (request.method === 'OPTIONS') {
         return new Response(null, { headers: corsHeaders });
     }
+    
+    // Ajouter des logs pour le débogage
+    console.log('Translation request received');
     
     try {
         const body = await request.json();
@@ -88,7 +116,9 @@ export async function onRequestPost(context) {
         }
         
         // Traduire avec LibreTranslate
+        console.log(`Translating: "${text.substring(0, 50)}..." to ${targetLanguage}`);
         const result = await translateWithLibreTranslate(text, targetLanguage, sourceLanguage);
+        console.log(`Translation result: "${result.translatedText.substring(0, 50)}..."`);
         
         return jsonResponse({
             success: true,
@@ -100,8 +130,15 @@ export async function onRequestPost(context) {
         
     } catch (error) {
         console.error("Translation error:", error);
+        console.error("Error stack:", error.stack);
+        
+        // Retourner une erreur plus détaillée pour le débogage
+        const errorMessage = error.message || "Translation service unavailable. Please try again later.";
         return errorResponse(
-            error.message || "Translation service unavailable. Please try again later.",
+            {
+                error: errorMessage,
+                details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+            },
             500
         );
     }
