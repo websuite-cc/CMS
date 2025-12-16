@@ -276,10 +276,10 @@
                 <a href="/serverless" hx-get="/serverless" hx-target="#main-content" hx-push-url="true"
                     class="text-sm font-medium text-gray-700 dark:text-slate-100 hover:text-purple-500 dark:hover:text-purple-300 transition-colors">Serverless</a>
                 
-                <!-- Dark mode toggle -->
+                <!-- Theme toggle (light / dark / auto) -->
                 <button id="theme-toggle" class="w-9 h-9 border border-gray-300 dark:border-slate-600 rounded-full flex items-center justify-center text-gray-600 dark:text-slate-200 hover:border-purple-500 hover:text-purple-500 dark:hover:text-purple-300 transition-colors"
-                    aria-label="Toggle dark mode">
-                    <i id="theme-toggle-icon" class="fas fa-moon text-sm"></i>
+                    aria-label="Toggle theme mode">
+                    <i id="theme-toggle-icon" class="fas fa-laptop text-sm"></i>
                 </button>
                 <a href="/get-started" hx-get="/get-started" hx-target="#main-content" hx-push-url="true"
                     class="px-6 py-2 bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold rounded-md hover:from-purple-700 hover:to-purple-900 transition-all shadow-lg shadow-purple-500/30">Get
@@ -2162,47 +2162,98 @@ export default {
         if (closeMobileMenu) closeMobileMenu.addEventListener('click', toggleMenu);
         if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', toggleMenu);
 
-        // Theme toggle (light / dark)
+        // Theme toggle (light / dark / auto)
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-toggle-icon');
         const root = document.documentElement;
+        let currentThemeMode = 'auto'; // 'light', 'dark', or 'auto'
+        let systemThemeListener = null;
 
-        function applyTheme(theme) {
-            if (theme === 'dark') {
+        // Fonction pour obtenir le thème système
+        function getSystemTheme() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                return 'dark';
+            }
+            return 'light';
+        }
+
+        // Fonction pour appliquer le thème effectif (en tenant compte du mode auto)
+        function applyEffectiveTheme() {
+            const effectiveTheme = currentThemeMode === 'auto' ? getSystemTheme() : currentThemeMode;
+            
+            if (effectiveTheme === 'dark') {
                 root.classList.add('dark');
-                if (themeIcon) {
-                    themeIcon.classList.remove('fa-moon');
-                    themeIcon.classList.add('fa-lightbulb');
-                }
             } else {
                 root.classList.remove('dark');
-                if (themeIcon) {
-                    themeIcon.classList.remove('fa-lightbulb');
-                    themeIcon.classList.add('fa-moon');
-                }
             }
         }
 
-        // Initial theme from localStorage or prefers-color-scheme (fallback: dark)
+        // Fonction pour mettre à jour l'icône du toggle
+        function updateThemeIcon() {
+            if (!themeIcon) return;
+            
+            // Retirer toutes les classes d'icônes
+            themeIcon.classList.remove('fa-moon', 'fa-lightbulb', 'fa-laptop');
+            
+            if (currentThemeMode === 'light') {
+                themeIcon.classList.add('fa-moon');
+            } else if (currentThemeMode === 'dark') {
+                themeIcon.classList.add('fa-lightbulb');
+            } else if (currentThemeMode === 'auto') {
+                themeIcon.classList.add('fa-laptop');
+            }
+        }
+
+        // Fonction pour appliquer le thème et mettre à jour l'icône
+        function applyTheme(mode) {
+            currentThemeMode = mode;
+            localStorage.setItem('websuite_theme', mode);
+            applyEffectiveTheme();
+            updateThemeIcon();
+            
+            // Gérer l'écoute des changements système
+            if (systemThemeListener) {
+                systemThemeListener.removeEventListener('change', handleSystemThemeChange);
+                systemThemeListener = null;
+            }
+            
+            // Si on est en mode auto, écouter les changements système
+            if (mode === 'auto') {
+                const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                systemThemeListener = mediaQuery;
+                mediaQuery.addEventListener('change', handleSystemThemeChange);
+            }
+        }
+
+        // Handler pour les changements de thème système
+        function handleSystemThemeChange(e) {
+            if (currentThemeMode === 'auto') {
+                applyEffectiveTheme();
+            }
+        }
+
+        // Initial theme from localStorage or prefers-color-scheme (fallback: auto)
         (function initTheme() {
             const saved = localStorage.getItem('websuite_theme');
-            if (saved === 'dark' || saved === 'light') {
+            if (saved === 'dark' || saved === 'light' || saved === 'auto') {
                 applyTheme(saved);
-            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                applyTheme('dark');
-            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-                applyTheme('light');
             } else {
-                // Default to dark mode if no explicit preference
-                applyTheme('dark');
+                // Par défaut, utiliser le mode auto
+                applyTheme('auto');
             }
         })();
 
         if (themeToggle) {
             themeToggle.addEventListener('click', () => {
-                const isDark = root.classList.contains('dark');
-                const next = isDark ? 'light' : 'dark';
-                localStorage.setItem('websuite_theme', next);
+                // Cycle: light -> dark -> auto -> light
+                let next;
+                if (currentThemeMode === 'light') {
+                    next = 'dark';
+                } else if (currentThemeMode === 'dark') {
+                    next = 'auto';
+                } else {
+                    next = 'light';
+                }
                 applyTheme(next);
             });
         }
