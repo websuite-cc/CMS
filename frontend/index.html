@@ -3004,38 +3004,205 @@ export default {
             return text; // Fallback au texte original
         }
         
-        // Traduire la page entière
+        // Obtenir tous les éléments textuels à traduire automatiquement
+        function getTextElementsToTranslate() {
+            // Sélecteurs pour les éléments textuels à traduire
+            const textSelectors = [
+                'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                'p', 'span', 'a', 'button', 'label',
+                'li', 'td', 'th', 'div', 'strong', 'em', 'b', 'i',
+                '[data-translate]' // Inclure aussi ceux avec data-translate
+            ].join(', ');
+            
+            const allElements = document.querySelectorAll(textSelectors);
+            const elementsToTranslate = [];
+            
+            // Exclusions : éléments qui ne doivent pas être traduits
+            const excludeSelectors = [
+                'script', 'style', 'noscript', 'code', 'pre',
+                '.gtranslate_wrapper', '#language-selector',
+                'option', 'input[type="text"]', 'input[type="email"]',
+                'input[type="password"]', 'textarea',
+                '.serverless-logo', // Logos
+                '[data-no-translate]' // Attribut pour exclure explicitement
+            ];
+            
+            const excludeElements = new Set();
+            excludeSelectors.forEach(selector => {
+                document.querySelectorAll(selector).forEach(el => {
+                    excludeElements.add(el);
+                    // Exclure aussi les enfants
+                    el.querySelectorAll('*').forEach(child => excludeElements.add(child));
+                });
+            });
+            
+            allElements.forEach(element => {
+                // Ignorer si dans la liste d'exclusion
+                if (excludeElements.has(element)) return;
+                
+                // Ignorer si parent est exclu
+                let parent = element.parentElement;
+                while (parent && parent !== document.body) {
+                    if (excludeElements.has(parent)) return;
+                    parent = parent.parentElement;
+                }
+                
+                // Récupérer le texte (sans les enfants)
+                const text = getDirectText(element);
+                
+                // Ignorer si pas de texte ou seulement des espaces
+                if (!text || text.trim().length === 0) return;
+                
+                // Ignorer si c'est une URL, email, ou code
+                if (isUrlOrCode(text)) return;
+                
+                // Ignorer si c'est un nombre seul
+                if (/^\d+$/.test(text.trim())) return;
+                
+                // Ignorer les textes trop courts (probablement des icônes ou symboles)
+                if (text.trim().length < 2) return;
+                
+                // Ignorer si c'est déjà traduit (a l'attribut data-translated)
+                if (element.hasAttribute('data-translated')) return;
+                
+                elementsToTranslate.push({
+                    element: element,
+                    text: text.trim()
+                });
+            });
+            
+            return elementsToTranslate;
+        }
+        
+        // Obtenir uniquement le texte direct d'un élément (sans les enfants)
+        function getDirectText(element) {
+            let text = '';
+            for (let node of element.childNodes) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    text += node.textContent;
+                }
+            }
+            return text.trim();
+        }
+        
+        // Vérifier si le texte est une URL, email ou code
+        function isUrlOrCode(text) {
+            const urlPattern = /^(https?:\/\/|www\.|mailto:|tel:)/i;
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const codePattern = /^[<>{}[\]()\/\\|]+$/;
+            
+            return urlPattern.test(text) || emailPattern.test(text) || codePattern.test(text);
+        }
+        
+        // Restaurer les textes originaux
+        function restoreOriginalTexts() {
+            const translatedElements = document.querySelectorAll('[data-translated]');
+            translatedElements.forEach(element => {
+                const originalText = element.getAttribute('data-original-text');
+                if (originalText) {
+                    // Vérifier si l'élément a des enfants HTML
+                    const hasHtmlChildren = Array.from(element.children).length > 0;
+                    
+                    if (hasHtmlChildren) {
+                        // Remplacer uniquement le texte direct
+                        let textNodeFound = false;
+                        for (let node of element.childNodes) {
+                            if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+                                node.textContent = originalText;
+                                textNodeFound = true;
+                                break;
+                            }
+                        }
+                        if (!textNodeFound && originalText) {
+                            element.insertBefore(document.createTextNode(originalText), element.firstChild);
+                        }
+                    } else {
+                        // Remplacer tout le contenu
+                        element.textContent = originalText;
+                    }
+                    
+                    // Retirer les attributs de traduction
+                    element.removeAttribute('data-translated');
+                }
+            });
+        }
+        
+        // Traduire la page entière automatiquement
         async function translatePage(targetLang) {
             if (targetLang === 'en') {
-                // Recharger la page pour revenir à l'original
-                window.location.reload();
+                // Restaurer les textes originaux au lieu de recharger
+                restoreOriginalTexts();
                 return;
             }
             
-            // Sélectionner tous les éléments à traduire
-            const elementsToTranslate = document.querySelectorAll('[data-translate]');
+            // Si on change de langue, restaurer d'abord les textes originaux
+            // pour éviter de traduire depuis une langue déjà traduite
+            const hasTranslatedElements = document.querySelectorAll('[data-translated]').length > 0;
+            if (hasTranslatedElements) {
+                restoreOriginalTexts();
+                // Attendre un peu pour que la restauration soit visible
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            // Obtenir tous les éléments à traduire automatiquement
+            const elementsToTranslate = getTextElementsToTranslate();
+            
+            if (elementsToTranslate.length === 0) {
+                return;
+            }
             
             // Traduire par batch pour éviter de surcharger l'API
-            const batchSize = 10;
+            const batchSize = 8;
             for (let i = 0; i < elementsToTranslate.length; i += batchSize) {
-                const batch = Array.from(elementsToTranslate).slice(i, i + batchSize);
+                const batch = elementsToTranslate.slice(i, i + batchSize);
                 
-                await Promise.all(batch.map(async (element) => {
-                    // Récupérer le texte original
-                    let originalText = element.getAttribute('data-original-text');
-                    if (!originalText) {
-                        originalText = element.textContent.trim();
-                        element.setAttribute('data-original-text', originalText);
+                await Promise.all(batch.map(async ({ element, text }) => {
+                    try {
+                        // Vérifier si on a déjà le texte original sauvegardé
+                        let originalText = element.getAttribute('data-original-text');
+                        if (!originalText) {
+                            originalText = text;
+                            element.setAttribute('data-original-text', originalText);
+                        }
+                        
+                        // Traduire
+                        const translated = await translateText(originalText, targetLang);
+                        
+                        // Remplacer le texte si traduit
+                        if (translated && translated !== originalText) {
+                            // Vérifier si l'élément a des enfants HTML
+                            const hasHtmlChildren = Array.from(element.children).length > 0;
+                            
+                            if (hasHtmlChildren) {
+                                // Si l'élément a des enfants, remplacer uniquement le texte direct
+                                let textNodeFound = false;
+                                for (let node of element.childNodes) {
+                                    if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+                                        node.textContent = translated;
+                                        textNodeFound = true;
+                                        break;
+                                    }
+                                }
+                                // Si pas de nœud texte trouvé, ajouter le texte traduit au début
+                                if (!textNodeFound) {
+                                    element.insertBefore(document.createTextNode(translated), element.firstChild);
+                                }
+                            } else {
+                                // Si l'élément n'a pas d'enfants HTML, remplacer tout le contenu
+                                element.textContent = translated;
+                            }
+                            
+                            // Marquer comme traduit
+                            element.setAttribute('data-translated', 'true');
+                        }
+                    } catch (error) {
+                        console.error('Error translating element:', error);
                     }
-                    
-                    // Traduire
-                    const translated = await translateText(originalText, targetLang);
-                    element.textContent = translated;
                 }));
                 
-                // Petit délai entre les batches
+                // Petit délai entre les batches pour ne pas surcharger l'API
                 if (i + batchSize < elementsToTranslate.length) {
-                    await new Promise(resolve => setTimeout(resolve, 100));
+                    await new Promise(resolve => setTimeout(resolve, 150));
                 }
             }
         }
