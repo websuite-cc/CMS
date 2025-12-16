@@ -168,6 +168,15 @@
         .dark button.nav-active {
             color: rgb(196 181 253) !important;
         }
+
+        /* Pour les cartes actives dans le dropdown (mega menu) */
+        a.nav-active.mega-menu-card {
+            background-color: rgb(250 245 255) !important; /* purple-50 */
+        }
+
+        .dark a.nav-active.mega-menu-card {
+            background-color: rgba(88, 28, 135, 0.3) !important; /* purple-900/30 */
+        }
     </style>
 </head>
 
@@ -2336,6 +2345,7 @@ export default {
                 
                 if (!isCTA) {
                     link.classList.remove('nav-active');
+                    link.classList.remove('mega-menu-card'); // Retirer aussi la classe de carte
                 }
             });
             
@@ -2361,13 +2371,25 @@ export default {
                 
                 const normalizedHref = normalizePath(href.split('?')[0]); // Enlever les query params
                 
+                // Vérifier si c'est une carte du mega menu (dropdown)
+                const isMegaMenuCard = link.classList.contains('hover:bg-purple-50') || 
+                                      link.closest('#components-menu') !== null;
+                
                 // Correspondance exacte
                 if (normalizedCurrent === normalizedHref) {
                     link.classList.add('nav-active');
+                    // Ajouter la classe pour le background si c'est une carte du mega menu
+                    if (isMegaMenuCard) {
+                        link.classList.add('mega-menu-card');
+                    }
                 }
                 // Correspondance pour les sous-pages (ex: /post/slug correspond à /post)
                 else if (normalizedHref !== '/' && normalizedCurrent.startsWith(normalizedHref + '/')) {
                     link.classList.add('nav-active');
+                    // Ajouter la classe pour le background si c'est une carte du mega menu
+                    if (isMegaMenuCard) {
+                        link.classList.add('mega-menu-card');
+                    }
                 }
             });
             
