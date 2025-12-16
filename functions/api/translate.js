@@ -21,6 +21,10 @@ async function translateWithMyMemory(text, targetLanguage, sourceLanguage = 'aut
         clearTimeout(timeoutId);
         
         if (!response.ok) {
+            // Gérer spécifiquement le rate limiting (429)
+            if (response.status === 429) {
+                throw new Error(`Rate limit exceeded. Please wait before making more requests.`);
+            }
             throw new Error(`MyMemory API error: ${response.status}`);
         }
         

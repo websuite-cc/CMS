@@ -3006,10 +3006,22 @@ export default {
                         console.warn('Translation API returned no translation:', data);
                     }
                 } else {
-                    const errorText = await response.text();
-                    console.error('Translation API error:', response.status, errorText);
+                    const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                    const errorMessage = errorData.error?.error || errorData.error || `HTTP ${response.status}`;
+                    
+                    // Détecter le rate limiting (429)
+                    if (response.status === 429 || errorMessage.includes('429') || errorMessage.includes('Rate limit')) {
+                        throw new Error('429 Rate limit exceeded'); // Erreur spéciale pour le rate limit
+                    }
+                    
+                    console.error('Translation API error:', response.status, errorMessage);
+                    throw new Error(`Translation failed: ${errorMessage}`);
                 }
             } catch (error) {
+                // Propager l'erreur 429 pour arrêter la traduction
+                if (error.message && (error.message.includes('429') || error.message.includes('Rate limit'))) {
+                    throw error;
+                }
                 console.error('Translation fetch error:', error);
             }
             
@@ -3178,9 +3190,9 @@ export default {
                 return;
             }
             
-            // Limiter le nombre d'éléments à traduire pour éviter de surcharger l'API
-            // Prioriser les éléments les plus importants (titres, paragraphes, boutons)
-            const MAX_ELEMENTS = 50; // Limite raisonnable
+            // Limiter le nombre d'éléments à traduire pour éviter le rate limiting (429)
+            // MyMemory gratuit: ~10K mots/jour, donc on limite à 20 éléments max
+            const MAX_ELEMENTS = 20; // Limite réduite pour éviter 429
             if (elementsToTranslate.length > MAX_ELEMENTS) {
                 console.warn(`[Translation] Limiting to ${MAX_ELEMENTS} elements (found ${elementsToTranslate.length})`);
                 
@@ -3197,18 +3209,19 @@ export default {
                 elementsToTranslate = elementsToTranslate.slice(0, MAX_ELEMENTS);
             }
             
-            // Traduire par batch pour éviter de surcharger l'API
-            // Réduire la taille des batches et ajouter des délais pour éviter les rate limits
-            const batchSize = 3; // Encore plus petit pour éviter les erreurs 500
+            // Traduire séquentiellement (un par un) pour respecter les rate limits
             let successCount = 0;
             let errorCount = 0;
+            let rateLimitHit = false;
             
-            for (let i = 0; i < elementsToTranslate.length; i += batchSize) {
-                const batch = elementsToTranslate.slice(i, i + batchSize);
+            for (const { element, text } of elementsToTranslate) {
+                // Arrêter si on a atteint le rate limit
+                if (rateLimitHit) {
+                    console.warn('[Translation] Rate limit reached, stopping translation');
+                    break;
+                }
                 
-                // Traduire séquentiellement dans chaque batch pour éviter les rate limits
-                for (const { element, text } of batch) {
-                    try {
+                try {
                         // Vérifier si on a déjà le texte original sauvegardé
                         let originalText = element.getAttribute('data-original-text');
                         if (!originalText) {
@@ -3265,18 +3278,22 @@ export default {
                     } catch (error) {
                         console.error('Error translating element:', error, element);
                         errorCount++;
-                        // Continuer même en cas d'erreur pour traduire les autres éléments
+                        
+                        // Si erreur 429 (rate limit), arrêter la traduction
+                        const errorMsg = error.message || error.toString() || '';
+                        if (errorMsg.includes('429') || errorMsg.includes('Rate limit')) {
+                            rateLimitHit = true;
+                            console.error('[Translation] Rate limit (429) reached. Stopping translation.');
+                            alert('Translation rate limit reached. Please wait a moment before translating again.');
+                            break;
+                        }
+                        // Continuer pour les autres erreurs
                     }
                     
-                    // Délai entre chaque élément pour éviter les rate limits
-                    await new Promise(resolve => setTimeout(resolve, 300));
+                    // Délai plus long entre chaque élément pour respecter les rate limits
+                    // MyMemory gratuit: ~1 requête/seconde recommandé
+                    await new Promise(resolve => setTimeout(resolve, 1200)); // 1.2 secondes entre chaque requête
                 }
-                
-                // Délai plus long entre les batches
-                if (i + batchSize < elementsToTranslate.length) {
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                }
-            }
             
             console.log(`[Translation] Completed: ${successCount} successful, ${errorCount} errors`);
         }
