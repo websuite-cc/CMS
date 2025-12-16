@@ -2147,6 +2147,17 @@ export default {
             }
         }
 
+        function closeMobileMenuIfOpen() {
+            // Fermer le menu mobile s'il est ouvert
+            if (mobileMenu && !mobileMenu.classList.contains('translate-x-full')) {
+                mobileMenu.classList.add('translate-x-full');
+                if (mobileMenuOverlay) {
+                    mobileMenuOverlay.classList.add('hidden');
+                }
+                document.body.style.overflow = '';
+            }
+        }
+
         if (mobileMenuButton) mobileMenuButton.addEventListener('click', toggleMenu);
         if (closeMobileMenu) closeMobileMenu.addEventListener('click', toggleMenu);
         if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', toggleMenu);
@@ -2478,12 +2489,16 @@ export default {
                 // Forcer un reflow pour que l'animation fonctionne
                 void mainContent.offsetWidth;
             }
+            // Fermer le menu mobile s'il est ouvert
+            closeMobileMenuIfOpen();
             setTimeout(updateActiveNav, 50);
             // Scroller vers le haut après le swap
             setTimeout(scrollToTop, 100);
         });
         
         document.body.addEventListener('htmx:historyRestore', function() {
+            // Fermer le menu mobile s'il est ouvert
+            closeMobileMenuIfOpen();
             setTimeout(updateActiveNav, 50);
             // Scroller vers le haut lors de la restauration de l'historique
             setTimeout(scrollToTop, 100);
@@ -2491,12 +2506,16 @@ export default {
 
         // Mettre à jour lors des changements d'URL (navigation navigateur)
         window.addEventListener('popstate', function() {
+            // Fermer le menu mobile s'il est ouvert
+            closeMobileMenuIfOpen();
             updateActiveNav();
             setTimeout(scrollToTop, 100);
         });
         
         // Écouter aussi les changements d'URL via HTMX
         document.body.addEventListener('htmx:pushedIntoHistory', function() {
+            // Fermer le menu mobile s'il est ouvert
+            closeMobileMenuIfOpen();
             updateActiveNav();
             setTimeout(scrollToTop, 100);
         });
