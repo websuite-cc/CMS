@@ -650,7 +650,9 @@ function renderPodcasts() {
             </td>
             <td class="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs">${new Date(podcast.pubDate).toLocaleDateString('fr-FR')}</td>
             <td class="px-6 py-4 text-right">
-                <button onclick="openPodcastPreview('${podcast.link}')" class="text-purple-600 dark:text-purple-400 hover:text-purple-700 font-medium text-xs uppercase tracking-wide">Voir</button>
+                <button onclick="openPodcastPreview('${podcast.link}')" class="text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm transition flex items-center justify-end gap-1 ml-auto">
+                    <i class="fas fa-eye"></i> Aperçu
+                </button>
             </td>
         </tr>
     `).join('');
@@ -718,7 +720,9 @@ function renderEvents() {
             </td>
             <td class="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs">${new Date(event.pubDate).toLocaleDateString('fr-FR')}</td>
             <td class="px-6 py-4 text-right">
-                <button onclick="openEventPreview('${event.link}')" class="text-purple-600 dark:text-purple-400 hover:text-purple-700 font-medium text-xs uppercase tracking-wide">Voir</button>
+                <button onclick="openEventPreview('${event.link}')" class="text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm transition flex items-center justify-end gap-1 ml-auto">
+                    <i class="fas fa-eye"></i> Aperçu
+                </button>
             </td>
         </tr>
     `).join('');
