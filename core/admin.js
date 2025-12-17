@@ -753,6 +753,41 @@ function nextEventPage() {
     }
 }
 
+// Helper function to sanitize and convert markdown to HTML
+function sanitizeEventContent(content) {
+    if (!content) return '';
+    
+    // Create a temporary div to parse HTML safely
+    const tempDiv = document.createElement('div');
+    tempDiv.textContent = content; // This escapes HTML first
+    
+    let text = tempDiv.innerHTML;
+    
+    // Convert markdown-style links [text](url) to HTML links
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-purple-600 dark:text-purple-400 hover:underline">$1</a>');
+    
+    // Convert **bold** to <strong>
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    
+    // Convert *italic* to <em>
+    text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    
+    // Convert line breaks
+    text = text.replace(/\n/g, '<br>');
+    
+    // Convert URLs to clickable links (if not already in markdown format)
+    const urlRegex = /(https?:\/\/[^\s<>"']+)/g;
+    text = text.replace(urlRegex, (url) => {
+        // Check if already wrapped in <a> tag
+        if (text.includes(`href="${url}"`) || text.includes(`href='${url}'`)) {
+            return url;
+        }
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-purple-600 dark:text-purple-400 hover:underline">${url}</a>`;
+    });
+    
+    return text;
+}
+
 function openEventPreview(link) {
     const event = appState.events.find(e => e.link === link);
     if (!event) {
@@ -762,6 +797,9 @@ function openEventPreview(link) {
     }
 
     document.getElementById('modal-title').textContent = event.title;
+
+    // Sanitize and format the content
+    const sanitizedContent = sanitizeEventContent(event.content || event.description || '');
 
     const content = `<div class="flex flex-col gap-4">
         ${event.image ? `
@@ -775,7 +813,7 @@ function openEventPreview(link) {
             </div>
         </div>
         `}
-        <div class="mt-6 prose prose-orange max-w-none">
+        <div class="mt-6 prose prose-orange max-w-none dark:prose-invert">
             <div class="flex flex-wrap gap-4 text-sm text-slate-500 dark:text-slate-400 mb-4">
                 ${event.location ? `<div class="flex items-center gap-2">
                     <i class="fas fa-map-marker-alt"></i> ${event.location}
@@ -787,10 +825,10 @@ function openEventPreview(link) {
                     <i class="far fa-calendar mr-2"></i> ${new Date(event.pubDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                 </div>
             </div>
-            <div class="event-content">
-                ${event.content || event.description || ''}
+            <div class="event-content text-slate-700 dark:text-slate-300 leading-relaxed">
+                ${sanitizedContent}
             </div>
-            <a href="${event.link}" target="_blank" class="inline-flex items-center gap-2 mt-6 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+            <a href="${event.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-6 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
                 <i class="fas fa-external-link-alt"></i> Voir l'événement sur Meetup
             </a>
         </div>
