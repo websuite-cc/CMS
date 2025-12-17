@@ -944,7 +944,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20">
-                    <!-- With Node Js runtime -->
+                    <!-- GitHub Self-Hosted -->
                     <div
                         class="bg-white dark:bg-slate-900 p-8 rounded-2xl border-2 border-gray-200 dark:border-slate-700 hover:border-purple-500 hover:-translate-y-1 hover:shadow-2xl transition-all group relative overflow-hidden">
                         <div
@@ -954,8 +954,8 @@
                             class="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center text-gray-700 text-3xl mb-6 group-hover:bg-purple-100 group-hover:text-purple-500 transition-colors">
                             <i class="fab fa-node-js"></i>
                         </div>
-                        <h3 class="text-2xl font-bold mb-2 text-gray-900 dark:text-slate-50">With Node.js</h3>
-                        <p class="text-purple-500 font-medium mb-6">Standard Runing Speed</p>
+                        <h3 class="text-2xl font-bold mb-2 text-gray-900 dark:text-slate-50">GitHub Self-Hosted</h3>
+                        <p class="text-purple-500 font-medium mb-6">With Developer API</p>
                         <ul class="space-y-3 text-gray-600 dark:text-purple-200 mb-8">
                             <li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i> Full Source
                                 Code Access</li>
@@ -972,7 +972,7 @@
                         </a>
                     </div>
 
-                    <!-- With Bun Js runtime -->
+                    <!-- Managed Deployment -->
                     <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border-2 border-purple-600 dark:border-purple-400 shadow-xl relative overflow-hidden hover:-translate-y-1 hover:shadow-2xl transition-all group">
                         <div
                             class="absolute top-0 right-0 bg-gradient-to-r from-purple-600 to-purple-800 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
@@ -981,8 +981,8 @@
                             class="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center text-purple-500 text-3xl mb-6">
                             <i class="fas fa-bolt"></i>
                         </div>
-                        <h3 class="text-2xl font-bold mb-2 text-gray-900 dark:text-slate-50">With Bun.js</h3>
-                        <p class="text-purple-500 font-medium mb-6">Bolt Runing speed (x5)</p>
+                        <h3 class="text-2xl font-bold mb-2 text-gray-900 dark:text-slate-50">Managed Deployment</h3>
+                        <p class="text-purple-500 font-medium mb-6">With Business API</p>
                         <ul class="space-y-3 text-gray-600 dark:text-purple-200 mb-8">
                             <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500"></i> One-Click
                                 Deployment</li>
@@ -2141,7 +2141,7 @@ export default {
                     </div>
 
                     <!-- Meta Ads -->
-                    <div class="integration-card bg-white dark:bg-slate-900 p-6 rounded-xl border-2 border-gray-200 dark:border-slate-700 hover:border-purple-500 hover:-translate-y-1 hover:shadow-xl transition-all group cursor-pointer" data-category="social">
+                    <div class="integration-card bg-white dark:bg-slate-900 p-6 rounded-xl border-2 border-gray-200 dark:border-slate-700 hover:border-purple-500 hover:-translate-y-1 hover:shadow-xl transition-all group cursor-pointer" data-category="business">
                         <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-gray-50 dark:bg-slate-800 rounded-lg group-hover:bg-purple-50 dark:group-hover:bg-purple-900/40 transition-colors">
                             <img src="https://cdn.worldvectorlogo.com/logos/meta-3.svg" alt="Meta Ads" class="w-10 h-10">
                         </div>
@@ -2157,7 +2157,7 @@ export default {
                     </div>
 
                     <!-- Google Ads -->
-                    <div class="integration-card bg-white dark:bg-slate-900 p-6 rounded-xl border-2 border-gray-200 dark:border-slate-700 hover:border-purple-500 hover:-translate-y-1 hover:shadow-xl transition-all group cursor-pointer" data-category="social">
+                    <div class="integration-card bg-white dark:bg-slate-900 p-6 rounded-xl border-2 border-gray-200 dark:border-slate-700 hover:border-purple-500 hover:-translate-y-1 hover:shadow-xl transition-all group cursor-pointer" data-category="business">
                         <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-gray-50 dark:bg-slate-800 rounded-lg group-hover:bg-purple-50 dark:group-hover:bg-purple-900/40 transition-colors">
                             <img src="https://cdn.worldvectorlogo.com/logos/google-ads-2.svg" alt="Google Ads" class="w-10 h-10">
                         </div>
@@ -2900,14 +2900,23 @@ export default {
         });
     </script>
     
-    <!-- LibreTranslate Integration -->
+    <!-- Translation Integration (temporarily disabled) -->
     <script>
-        // Language translation system using LibreTranslate
+        // Language translation system (temporarily disabled)
+        const TRANSLATION_ENABLED = false;
         let currentLanguage = localStorage.getItem('websuite_language') || 'en';
         let originalTexts = new Map(); // Cache des textes originaux
         
         // Initialiser le sélecteur de langue
         function initLanguageSelector() {
+            // Si la traduction est désactivée, cacher le sélecteur et ne rien faire
+            if (!TRANSLATION_ENABLED) {
+                const selector = document.getElementById('language-selector');
+                if (selector) {
+                    selector.style.display = 'none';
+                }
+                return;
+            }
             const selector = document.getElementById('language-selector');
             if (!selector) return;
             
@@ -3190,6 +3199,8 @@ export default {
         
         // Traduire la page entière automatiquement
         async function translatePage(targetLang) {
+            // Si le système est désactivé, ne rien faire
+            if (!TRANSLATION_ENABLED) return;
             if (targetLang === 'en') {
                 // Restaurer les textes originaux au lieu de recharger
                 restoreOriginalTexts();

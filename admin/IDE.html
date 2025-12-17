@@ -600,7 +600,7 @@
                 } catch (e) {
                     console.warn('Could not check GitHub config via API, falling back to localStorage:', e);
                     // Fallback: vérifier localStorage (ancien système)
-                    const ghConfig = JSON.parse(localStorage.getItem('stackpages_github_config') || '{}');
+                const ghConfig = JSON.parse(localStorage.getItem('stackpages_github_config') || '{}');
                     deployToGitHub = !!(ghConfig.owner && ghConfig.repo && ghConfig.token);
                 }
 
