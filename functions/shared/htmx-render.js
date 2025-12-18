@@ -397,6 +397,10 @@ export async function detectAndRenderContentRoute(request, path, fullTemplate, s
     else if (slugLower === 'podcasts' || slugLower === 'podcast') {
         contentType = 'podcasts';
     }
+    // Routes explicites pour les événements
+    else if (slugLower === 'events' || slugLower === 'event') {
+        contentType = 'events';
+    }
     
     // Si aucune route de contenu n'est détectée, retourner null pour laisser le catch-all gérer
     if (!contentType) {
@@ -448,6 +452,8 @@ export async function detectAndRenderContentRoute(request, path, fullTemplate, s
                 // Passer siteConfig pour l'auteur par défaut
                 const content = contentType === 'posts'
                     ? generatePublicationsContent(fullTemplate, items, siteConfig)
+                    : contentType === 'events'
+                    ? generateEventsContent(fullTemplate, items)
                     : apiConfig.generator(fullTemplate, items, siteConfig);
                 
                 // Si le contenu généré contient encore {{items}}, c'est qu'aucun template n'a été trouvé
@@ -778,6 +784,14 @@ export function generateEventsContent(fullTemplate, events) {
         </div>`;
     }
 
+    // Debug: Vérifier que les templates sont bien extraits
+    if (!listTpl) {
+        console.error('Warning: tpl-events template not found, using fallback');
+    }
+    if (!cardTpl) {
+        console.error('Warning: tpl-event-card template not found, using fallback');
+    }
+
     // Envoyer TOUS les événements - le frontend gère l'affichage et la pagination
     let itemsHtml = '';
     if (events.length === 0) {
@@ -855,7 +869,20 @@ export function generateEventsContent(fullTemplate, events) {
         });
     }
 
+    // Remplacer le placeholder {{items}} dans le template de liste
+    if (!listTpl) {
+        console.error('Error: listTpl is null or undefined in generateEventsContent');
+        return '<div class="p-8 text-center"><p class="text-red-500">Error: Events template not found</p></div>';
+    }
+    
     let content = listTpl.replace('{{items}}', itemsHtml);
+    
+    // Vérifier que le remplacement a fonctionné - utiliser replace global si nécessaire
+    if (content.includes('{{items}}')) {
+        console.error('Error: {{items}} placeholder was not replaced. Trying with global replace.');
+        content = listTpl.replace(/\{\{items\}\}/g, itemsHtml);
+    }
+    
     return content;
 }
 
