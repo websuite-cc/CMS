@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>WebSuite CMS - Documentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta name="description" content="Documentation complète du CMS headless WebSuite basé sur RSS et déployable sur Cloudflare Pages">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    .app-name-link img {
+      max-width: 200px;
+      height: auto;
+    }
+    .sidebar {
+      width: 300px;
+    }
+    .markdown-section code {
+      background-color: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .markdown-section pre {
+      background-color: #282c34;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">Chargement...</div>
+  <script>
+    window.$docsify = {
+      name: 'WebSuite CMS',
+      repo: '',
+      loadSidebar: true,
+      subMaxLevel: 2,
+      auto2top: true,
+      search: {
+        maxAge: 86400000,
+        paths: 'auto',
+        placeholder: 'Rechercher...',
+        noData: 'Aucun résultat trouvé',
+        depth: 6
+      },
+      pagination: {
+        previousText: 'Précédent',
+        nextText: 'Suivant',
+        crossChapter: true,
+        crossChapterText: true,
+      },
+      coverpage: false,
+      notFoundPage: true,
+      executeScript: true,
+      mergeNavbar: true,
+      formatUpdated: '{YYYY}-{MM}-{DD} {HH}:{mm}',
+      plugins: [
+        function(hook, vm) {
+          hook.beforeEach(function(html) {
+            return html;
+          });
+          hook.afterEach(function(html, next) {
+            next(html);
+          });
+        }
+      ]
+    }
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/pagination.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-javascript.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-http.min.js"></script>
+</body>
+</html>
