@@ -30,16 +30,16 @@
   * [Événements (Meetup)](content/events.md)
 
 * 🎨 Interface Admin
-  * [Dashboard](admin/dashboard.md)
-  * [Fonctionnalités](admin/features.md)
-  * [Gestion du Contenu](admin/content-management.md)
-  * [API Explorer](admin/api-explorer.md)
+  * [Dashboard](docs/admin/dashboard.md)
+  * [Fonctionnalités](docs/admin/features.md)
+  * [Gestion du Contenu](docs/admin/content-management.md)
+  * [API Explorer](docs/admin/api-explorer.md)
 
 * 🔧 Avancé
-  * [Cache & Performance](advanced/caching.md)
-  * [Sécurité](advanced/security.md)
-  * [HTMX & SSR](advanced/htmx-ssr.md)
-  * [Personnalisation](advanced/customization.md)
+  * [Cache & Performance](docs/advanced/caching.md)
+  * [Sécurité](docs/advanced/security.md)
+  * [HTMX & SSR](docs/advanced/htmx-ssr.md)
+  * [Personnalisation](docs/advanced/customization.md)
 
 * ❓ FAQ
   * [Questions Fréquentes](faq/general.md)
