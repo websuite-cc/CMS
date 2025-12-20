@@ -1,22 +1,23 @@
-# 🎯 WebSuite - Cloudflare Pages Edition
+# 🎯 WebSuite Platform - GitHub Pages Edition
 
-> **CMS headless moderne** basé sur RSS (Substack, YouTube, Podcasts) déployable sur Cloudflare Pages en un clic.
+> **CMS headless moderne** basé sur RSS (Substack, YouTube, Podcasts, Meetup)  
+> Worker MCP distant sur `mcp.websuite.cc` - Déployez votre CMS sur GitHub Pages en un clic.
 
-[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-orange?logo=cloudflare)](https://pages.cloudflare.com/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-222222?logo=github)](https://pages.github.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ---
 
 ## ✨ Caractéristiques
 
-- 🚀 **Déploiement automatique** via Git push
-- ⚡ **Serverless** avec Cloudflare Pages Functions
+- 🚀 **Déploiement automatique** via Git push sur GitHub Pages
+- ⚡ **Worker MCP distant** hébergé sur `mcp.websuite.cc`
 - 🎨 **Interface admin moderne** avec TailwindCSS
-- 📊 **Multi-sources** : Substack + YouTube + Podcasts
+- 📊 **Multi-sources** : Substack + YouTube + Podcasts + Meetup
 - 🔐 **Authentification** simple et sécurisée
-- 💨 **Cache intelligent** (180s TTL)
+- 💨 **Cache intelligent** géré par le worker MCP
 - 🌍 **CDN global** ultra-rapide
-- 💰 **Gratuit** (plan généreux de Cloudflare)
+- 💰 **100% Gratuit** (GitHub Pages + Worker MCP)
 
 ---
 
@@ -24,25 +25,49 @@
 
 ```
 ┌─────────────────────────────────────────┐
-│     Cloudflare Pages (Même domaine)     │
+│     GitHub Pages (Développeur)          │
 ├─────────────────────────────────────────┤
-│  Frontend (Static)  │  Backend (API)    │
-│  ✓ index.html       │  ✓ /api/posts     │
-│  ✓ admin/           │  ✓ /api/videos    │
-│  ✓ core/admin.js    │  ✓ /api/podcasts  │
-│                     │  ✓ /api/login     │
-└─────────────────────┴───────────────────┘
+│  Frontend (Static)                     │
+│  ✓ index.html                          │
+│  ✓ admin/                              │
+│  ✓ core/admin.js                       │
+│  ✓ frontend/index.html                 │
+└─────────────────────────────────────────┘
+                    ↓ (API Calls)
+┌─────────────────────────────────────────┐
+│     mcp.websuite.cc (Worker MCP)        │
+├─────────────────────────────────────────┤
+│  API Backend                            │
+│  ✓ /api/posts                           │
+│  ✓ /api/videos                          │
+│  ✓ /api/podcasts                        │
+│  ✓ /api/events                          │
+│  ✓ /api/login                           │
+│  ✓ Variables d'environnement           │
+│  ✓ RSS Parsing                          │
+│  ✓ Cache Management                     │
+│  ✓ MCP Workers                          │
+└─────────────────────────────────────────┘
 ```
 
 **Avantages** :
-- ✅ Pas de CORS (tout sur le même domaine)
+- ✅ Déploiement simplifié (GitHub Pages uniquement)
+- ✅ Worker MCP géré et maintenu par WebSuite
+- ✅ Mises à jour automatiques du worker
 - ✅ SSL automatique et gratuit
 - ✅ Auto-deploy sur Git push
 - ✅ CDN global intégré
+- ✅ Pas de configuration serveur nécessaire
 
 ---
 
 ## 🚀 Démarrage Rapide
+
+### Architecture
+
+WebSuite Platform utilise une architecture hybride :
+- **Worker MCP** : Hébergé sur `mcp.websuite.cc` (géré par WebSuite)
+- **CMS/Frontend** : Déployé par vous sur GitHub Pages
 
 ### 1. Cloner le projet
 
@@ -51,63 +76,79 @@ git clone https://github.com/VOTRE_USERNAME/StackPagesCMS.git
 cd StackPagesCMS/ProdBeta
 ```
 
-### 2. Déployer sur Cloudflare Pages
+### 2. Déployer sur GitHub Pages
 
-#### Option A : Via Dashboard (Recommandé)
+#### Option A : Via GitHub Settings (Recommandé)
 
-1. Aller sur https://dash.cloudflare.com/
-2. **Workers & Pages** → **Create application** → **Pages**
-3. **Connect to Git** → Sélectionner votre repo
-4. Configurer :
-   - **Build command** : (laisser vide)
-   - **Build output** : `/` (racine)
-5. **Déployer** !
-6. **Cliquer sur Custom domain** → **Setup custom domain** → Entrez votre nom de domaine (monsitepro.com)
+1. Pousser votre code sur GitHub
+2. Aller dans **Settings** → **Pages**
+3. Sélectionner la branche `main` comme source
+4. Votre site sera disponible sur `https://votre-username.github.io/votre-repo`
 
-#### Option B : Via CLI
+#### Option B : Via GitHub Actions (Automatique)
 
-```bash
-npx wrangler login
-npx wrangler pages deploy .
-```
+Le déploiement se fait automatiquement à chaque push sur `main`.
 
-### 3. Configurer les Variables
+### 3. Configurer le Worker MCP
 
-Dashboard → Settings → Environment variables
+Le worker MCP est déjà configuré sur `mcp.websuite.cc`. Vous n'avez qu'à :
+
+1. Créer un fichier `.dev.vars` à la racine du projet pour le développement local :
 
 ```env
-ADMIN_EMAIL = admin@example.com
-ADMIN_PASSWORD = votre_password_securise
-BLOG_FEED_URL = https://votrecompte.substack.com/feed
-YOUTUBE_FEED_URL = https://www.youtube.com/feeds/videos.xml?channel_id=VOTRE_ID
-PODCAST_FEED_URL = https://anchor.fm/s/VOTRE_ID/podcast/rss
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=votre_password_securise
+BLOG_FEED_URL=https://votrecompte.substack.com/feed
+YOUTUBE_FEED_URL=https://www.youtube.com/feeds/videos.xml?channel_id=VOTRE_ID
+PODCAST_FEED_URL=https://anchor.fm/s/VOTRE_ID/podcast/rss
+EVENTS_FEED_URL=https://www.meetup.com/fr-fr/votre-groupe/events/rss
 ```
 
-### 4. C'est prêt ! 🎉
+> ⚠️ **Sécurité** : Ajoutez `.dev.vars` à votre `.gitignore` pour ne pas commiter vos secrets !
+
+2. Pour la production, contactez WebSuite pour configurer vos variables sur le worker MCP distant.
+
+### 4. Configuration dans le Code
+
+Tous les appels API pointent automatiquement vers `https://mcp.websuite.cc/api/*`. Le worker MCP gère :
+- Le parsing RSS
+- Le cache
+- L'authentification
+- Les MCP Workers
+
+### 5. C'est prêt ! 🎉
 
 Votre CMS est en ligne :
 ```
-https://votre-projet.pages.dev
+https://votre-username.github.io/votre-repo
 ```
+
+Le worker MCP sur `mcp.websuite.cc` gère automatiquement toutes les opérations backend.
 
 ---
 
 ## 💻 Développement Local
 
 ```bash
-# 1. Installer Wrangler
-npm install -g wrangler
-
-# 2. Créer les variables d'environnement
+# 1. Créer les variables d'environnement
 cp .dev.vars.example .dev.vars
 nano .dev.vars
 
-# 3. Lancer le serveur local
-npx wrangler pages dev . --compatibility-date=2024-12-12
+# 2. Lancer un serveur HTTP local
+# Option A : Avec Python
+python -m http.server 8000
 
-# 4. Ouvrir dans le navigateur
-open http://localhost:8788
+# Option B : Avec Node.js
+npx http-server
+
+# Option C : Avec PHP
+php -S localhost:8000
+
+# 3. Ouvrir dans le navigateur
+open http://localhost:8000
 ```
+
+> 💡 **Note** : Le frontend communiquera automatiquement avec le worker MCP sur `mcp.websuite.cc`. Les variables dans `.dev.vars` sont utilisées pour le développement local uniquement.
 
 ---
 
@@ -268,11 +309,12 @@ Compatible avec :
 ## 🛠️ Technologies
 
 - **Frontend** : HTML, CSS (TailwindCSS), JavaScript
-- **Backend** : Cloudflare Pages Functions (Workers API)
-- **Déploiement** : Cloudflare Pages
-- **Parsing** : RSS/XML natif (pas de dépendances)
-- **Authentification** : Simple password-based
-- **Cache** : Cloudflare Cache API
+- **Backend** : Worker MCP distant sur `mcp.websuite.cc`
+- **Déploiement** : GitHub Pages
+- **Parsing** : RSS/XML natif (géré par le worker MCP)
+- **Authentification** : Simple password-based (géré par le worker MCP)
+- **Cache** : Géré par le worker MCP
+- **MCP Workers** : Agents MCP pour LLMs (hébergés sur `mcp.websuite.cc`)
 
 ---
 

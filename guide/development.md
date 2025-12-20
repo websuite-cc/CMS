@@ -1,31 +1,32 @@
 # 💻 Développement Local
 
-Guide pour développer et tester WebSuite CMS en local.
+Guide pour développer et tester WebSuite Platform en local.
+
+## Architecture
+
+WebSuite Platform utilise une architecture hybride :
+- **Worker MCP** : Hébergé sur `mcp.websuite.cc` (géré par WebSuite)
+- **CMS/Frontend** : Déployé par vous sur GitHub Pages
+
+Pour le développement local, le frontend communique avec le worker MCP distant.
 
 ## Prérequis
 
-- [Node.js](https://nodejs.org/) v18 ou supérieur
-- [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/)
 - Un éditeur de code (VS Code recommandé)
+- Python, Node.js, ou PHP (pour servir les fichiers statiques)
 
 ## Installation
 
-### 1. Installer Wrangler
-
-```bash
-npm install -g wrangler
-```
-
-### 2. Cloner le Projet
+### 1. Cloner le Projet
 
 ```bash
 git clone https://github.com/VOTRE_USERNAME/StackPagesCMS.git
 cd StackPagesCMS/ProdBeta
 ```
 
-### 3. Configurer les Variables
+### 2. Configurer les Variables
 
-Créez un fichier `.dev.vars` :
+Créez un fichier `.dev.vars` à la racine :
 
 ```bash
 cp .dev.vars.example .dev.vars
@@ -42,13 +43,51 @@ PODCAST_FEED_URL=https://anchor.fm/s/VOTRE_ID/podcast/rss
 EVENTS_FEED_URL=https://www.meetup.com/fr-fr/votre-groupe/events/rss
 ```
 
-## Lancer le Serveur
+> ⚠️ **Important** : `.dev.vars` est dans `.gitignore` - ne sera pas commité.
+
+## Lancer le Serveur Local
+
+### Option 1 : Avec Python
 
 ```bash
-npx wrangler pages dev . --compatibility-date=2024-12-12
+python -m http.server 8000
 ```
 
-Le serveur démarre sur `http://localhost:8788`
+### Option 2 : Avec Node.js
+
+```bash
+npx http-server
+```
+
+### Option 3 : Avec PHP
+
+```bash
+php -S localhost:8000
+```
+
+Le serveur démarre sur `http://localhost:8000`
+
+## Configuration du Worker MCP
+
+Le worker MCP est hébergé sur `https://mcp.websuite.cc` et gère toutes les variables d'environnement.
+
+### Communication avec le Worker
+
+Tous les appels API pointent automatiquement vers le worker MCP distant :
+
+- `GET https://mcp.websuite.cc/api/posts` - Liste des articles
+- `GET https://mcp.websuite.cc/api/videos` - Liste des vidéos
+- `GET https://mcp.websuite.cc/api/podcasts` - Liste des podcasts
+- `GET https://mcp.websuite.cc/api/events` - Liste des événements
+
+Le worker MCP gère :
+- Les variables d'environnement (RSS feeds, admin password)
+- Le parsing RSS
+- Le cache
+- L'authentification
+- Les MCP Workers
+
+> 💡 **Note** : Pour le développement local, les variables dans `.dev.vars` sont utilisées uniquement pour la configuration locale. Le worker MCP distant utilise ses propres variables configurées par WebSuite.
 
 ## Workflow de Développement
 
@@ -58,9 +97,9 @@ Le serveur démarre sur `http://localhost:8788`
 
 ### 2. Tester Localement
 
-- Frontend : `http://localhost:8788`
-- Admin : `http://localhost:8788/admin`
-- API : `http://localhost:8788/api/posts`
+- Frontend : `http://localhost:8000`
+- Admin : `http://localhost:8000/admin`
+- API : Les appels API pointent vers `https://mcp.websuite.cc/api/*`
 
 ### 3. Déboguer
 
@@ -69,27 +108,25 @@ Utilisez `console.log()` dans le code. Les logs apparaissent dans le terminal o�
 ### 4. Tester les API
 
 ```bash
-# Tester les articles
-curl http://localhost:8788/api/posts
+# Tester les articles (via le worker MCP distant)
+curl https://mcp.websuite.cc/api/posts
 
 # Tester avec authentification
 curl -H "X-Auth-Key: votre_password" \
-     http://localhost:8788/api/config
+     https://mcp.websuite.cc/api/config
 ```
 
 ## Structure de Développement
 
-### Modifier l'API
-
-Les endpoints sont dans `functions/api/`. Modifiez le fichier correspondant et rechargez.
-
 ### Modifier le Frontend
 
-Les templates sont dans `frontend/index.html`. Les modifications sont visibles immédiatement.
+Les templates sont dans `frontend/index.html`. Les modifications sont visibles immédiatement après rechargement.
 
 ### Modifier l'Admin
 
 L'interface admin est dans `admin/dashboard.html` et `core/admin.js`.
+
+> ⚠️ **Note** : L'API backend est gérée par le worker MCP distant. Pour modifier l'API, contactez WebSuite.
 
 ## Outils de Développement
 
@@ -130,28 +167,31 @@ Les erreurs sont affichées dans le terminal Wrangler et dans la console du navi
 
 ## Hot Reload
 
-Wrangler recharge automatiquement les modifications. Parfois, un redémarrage manuel est nécessaire :
+Pour les serveurs HTTP simples, rechargez manuellement la page dans le navigateur après chaque modification.
+
+Pour un hot reload automatique, utilisez un outil comme `live-server` :
 
 ```bash
-# Arrêter avec Ctrl+C
-# Relancer
-npx wrangler pages dev . --compatibility-date=2024-12-12
+npm install -g live-server
+live-server
 ```
 
 ## Variables d'Environnement
 
-Les variables dans `.dev.vars` sont chargées automatiquement. Pour les modifier :
+Les variables dans `.dev.vars` sont utilisées pour le développement local uniquement.
+
+Pour les modifier :
 
 1. Éditez `.dev.vars`
-2. Redémarrez Wrangler
+2. Rechargez la page dans le navigateur
+
+> 💡 **Note** : Pour la production, les variables sont configurées sur le worker MCP distant (`mcp.websuite.cc`) par WebSuite.
 
 ## Débogage Avancé
 
-### Mode Verbose
+### Mode Debug
 
-```bash
-npx wrangler pages dev . --compatibility-date=2024-12-12 --log-level=debug
-```
+Utilisez les DevTools du navigateur (Console et Network) pour déboguer.
 
 ### Inspecter les Requêtes
 
@@ -162,28 +202,29 @@ Utilisez les DevTools du navigateur (Network tab) pour inspecter les requêtes.
 ### Port Déjà Utilisé
 
 ```bash
-# Utiliser un autre port
-npx wrangler pages dev . --port=8789
+# Avec Python, utiliser un autre port
+python -m http.server 8001
+
+# Avec Node.js
+npx http-server -p 8001
 ```
 
 ### Variables Non Chargées
 
 - Vérifiez que `.dev.vars` existe
 - Vérifiez la syntaxe (pas d'espaces autour du `=`)
-- Redémarrez Wrangler
+- Rechargez la page dans le navigateur
 
 ### Cache Persistant
 
-Le cache local peut persister. Pour le vider :
+Le cache est géré par le worker MCP distant. Pour le vider :
 
-```bash
-# Vider le cache Wrangler
-rm -rf .wrangler
-```
+1. Utilisez l'interface admin : `/admin` → Configuration → Vider le cache
+2. Ou contactez WebSuite pour vider le cache sur le worker MCP
 
 ## Prochaines Étapes
 
 - [Structure du projet](structure.md)
-- [API Documentation](api/overview.md)
-- [Déploiement](deployment/cloudflare-pages.md)
+- [API Documentation](../api/overview.md)
+- [Déploiement sur GitHub Pages](../deployment/github-pages.md)
 
