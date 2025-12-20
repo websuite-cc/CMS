@@ -7,15 +7,351 @@
   <meta name="description" content="Documentation complète du CMS headless WebSuite basé sur RSS et déployable sur Cloudflare Pages">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <style>
-    /* Thème sombre personnalisé */
+    /* Variables de thème */
     :root {
       --theme-color: #6366f1;
       --theme-color-dark: #4f46e5;
     }
     
-    body {
+    /* Thème Switcher */
+    .theme-switcher {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: #6366f1;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      font-size: 24px;
+    }
+    
+    .theme-switcher:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+    }
+    
+    .theme-switcher.dark {
+      background: #6366f1;
+      color: #fff;
+    }
+    
+    .theme-switcher.light {
+      background: #f3f4f6;
+      color: #1f2937;
+    }
+    
+    /* Thème Dark (par défaut) */
+    body.dark-theme {
+      background-color: #0f0f0f !important;
+      color: #f9fafb !important;
+    }
+    
+    body.dark-theme .sidebar {
       background-color: #1a1a1a !important;
+      border-right: 1px solid #2d2d2d !important;
+    }
+    
+    body.dark-theme .sidebar ul li a {
       color: #e5e7eb !important;
+    }
+    
+    body.dark-theme .sidebar ul li a:hover {
+      background-color: #2d2d2d !important;
+      color: #818cf8 !important;
+    }
+    
+    body.dark-theme .sidebar ul li.active > a {
+      background-color: #2d2d2d !important;
+      color: #818cf8 !important;
+      font-weight: 600;
+    }
+    
+    body.dark-theme .app-name {
+      color: #ffffff !important;
+    }
+    
+    body.dark-theme .markdown-section {
+      color: #e5e7eb !important;
+    }
+    
+    body.dark-theme .markdown-section p {
+      color: #d1d5db !important;
+      line-height: 1.7 !important;
+    }
+    
+    body.dark-theme .markdown-section strong {
+      color: #ffffff !important;
+      font-weight: 700 !important;
+    }
+    
+    body.dark-theme .markdown-section h1 {
+      color: #ffffff !important;
+      border-color: #818cf8 !important;
+      font-size: 2.5em !important;
+      font-weight: 700 !important;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+    }
+    
+    body.dark-theme .markdown-section h2 {
+      color: #f9fafb !important;
+      border-color: #818cf8 !important;
+      border-bottom: 2px solid #818cf8 !important;
+      font-size: 2em !important;
+      font-weight: 600 !important;
+      margin-top: 2em !important;
+      padding-bottom: 0.5em !important;
+    }
+    
+    body.dark-theme .markdown-section h3 {
+      color: #f3f4f6 !important;
+      border-color: #4b5563 !important;
+      font-size: 1.5em !important;
+      font-weight: 600 !important;
+      margin-top: 1.5em !important;
+    }
+    
+    body.dark-theme .markdown-section h4 {
+      color: #e5e7eb !important;
+      font-weight: 600 !important;
+      font-size: 1.25em !important;
+    }
+    
+    body.dark-theme .markdown-section h5,
+    body.dark-theme .markdown-section h6 {
+      color: #d1d5db !important;
+      font-weight: 600 !important;
+    }
+    
+    body.dark-theme .markdown-section a {
+      color: #a5b4fc !important;
+    }
+    
+    body.dark-theme .markdown-section a:hover {
+      color: #818cf8 !important;
+    }
+    
+    body.dark-theme .markdown-section code {
+      background-color: #1e1e1e !important;
+      color: #fbbf24 !important;
+      padding: 2px 6px;
+      border-radius: 3px;
+      border: 1px solid #374151 !important;
+    }
+    
+    body.dark-theme .markdown-section pre {
+      background-color: #0f0f0f !important;
+      border: 1px solid #2d2d2d !important;
+    }
+    
+    body.dark-theme .markdown-section pre code {
+      background-color: transparent !important;
+      color: #e5e7eb !important;
+      border: none !important;
+    }
+    
+    body.dark-theme .markdown-section blockquote {
+      border-left-color: #818cf8 !important;
+      background-color: #1a1a1a !important;
+      color: #d1d5db !important;
+    }
+    
+    body.dark-theme .markdown-section table {
+      border-color: #374151 !important;
+    }
+    
+    body.dark-theme .markdown-section table th {
+      background-color: #1a1a1a !important;
+      border-color: #374151 !important;
+      color: #f9fafb !important;
+    }
+    
+    body.dark-theme .markdown-section table td {
+      border-color: #374151 !important;
+    }
+    
+    body.dark-theme .markdown-section table tr:nth-child(2n) {
+      background-color: #1a1a1a !important;
+    }
+    
+    body.dark-theme .search input {
+      background-color: #1a1a1a !important;
+      border-color: #374151 !important;
+      color: #e5e7eb !important;
+    }
+    
+    body.dark-theme .search input::placeholder {
+      color: #9ca3af !important;
+    }
+    
+    body.dark-theme .pagination-item {
+      background-color: #1a1a1a !important;
+      border-color: #374151 !important;
+      color: #e5e7eb !important;
+    }
+    
+    body.dark-theme .pagination-item:hover {
+      background-color: #2d2d2d !important;
+      color: #818cf8 !important;
+    }
+    
+    /* Thème Light */
+    body.light-theme {
+      background-color: #ffffff !important;
+      color: #1f2937 !important;
+    }
+    
+    body.light-theme .sidebar {
+      background-color: #f9fafb !important;
+      border-right: 1px solid #e5e7eb !important;
+    }
+    
+    body.light-theme .sidebar ul li a {
+      color: #374151 !important;
+    }
+    
+    body.light-theme .sidebar ul li a:hover {
+      background-color: #f3f4f6 !important;
+      color: #6366f1 !important;
+    }
+    
+    body.light-theme .sidebar ul li.active > a {
+      background-color: #eef2ff !important;
+      color: #6366f1 !important;
+      font-weight: 600;
+    }
+    
+    body.light-theme .app-name {
+      color: #111827 !important;
+    }
+    
+    body.light-theme .markdown-section {
+      color: #374151 !important;
+    }
+    
+    body.light-theme .markdown-section p {
+      color: #4b5563 !important;
+    }
+    
+    body.light-theme .markdown-section strong {
+      color: #111827 !important;
+    }
+    
+    body.light-theme .markdown-section h1 {
+      color: #111827 !important;
+      border-color: #6366f1 !important;
+    }
+    
+    body.light-theme .markdown-section h2 {
+      color: #1f2937 !important;
+      border-bottom: 2px solid #6366f1 !important;
+    }
+    
+    body.light-theme .markdown-section h3 {
+      color: #374151 !important;
+    }
+    
+    body.light-theme .markdown-section h4 {
+      color: #4b5563 !important;
+    }
+    
+    body.light-theme .markdown-section a {
+      color: #6366f1 !important;
+    }
+    
+    body.light-theme .markdown-section a:hover {
+      color: #4f46e5 !important;
+    }
+    
+    body.light-theme .markdown-section code {
+      background-color: #f3f4f6 !important;
+      color: #dc2626 !important;
+      border: 1px solid #e5e7eb !important;
+    }
+    
+    body.light-theme .markdown-section pre {
+      background-color: #1f2937 !important;
+      border: 1px solid #374151 !important;
+    }
+    
+    body.light-theme .markdown-section pre code {
+      color: #e5e7eb !important;
+    }
+    
+    body.light-theme .markdown-section blockquote {
+      border-left-color: #6366f1 !important;
+      background-color: #f9fafb !important;
+      color: #4b5563 !important;
+    }
+    
+    body.light-theme .markdown-section table th {
+      background-color: #f3f4f6 !important;
+      color: #111827 !important;
+    }
+    
+    body.light-theme .markdown-section table tr:nth-child(2n) {
+      background-color: #f9fafb !important;
+    }
+    
+    body.light-theme .search input {
+      background-color: #ffffff !important;
+      border-color: #d1d5db !important;
+      color: #1f2937 !important;
+    }
+    
+    body.light-theme .pagination-item {
+      background-color: #ffffff !important;
+      border-color: #d1d5db !important;
+      color: #374151 !important;
+    }
+    
+    body.light-theme .pagination-item:hover {
+      background-color: #f3f4f6 !important;
+      color: #6366f1 !important;
+    }
+    
+    /* Styles communs */
+    .sidebar {
+      width: 300px;
+    }
+    
+    .sidebar ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    
+    .sidebar ul li {
+      margin: 5px 0;
+    }
+    
+    .sidebar ul li a {
+      text-decoration: none;
+      display: block;
+      padding: 8px 15px;
+      border-radius: 5px;
+      transition: all 0.2s;
+    }
+    
+    .markdown-section ul,
+    .markdown-section ol {
+      line-height: 1.7;
+    }
+    
+    .markdown-section ul li,
+    .markdown-section ol li {
+      margin: 0.5em 0;
+    }
+    
+    .app-name-link img {
+      max-width: 200px;
+      height: auto;
     }
     
     .sidebar {
@@ -208,7 +544,10 @@
     }
   </style>
 </head>
-<body>
+<body class="dark-theme">
+  <button class="theme-switcher dark" id="theme-switcher" title="Basculer le thème" aria-label="Basculer le thème">
+    ☀️
+  </button>
   <div id="app">Chargement...</div>
   <script>
     // Détection automatique du basePath
@@ -272,5 +611,43 @@
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-javascript.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-http.min.js"></script>
+  <script>
+    // Gestion du thème
+    (function() {
+      const themeSwitcher = document.getElementById('theme-switcher');
+      const body = document.body;
+      
+      // Charger la préférence sauvegardée
+      const savedTheme = localStorage.getItem('docsify-theme') || 'dark';
+      if (savedTheme === 'light') {
+        body.classList.remove('dark-theme');
+        body.classList.add('light-theme');
+        themeSwitcher.classList.remove('dark');
+        themeSwitcher.classList.add('light');
+        themeSwitcher.textContent = '🌙';
+      }
+      
+      // Basculer le thème
+      themeSwitcher.addEventListener('click', function() {
+        if (body.classList.contains('dark-theme')) {
+          // Passer en light
+          body.classList.remove('dark-theme');
+          body.classList.add('light-theme');
+          themeSwitcher.classList.remove('dark');
+          themeSwitcher.classList.add('light');
+          themeSwitcher.textContent = '🌙';
+          localStorage.setItem('docsify-theme', 'light');
+        } else {
+          // Passer en dark
+          body.classList.remove('light-theme');
+          body.classList.add('dark-theme');
+          themeSwitcher.classList.remove('light');
+          themeSwitcher.classList.add('dark');
+          themeSwitcher.textContent = '☀️';
+          localStorage.setItem('docsify-theme', 'dark');
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
