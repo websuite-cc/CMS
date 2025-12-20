@@ -10,7 +10,7 @@
   "analyticsEmbedUrl": "",
   "seo": {
     "metaTitle": "WebSuite CCP",
-    "metaDescription": "The OpenSource Serverless AI Toolbox for modern development. CMS, AI Workers, and IDE - Built with Bun.js & powered by Cloudflare.",
-    "metaKeywords": "AI, MCP, ServerLess, AI Workers, WorkFlow, WebSuite, Cloud Computing"
+    "metaDescription": "The OpenSource Serverless AI Toolbox for modern development. CMS, MCP Workers, and IDE - Built with Bun.js & powered by Cloudflare.",
+    "metaKeywords": "AI, MCP, Model Context Protocol, ServerLess, MCP Workers, WorkFlow, WebSuite, Cloud Computing"
   }
 }

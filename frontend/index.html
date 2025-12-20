@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="site-title">WebSuite - Complete Web Platform for Modern Development</title>
-    <meta name="description" id="meta-desc" content="WebSuite: The all-in-one web platform with CMS, AI Workers, and IDE. Built on Cloudflare. OpenSource or Managed deployment.">
-    <meta name="keywords" id="meta-keywords" content="websuite, cms, ai workers, ide, cloudflare, serverless, headless cms, page builder">
+    <meta name="description" id="meta-desc" content="WebSuite: The all-in-one web platform with CMS, MCP Workers, and IDE. Built on Cloudflare. OpenSource or Managed deployment.">
+    <meta name="keywords" id="meta-keywords" content="websuite, cms, mcp workers, mcp, model context protocol, ide, cloudflare, serverless, headless cms, page builder">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%239333ea'/%3E%3Cpath d='M8.5 13.5L7 15C5.9 16.1 5.9 17.9 7 19C8.1 20.1 9.9 20.1 11 19L13.5 16.5C14.6 15.4 14.6 13.6 13.5 12.5' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M15.5 10.5L17 9C18.1 7.9 18.1 6.1 17 5C15.9 3.9 14.1 3.9 13 5L10.5 7.5C9.4 8.6 9.4 10.4 10.5 11.5' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M10 14L14 10' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -318,14 +318,14 @@
                                         <div class="text-xs text-gray-600 dark:text-purple-200 mt-1">Modern CMS with REST API</div>
                                     </div>
                                 </a>
-                                <a href="/ai-workers" hx-get="/ai-workers" hx-target="#main-content" hx-push-url="true"
+                                <a href="/mcp-workers" hx-get="/mcp-workers" hx-target="#main-content" hx-push-url="true"
                                     class="flex items-start gap-3 p-3 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors group/item">
                                     <div class="w-10 h-10 gradient-purple rounded-lg flex items-center justify-center flex-shrink-0">
                                         <i class="fas fa-robot text-white"></i>
                                     </div>
                                     <div>
-                                        <div class="font-semibold text-gray-900 dark:text-slate-50 group-hover/item:text-purple-600 dark:group-hover/item:text-purple-300 transition-colors">AI Workers</div>
-                                        <div class="text-xs text-gray-600 dark:text-purple-200 mt-1">Intelligent automation agents</div>
+                                        <div class="font-semibold text-gray-900 dark:text-slate-50 group-hover/item:text-purple-600 dark:group-hover/item:text-purple-300 transition-colors">MCP Workers</div>
+                                        <div class="text-xs text-gray-600 dark:text-purple-200 mt-1">MCP workers for LLMs</div>
                                     </div>
                                 </a>
                                 <a href="/ide" hx-get="/ide" hx-target="#main-content" hx-push-url="true"
@@ -380,8 +380,8 @@
                                 class="block text-lg text-gray-700 dark:text-slate-100 hover:text-purple-500 dark:hover:text-purple-300 transition-colors">All Components</a>
                             <a href="/cms" hx-get="/cms" hx-target="#main-content" hx-push-url="true"
                                 class="block text-lg text-gray-700 dark:text-slate-100 hover:text-purple-500 dark:hover:text-purple-300 transition-colors">Headless CMS</a>
-                            <a href="/ai-workers" hx-get="/ai-workers" hx-target="#main-content" hx-push-url="true"
-                                class="block text-lg text-gray-700 dark:text-slate-100 hover:text-purple-500 dark:hover:text-purple-300 transition-colors">AI Workers</a>
+                            <a href="/mcp-workers" hx-get="/mcp-workers" hx-target="#main-content" hx-push-url="true"
+                                class="block text-lg text-gray-700 dark:text-slate-100 hover:text-purple-500 dark:hover:text-purple-300 transition-colors">MCP Workers</a>
                             <a href="/ide" hx-get="/ide" hx-target="#main-content" hx-push-url="true"
                                 class="block text-lg text-gray-700 dark:text-slate-100 hover:text-purple-500 dark:hover:text-purple-300 transition-colors">IDE - AI Code Editorr</a>
                         </div>
@@ -426,7 +426,7 @@
                         <span class="text-xl font-bold text-gray-900 dark:text-slate-50">WebSuite</span>
                         <span class="text-xs px-2 py-1 bg-purple-100 text-purple-700 dark:bg-purple-900/60 dark:text-purple-200 rounded-full font-semibold">.cc</span>
                     </div>
-                    <p class="text-gray-600 dark:text-purple-200 mb-6 text-sm" data-translate>The OpenSource Serverless AI Toolbox for modern development. CMS, AI Workers, and IDE - powered by Cloudflare.</p>
+                    <p class="text-gray-600 dark:text-purple-200 mb-6 text-sm" data-translate>The OpenSource Serverless AI Toolbox for modern development. CMS, MCP Workers, and IDE - powered by Cloudflare.</p>
                     <div class="flex gap-4">
                         <a href="#"
                             class="w-10 h-10 bg-gray-200 dark:bg-slate-800 rounded-lg flex items-center justify-center text-gray-700 dark:text-slate-100 hover:bg-gradient-to-br hover:from-purple-600 hover:to-purple-800 hover:text-white transition-all"><i
@@ -460,7 +460,7 @@
                     <ul class="space-y-3 text-gray-600 dark:text-purple-200">
                         <li><a href="/components" hx-get="/components" hx-target="#main-content" hx-push-url="true" class="hover:text-purple-500 transition-colors" data-translate>All Components</a></li>
                         <li><a href="/cms" hx-get="/cms" hx-target="#main-content" hx-push-url="true" class="hover:text-purple-500 transition-colors" data-translate>Headless CMS</a></li>
-                        <li><a href="/ai-workers" hx-get="/ai-workers" hx-target="#main-content" hx-push-url="true" class="hover:text-purple-500 transition-colors" data-translate>AI Workers</a></li>
+                        <li><a href="/mcp-workers" hx-get="/mcp-workers" hx-target="#main-content" hx-push-url="true" class="hover:text-purple-500 transition-colors" data-translate>MCP Workers</a></li>
                         <li><a href="/ide" hx-get="/ide" hx-target="#main-content" hx-push-url="true" class="hover:text-purple-500 transition-colors" data-translate>IDE - AI Code Editor</a></li>
                     </ul>
                 </div>
@@ -506,7 +506,7 @@
                         in 05 Minutes.
                     </h1>
                     <p class="text-xl text-gray-600 dark:text-purple-200 mb-12 max-w-3xl mx-auto">
-                        Build, deploy, and automate with our all-in-one platform. CMS, AI Workers, and IDE - powered by Cloudflare's global network.
+                        Build, deploy, and automate with our all-in-one platform. CMS, MCP Workers, and IDE - powered by Cloudflare's global network.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
                         <a href="/get-started" hx-get="/get-started" hx-target="#main-content" hx-push-url="true"
@@ -616,7 +616,7 @@
                 <div class="text-center mb-12">
                     <h2 class="text-4xl md:text-5xl font-bold mb-4">AI Automation Integrations</h2>
                     <p class="text-xl text-gray-600 dark:text-purple-200 max-w-2xl mx-auto">
-                        Connect to 30+ services and automate your workflows with AI Workers
+                        Connect to 30+ services and automate your workflows with MCP Workers
                     </p>
                         </div>
                 
@@ -731,7 +731,7 @@
                         </ul>
                     </div>
 
-                    <!-- AI Workers Component -->
+                    <!-- MCP Workers Component -->
                     <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border-2 border-purple-500 shadow-xl relative overflow-hidden">
                         <div class="absolute top-0 right-0 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
                             BETA
@@ -739,9 +739,9 @@
                         <div class="w-16 h-16 gradient-purple rounded-xl flex items-center justify-center mb-6">
                             <i class="fas fa-robot text-white text-2xl"></i>
                         </div>
-                        <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-slate-50">AI Workers</h3>
+                        <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-slate-50">MCP Workers</h3>
                         <p class="text-gray-600 dark:text-slate-300 mb-6">
-                            Intelligent automation agents. Connect to 30+ services and automate your workflows with AI.
+                            MCP (Model Context Protocol) workers that expose resources and tools to LLMs. Connect to 30+ services and automate your workflows.
                         </p>
                         <ul class="space-y-2 text-sm text-gray-600 dark:text-slate-300">
                             <li class="flex items-center gap-2"><i class="fas fa-check text-purple-600"></i> Background Jobs</li>
@@ -1380,7 +1380,7 @@ export default {
                         </div>
                     </div>
 
-                    <!-- AI Workers Detail -->
+                    <!-- MCP Workers Detail -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                         <div class="order-2 md:order-1 bg-gray-100 rounded-2xl p-8 border-2 border-gray-200">
                             <div class="bg-white rounded-lg p-6 shadow-lg">
@@ -1409,9 +1409,9 @@ export default {
                                 </div>
                             </div>
                             <div class="mt-6">
-                                <a href="/ai-workers" hx-get="/ai-workers" hx-target="#main-content" hx-push-url="true"
+                                <a href="/mcp-workers" hx-get="/mcp-workers" hx-target="#main-content" hx-push-url="true"
                                     class="block w-full py-3 gradient-purple text-white text-center font-semibold rounded-lg hover:opacity-90 transition-all shadow-lg shadow-purple-500/30">
-                                    Learn More About AI Workers
+                                    Learn More About MCP Workers
                                 </a>
                             </div>
                         </div>
@@ -1419,9 +1419,9 @@ export default {
                             <div class="w-20 h-20 gradient-purple rounded-2xl flex items-center justify-center mb-6">
                                 <i class="fas fa-robot text-white text-3xl"></i>
                             </div>
-                            <h2 class="text-4xl font-bold mb-4 text-gray-900 dark:text-slate-50">AI Workers</h2>
+                            <h2 class="text-4xl font-bold mb-4 text-gray-900 dark:text-slate-50">MCP Workers</h2>
                             <p class="text-xl text-gray-600 dark:text-purple-200 mb-6">
-                                Intelligent automation agents that connect your services and automate workflows. Powered by AI.
+                                MCP (Model Context Protocol) workers that expose resources and tools to LLMs, enabling intelligent automation and workflow creation.
                             </p>
                             <ul class="space-y-3 text-gray-700 dark:text-purple-200">
                                 <li class="flex items-start gap-3">
@@ -1532,7 +1532,7 @@ export default {
                 <div class="max-w-3xl mx-auto text-center">
                     <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Build Your Complete Web Platform</h2>
                     <p class="text-xl text-purple-100 mb-8">
-                        Combine CMS, AI Workers, and IDE to create powerful web applications. Start building today.
+                        Combine CMS, MCP Workers, and IDE to create powerful web applications. Start building today.
                     </p>
                     <a href="/get-started" hx-get="/get-started" hx-target="#main-content" hx-push-url="true"
                         class="inline-block px-8 py-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors text-lg shadow-xl">
@@ -1644,8 +1644,8 @@ export default {
         </section>
     </template>
 
-    <!-- AI Workers Page Template -->
-    <template id="tpl-ai-workers">
+    <!-- MCP Workers Page Template -->
+    <template id="tpl-mcp-workers">
         <section class="pt-20 pb-12 bg-gradient-to-b from-white to-gray-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 transition-colors duration-300">
             <div class="container mx-auto px-6">
                 <div class="max-w-4xl mx-auto text-center">
@@ -1653,10 +1653,10 @@ export default {
                         <i class="fas fa-robot text-white text-4xl"></i>
                     </div>
                     <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-8 text-gray-900 dark:text-slate-50">
-                        AI <span class="text-gradient">Workers</span>
+                        MCP <span class="text-gradient">Workers</span>
                     </h1>
                     <p class="text-xl text-gray-600 dark:text-purple-200 mb-8 max-w-2xl mx-auto">
-                        Intelligent automation agents that connect your services and automate workflows. Powered by AI.
+                        MCP (Model Context Protocol) workers that expose resources and tools to LLMs, enabling intelligent automation and workflow creation.
                     </p>
                 </div>
             </div>
@@ -1982,7 +1982,7 @@ export default {
                         AI Agents <span class="text-gradient">Integrations</span>
                     </h1>
                     <p class="text-xl text-gray-600 dark:text-purple-200 mb-8 max-w-2xl mx-auto">
-                        Connect to 30+ services and automate your workflows with AI Workers
+                        Connect to 30+ services and automate your workflows with MCP Workers
                     </p>
                 </div>
             </div>
@@ -2309,7 +2309,7 @@ export default {
             <div class="container mx-auto px-6 text-center">
                 <h2 class="text-3xl font-bold text-white mb-4">Ready to Connect Your Services?</h2>
                 <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
-                    Start building automated workflows with AI Workers. Connect your favorite services and let AI handle the rest.
+                    Start building automated workflows with MCP Workers. Connect your favorite services and let AI handle the rest.
                 </p>
                 <a href="/get-started" hx-get="/get-started" hx-target="#main-content" hx-push-url="true"
                     class="inline-block px-8 py-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors text-lg">
@@ -2778,7 +2778,7 @@ export default {
             const normalizedCurrent = normalizePath(currentPath);
             
             // Liste des pages de composants pour le mega menu
-            const componentPages = ['/components', '/cms', '/ai-workers', '/ide'];
+            const componentPages = ['/components', '/cms', '/mcp-workers', '/ide'];
             const isComponentPage = componentPages.some(page => normalizedCurrent === normalizePath(page));
             
             // Retirer toutes les classes actives des liens de navigation
