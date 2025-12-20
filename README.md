@@ -174,29 +174,33 @@ ProdBeta/
 
 ## 🔌 API Endpoints
 
-Tous les endpoints sont disponibles après déploiement :
+Tous les endpoints sont disponibles via le worker MCP sur `https://mcp.websuite.cc/api/*` :
 
 ### Public (pas d'auth)
 
 ```http
-GET  /api/siteinfos         # Infos du site (depuis config.json)
-GET  /api/posts             # Articles Substack
-GET  /api/post/:slug        # Article spécifique
-GET  /api/videos            # Vidéos YouTube
-GET  /api/video/:id         # Vidéo spécifique
-GET  /api/podcasts          # Épisodes podcast
-GET  /api/podcast/:id       # Podcast spécifique
-POST /api/login             # Connexion admin
+GET  https://mcp.websuite.cc/api/siteinfos         # Infos du site
+GET  https://mcp.websuite.cc/api/posts             # Articles Substack
+GET  https://mcp.websuite.cc/api/post/:slug        # Article spécifique
+GET  https://mcp.websuite.cc/api/videos            # Vidéos YouTube
+GET  https://mcp.websuite.cc/api/video/:id         # Vidéo spécifique
+GET  https://mcp.websuite.cc/api/podcasts          # Épisodes podcast
+GET  https://mcp.websuite.cc/api/podcast/:id       # Podcast spécifique
+GET  https://mcp.websuite.cc/api/events            # Événements Meetup
+GET  https://mcp.websuite.cc/api/event/:slug      # Événement spécifique
+POST https://mcp.websuite.cc/api/login             # Connexion admin
 ```
 
 ### Protégé (auth requise)
 
 ```http
-GET  /api/config            # Configuration
-POST /api/clear-cache       # Vider le cache
+GET  https://mcp.websuite.cc/api/config            # Configuration
+POST https://mcp.websuite.cc/api/clear-cache       # Vider le cache
 ```
 
 **Authentification** : Header `X-Auth-Key: votre_password`
+
+> 💡 **Note** : Tous les appels API pointent automatiquement vers le worker MCP distant. Vous n'avez pas besoin de spécifier l'URL complète dans votre code.
 
 ---
 
@@ -259,13 +263,31 @@ Compatible avec :
 
 ### Variables d'Environnement
 
+Pour le développement local, créez un fichier `.dev.vars` :
+
+```env
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=votre_password_securise
+BLOG_FEED_URL=https://votrecompte.substack.com/feed
+YOUTUBE_FEED_URL=https://www.youtube.com/feeds/videos.xml?channel_id=VOTRE_ID
+PODCAST_FEED_URL=https://anchor.fm/s/VOTRE_ID/podcast/rss
+EVENTS_FEED_URL=https://www.meetup.com/fr-fr/votre-groupe/events/rss
+```
+
+> ⚠️ **Sécurité** : Ajoutez `.dev.vars` à votre `.gitignore` pour ne pas commiter vos secrets !
+
+### Configuration du Worker MCP
+
+Pour la production, les variables d'environnement sont configurées sur le worker MCP distant (`mcp.websuite.cc`) par WebSuite. Contactez WebSuite pour configurer vos variables.
+
 | Variable | Description | Obligatoire |
 |----------|-------------|-------------|
 | `ADMIN_EMAIL` | Email de connexion admin | ✅ |
 | `ADMIN_PASSWORD` | Mot de passe admin | ✅ |
-| `SUBSTACK_FEED_URL` | URL flux RSS Substack | ✅ |
+| `BLOG_FEED_URL` | URL flux RSS Substack | ✅ |
 | `YOUTUBE_FEED_URL` | URL flux RSS YouTube | ❌ |
 | `PODCAST_FEED_URL` | URL flux RSS Podcast | ❌ |
+| `EVENTS_FEED_URL` | URL flux RSS Meetup | ❌ |
 | `FRONTEND_BUILDER_URL` | URL Webstudio (optionnel) | ❌ |
 | `META_TITLE` | Titre du site (SEO) | ❌ |
 | `META_DESCRIPTION` | Description (SEO) | ❌ |
@@ -278,10 +300,10 @@ Compatible avec :
 ### Bonnes Pratiques
 
 - ✅ Utilisez un mot de passe fort (12+ caractères)
-- ✅ Marquez `ADMIN_PASSWORD` comme **Encrypted** dans Cloudflare
 - ✅ Ne commitez JAMAIS `.dev.vars` dans Git (déjà dans `.gitignore`)
-- ✅ Activez la 2FA sur votre compte Cloudflare
-- ✅ Utilisez HTTPS uniquement (automatique sur Pages)
+- ✅ Utilisez HTTPS uniquement (automatique sur GitHub Pages)
+- ✅ Les variables d'environnement sont gérées de manière sécurisée sur le worker MCP
+- ✅ Contactez WebSuite pour toute question de sécurité
 
 ---
 
@@ -290,19 +312,20 @@ Compatible avec :
 ### Cache
 
 - **TTL** : 180 secondes (3 minutes)
-- **Endpoint** : `/api/clear-cache` pour forcer le rafraîchissement
-- **Cache Cloudflare** : Global, distribué sur 300+ datacenters
+- **Endpoint** : `https://mcp.websuite.cc/api/clear-cache` pour forcer le rafraîchissement
+- **Cache** : Géré par le worker MCP, distribué globalement
 
-### Limites (Plan Gratuit)
+### Limites GitHub Pages
 
 | Ressource | Limite |
 |-----------|--------|
-| Requêtes/jour | 100 000 |
-| Bandwidth | Illimité |
-| Functions CPU | 10ms/requête |
-| Build time | 20 min |
+| Bandwidth | 100 GB/mois |
+| Build time | 10 minutes |
+| Taille du repo | 1 GB |
 
-**Largement suffisant pour 99% des cas d'usage !**
+**Largement suffisant pour la plupart des cas d'usage !**
+
+> 💡 **Note** : Le worker MCP gère les limites de requêtes API. Contactez WebSuite pour plus d'informations.
 
 ---
 
@@ -338,10 +361,11 @@ MIT License - Voir [LICENSE](LICENSE) pour plus de détails.
 
 ## 🙏 Remerciements
 
-- [Cloudflare Pages](https://pages.cloudflare.com/) - Hébergement gratuit et performant
+- [GitHub Pages](https://pages.github.com/) - Hébergement gratuit et performant
 - [TailwindCSS](https://tailwindcss.com/) - Framework CSS
 - [Font Awesome](https://fontawesome.com/) - Icônes
 - [Google Fonts](https://fonts.google.com/) - Typographies
+- [WebSuite](https://websuite.cc) - Worker MCP distant
 
 ---
 

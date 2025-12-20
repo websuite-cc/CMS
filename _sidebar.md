@@ -7,6 +7,7 @@
   * [Structure du Projet](guide/structure.md)
 
 * 🚀 Déploiement
+  * [GitHub Pages](deployment/github-pages.md)
   * [Cloudflare Pages](deployment/cloudflare-pages.md)
   * [Domaine Personnalisé](deployment/custom-domain.md)
   * [Variables d'Environnement](deployment/environment-variables.md)
