@@ -101,7 +101,7 @@
     }
     
     body.dark-theme .markdown-section h2 {
-      color: #f9fafb !important;
+      color: #ffffff !important;
       border-color: #818cf8 !important;
       border-bottom: 2px solid #818cf8 !important;
       font-size: 2em !important;
@@ -111,7 +111,7 @@
     }
     
     body.dark-theme .markdown-section h3 {
-      color: #f3f4f6 !important;
+      color: #ffffff !important;
       border-color: #4b5563 !important;
       font-size: 1.5em !important;
       font-weight: 600 !important;
@@ -119,14 +119,14 @@
     }
     
     body.dark-theme .markdown-section h4 {
-      color: #e5e7eb !important;
+      color: #ffffff !important;
       font-weight: 600 !important;
       font-size: 1.25em !important;
     }
     
     body.dark-theme .markdown-section h5,
     body.dark-theme .markdown-section h6 {
-      color: #d1d5db !important;
+      color: #ffffff !important;
       font-weight: 600 !important;
     }
     
@@ -155,6 +155,24 @@
       background-color: transparent !important;
       color: #e5e7eb !important;
       border: none !important;
+    }
+    
+    /* Blocs de code toujours sur fond noir, peu importe le thème */
+    body.light-theme .markdown-section pre {
+      background-color: #0f0f0f !important;
+      border: 1px solid #2d2d2d !important;
+    }
+    
+    body.light-theme .markdown-section pre code {
+      background-color: transparent !important;
+      color: #e5e7eb !important;
+      border: none !important;
+    }
+    
+    body.light-theme .markdown-section code:not(pre code) {
+      background-color: #f3f4f6 !important;
+      color: #dc2626 !important;
+      border: 1px solid #e5e7eb !important;
     }
     
     body.dark-theme .markdown-section blockquote {
@@ -276,13 +294,16 @@
       border: 1px solid #e5e7eb !important;
     }
     
+    /* Blocs de code toujours sur fond noir, peu importe le thème */
     body.light-theme .markdown-section pre {
-      background-color: #1f2937 !important;
-      border: 1px solid #374151 !important;
+      background-color: #0f0f0f !important;
+      border: 1px solid #2d2d2d !important;
     }
     
     body.light-theme .markdown-section pre code {
+      background-color: transparent !important;
       color: #e5e7eb !important;
+      border: none !important;
     }
     
     body.light-theme .markdown-section blockquote {
@@ -527,15 +548,58 @@
       color: #9ca3af !important;
     }
     
+    /* Styles améliorés pour la pagination */
+    .pagination {
+      margin-top: 4em !important;
+      padding-top: 2em !important;
+      border-top: 2px solid;
+      display: flex;
+      justify-content: space-between;
+      gap: 1em;
+      flex-wrap: wrap;
+    }
+    
+    body.dark-theme .pagination {
+      border-top-color: #2d2d2d !important;
+    }
+    
+    body.light-theme .pagination {
+      border-top-color: #e5e7eb !important;
+    }
+    
     .pagination-item {
-      background-color: #2d2d2d !important;
-      border-color: #374151 !important;
-      color: #e5e7eb !important;
+      flex: 1;
+      min-width: 150px;
+      padding: 1em 1.5em !important;
+      border-radius: 8px !important;
+      text-align: center;
+      font-weight: 500;
+      transition: all 0.2s;
+      text-decoration: none !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5em;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     
     .pagination-item:hover {
-      background-color: #374151 !important;
-      color: #6366f1 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .pagination-item:first-child {
+      text-align: left;
+      justify-content: flex-start;
+    }
+    
+    .pagination-item:last-child {
+      text-align: right;
+      justify-content: flex-end;
+    }
+    
+    .pagination-item:only-child {
+      justify-content: center;
     }
     
     .app-name-link img {
