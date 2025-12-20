@@ -227,12 +227,23 @@
     }
     
     body.light-theme .sidebar {
-      background-color: #f9fafb !important;
+      background-color: #ffffff !important;
       border-right: 1px solid #e5e7eb !important;
     }
     
     body.light-theme .sidebar ul li a {
+      color: #1f2937 !important;
+      font-weight: 500;
+    }
+    
+    body.light-theme .sidebar ul li > a {
+      color: #111827 !important;
+      font-weight: 600;
+    }
+    
+    body.light-theme .sidebar ul li ul li a {
       color: #374151 !important;
+      font-weight: 400;
     }
     
     body.light-theme .sidebar ul li a:hover {
@@ -548,15 +559,17 @@
       color: #9ca3af !important;
     }
     
-    /* Styles améliorés pour la pagination */
+    /* Styles améliorés pour la pagination - FORCER LA VISIBILITÉ */
     .pagination {
       margin-top: 4em !important;
       padding-top: 2em !important;
-      border-top: 2px solid;
-      display: flex;
-      justify-content: space-between;
-      gap: 1em;
-      flex-wrap: wrap;
+      border-top: 2px solid !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      gap: 1em !important;
+      flex-wrap: wrap !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
     
     body.dark-theme .pagination {
@@ -568,38 +581,73 @@
     }
     
     .pagination-item {
-      flex: 1;
-      min-width: 150px;
+      flex: 1 !important;
+      min-width: 150px !important;
       padding: 1em 1.5em !important;
       border-radius: 8px !important;
-      text-align: center;
-      font-weight: 500;
-      transition: all 0.2s;
+      text-align: center !important;
+      font-weight: 500 !important;
+      transition: all 0.2s !important;
       text-decoration: none !important;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5em;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 0.5em !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
     
     .pagination-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transform: translateY(-2px) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
     }
     
     .pagination-item:first-child {
-      text-align: left;
-      justify-content: flex-start;
+      text-align: left !important;
+      justify-content: flex-start !important;
     }
     
     .pagination-item:last-child {
-      text-align: right;
-      justify-content: flex-end;
+      text-align: right !important;
+      justify-content: flex-end !important;
     }
     
     .pagination-item:only-child {
-      justify-content: center;
+      justify-content: center !important;
+    }
+    
+    /* Forcer la visibilité de la pagination */
+    .pagination-item[href],
+    .pagination-item:not([style*="display: none"]) {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+    
+    /* Améliorer le contraste des boutons de pagination */
+    body.dark-theme .pagination-item {
+      background-color: #1a1a1a !important;
+      border: 1px solid #374151 !important;
+      color: #e5e7eb !important;
+    }
+    
+    body.dark-theme .pagination-item:hover {
+      background-color: #2d2d2d !important;
+      border-color: #6366f1 !important;
+      color: #818cf8 !important;
+    }
+    
+    body.light-theme .pagination-item {
+      background-color: #ffffff !important;
+      border: 1px solid #d1d5db !important;
+      color: #374151 !important;
+    }
+    
+    body.light-theme .pagination-item:hover {
+      background-color: #f3f4f6 !important;
+      border-color: #6366f1 !important;
+      color: #6366f1 !important;
     }
     
     .app-name-link img {
@@ -645,8 +693,8 @@
         depth: 6
       },
       pagination: {
-        previousText: 'Précédent',
-        nextText: 'Suivant',
+        previousText: '← Précédent',
+        nextText: 'Suivant →',
         crossChapter: true,
         crossChapterText: true,
       },
