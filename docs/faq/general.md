@@ -29,7 +29,7 @@ Oui ! Le système est extensible. Vous pouvez ajouter de nouvelles sources en cr
 
 ### Comment installer WebSuite CMS ?
 
-Voir le guide [Démarrage Rapide](guide/quick-start.md).
+Voir le guide [Démarrage Rapide](../guide/quick-start.md).
 
 ### Puis-je l'installer ailleurs que sur Cloudflare Pages ?
 
@@ -92,7 +92,7 @@ Oui, les images sont extraites automatiquement des flux RSS et servies via le CD
 
 ### Puis-je utiliser mon propre domaine ?
 
-Oui ! Voir [Domaine Personnalisé](deployment/custom-domain.md).
+Oui ! Voir [Domaine Personnalisé](../deployment/custom-domain.md).
 
 ### Le déploiement est-il automatique ?
 

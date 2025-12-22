@@ -166,6 +166,6 @@ RSS Feed → Worker MCP (mcp.websuite.cc)
 ## Prochaines Étapes
 
 - [Développement Local](development.md)
-- [Configuration](configuration/overview.md)
-- [API Documentation](api/overview.md)
+- [Configuration](../configuration/overview.md)
+- [API Documentation](../api/overview.md)
 

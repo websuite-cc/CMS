@@ -135,5 +135,5 @@ curl https://votre-projet.pages.dev/api/siteinfos
 
 - [Configuration générale](overview.md)
 - [Flux RSS](rss-feeds.md)
-- [Déploiement](deployment/cloudflare-pages.md)
+- [Déploiement](../deployment/cloudflare-pages.md)
 

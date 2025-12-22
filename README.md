@@ -22,7 +22,7 @@
 
 ## 🚀 Démarrage Rapide
 
-Pour commencer rapidement, suivez le [guide de démarrage rapide](#/guide/quick-start).
+Pour commencer rapidement, suivez le [guide de démarrage rapide](#/docs/guide/quick-start).
 
 En résumé :
 
@@ -33,16 +33,16 @@ En résumé :
    ```
 
 2. **Déployer sur votre plateforme edge préférée**
-   - [GitHub Pages](#/deployment/github-pages)
-   - [Cloudflare Pages](#/deployment/cloudflare-pages)
+   - [GitHub Pages](#/docs/deployment/github-pages)
+   - [Cloudflare Pages](#/docs/deployment/cloudflare-pages)
    - Ou toute autre plateforme supportant Edge Functions
 
 3. **Configurer vos flux RSS**
-   Voir [Configuration des flux RSS](#/configuration/rss-feeds)
+   Voir [Configuration des flux RSS](#/docs/configuration/rss-feeds)
 
 4. **C'est prêt !** 🎉
 
-> 💡 **Astuce** : Consultez le [guide complet](#/guide/quick-start) pour plus de détails.
+> 💡 **Astuce** : Consultez le [guide complet](#/docs/guide/quick-start) pour plus de détails.
 
 ---
 
@@ -50,38 +50,38 @@ En résumé :
 
 ### 🎓 Guides
 
-- **[Démarrage Rapide](#/guide/quick-start)** - Installation en 5 minutes
-- **[Installation](#/guide/installation)** - Guide d'installation détaillé
-- **[Développement Local](#/guide/development)** - Développement et test local
-- **[Structure du Projet](#/guide/structure)** - Architecture et organisation
+- **[Démarrage Rapide](#/docs/guide/quick-start)** - Installation en 5 minutes
+- **[Installation](#/docs/guide/installation)** - Guide d'installation détaillé
+- **[Développement Local](#/docs/guide/development)** - Développement et test local
+- **[Structure du Projet](#/docs/guide/structure)** - Architecture et organisation
 
 ### 🚀 Déploiement
 
-- **[GitHub Pages](#/deployment/github-pages)** - Déploiement sur GitHub Pages
-- **[Cloudflare Pages](#/deployment/cloudflare-pages)** - Déploiement sur Cloudflare Pages
-- **[Domaine Personnalisé](#/deployment/custom-domain)** - Configurer un domaine personnalisé
-- **[Variables d'Environnement](#/deployment/environment-variables)** - Configuration des variables
+- **[GitHub Pages](#/docs/deployment/github-pages)** - Déploiement sur GitHub Pages
+- **[Cloudflare Pages](#/docs/deployment/cloudflare-pages)** - Déploiement sur Cloudflare Pages
+- **[Domaine Personnalisé](#/docs/deployment/custom-domain)** - Configurer un domaine personnalisé
+- **[Variables d'Environnement](#/docs/deployment/environment-variables)** - Configuration des variables
 
 ### ⚙️ Configuration
 
-- **[Vue d'ensemble](#/configuration/overview)** - Configuration générale
-- **[Flux RSS](#/configuration/rss-feeds)** - Configurer vos sources de contenu
-- **[SEO & Métadonnées](#/configuration/seo)** - Optimisation SEO
+- **[Vue d'ensemble](#/docs/configuration/overview)** - Configuration générale
+- **[Flux RSS](#/docs/configuration/rss-feeds)** - Configurer vos sources de contenu
+- **[SEO & Métadonnées](#/docs/configuration/seo)** - Optimisation SEO
 
 ### 🔌 API
 
-- **[Vue d'ensemble](#/api/overview)** - Documentation API complète
-- **[Endpoints Publics](#/api/public-endpoints)** - Endpoints accessibles sans authentification
-- **[Endpoints Protégés](#/api/protected-endpoints)** - Endpoints nécessitant une authentification
-- **[Authentification](#/api/authentication)** - Système d'authentification
-- **[Exemples](#/api/examples)** - Exemples d'utilisation
+- **[Vue d'ensemble](#/docs/api/overview)** - Documentation API complète
+- **[Endpoints Publics](#/docs/api/public-endpoints)** - Endpoints accessibles sans authentification
+- **[Endpoints Protégés](#/docs/api/protected-endpoints)** - Endpoints nécessitant une authentification
+- **[Authentification](#/docs/api/authentication)** - Système d'authentification
+- **[Exemples](#/docs/api/examples)** - Exemples d'utilisation
 
 ### 📝 Gestion du Contenu
 
-- **[Articles (Substack)](#/content/articles)** - Gérer vos articles
-- **[Vidéos (YouTube)](#/content/videos)** - Gérer vos vidéos
-- **[Podcasts](#/content/podcasts)** - Gérer vos podcasts
-- **[Événements (Meetup)](#/content/events)** - Gérer vos événements
+- **[Articles (Substack)](#/docs/content/articles)** - Gérer vos articles
+- **[Vidéos (YouTube)](#/docs/content/videos)** - Gérer vos vidéos
+- **[Podcasts](#/docs/content/podcasts)** - Gérer vos podcasts
+- **[Événements (Meetup)](#/docs/content/events)** - Gérer vos événements
 
 ### 🎨 Interface Admin
 
@@ -99,8 +99,8 @@ En résumé :
 
 ### ❓ FAQ
 
-- **[Questions Fréquentes](#/faq/general)** - Réponses aux questions courantes
-- **[Dépannage](#/faq/troubleshooting)** - Résolution des problèmes courants
+- **[Questions Fréquentes](#/docs/faq/general)** - Réponses aux questions courantes
+- **[Dépannage](#/docs/faq/troubleshooting)** - Résolution des problèmes courants
 
 ---
 
@@ -125,7 +125,7 @@ WebSuite Platform utilise une **architecture Edge Functions** avec runtime Bun.j
 └─────────────────────────────────────────┘
 ```
 
-> 📖 Pour plus de détails sur l'architecture, consultez la [Structure du Projet](#/guide/structure).
+> 📖 Pour plus de détails sur l'architecture, consultez la [Structure du Projet](#/docs/guide/structure).
 
 ---
 

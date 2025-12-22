@@ -146,8 +146,8 @@ Le frontend communiquera automatiquement avec le worker MCP sur `mcp.websuite.cc
 
 ## Prochaines Étapes
 
-- 📖 [Configuration des flux RSS](configuration/rss-feeds.md)
-- 🎨 [Personnaliser l'interface](docs/admin/dashboard.md)
-- 🔌 [Utiliser l'API](api/overview.md)
+- 📖 [Configuration des flux RSS](../configuration/rss-feeds.md)
+- 🎨 [Personnaliser l'interface](../admin/dashboard.md)
+- 🔌 [Utiliser l'API](../api/overview.md)
 - 🌐 [Configurer un domaine personnalisé](custom-domain.md)
 

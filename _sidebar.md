@@ -1,34 +1,34 @@
 * [🏠 Accueil](#/)
 
 * 📚 Guide
-  * [Démarrage Rapide](#/guide/quick-start)
-  * [Installation](#/guide/installation)
-  * [Développement Local](#/guide/development)
-  * [Structure du Projet](#/guide/structure)
+  * [Démarrage Rapide](#/docs/guide/quick-start)
+  * [Installation](#/docs/guide/installation)
+  * [Développement Local](#/docs/guide/development)
+  * [Structure du Projet](#/docs/guide/structure)
 
 * 🚀 Déploiement
-  * [GitHub Pages](#/deployment/github-pages)
-  * [Cloudflare Pages](#/deployment/cloudflare-pages)
-  * [Domaine Personnalisé](#/deployment/custom-domain)
-  * [Variables d'Environnement](#/deployment/environment-variables)
+  * [GitHub Pages](#/docs/deployment/github-pages)
+  * [Cloudflare Pages](#/docs/deployment/cloudflare-pages)
+  * [Domaine Personnalisé](#/docs/deployment/custom-domain)
+  * [Variables d'Environnement](#/docs/deployment/environment-variables)
 
 * ⚙️ Configuration
-  * [Vue d'ensemble](#/configuration/overview)
-  * [Flux RSS](#/configuration/rss-feeds)
-  * [SEO & Métadonnées](#/configuration/seo)
+  * [Vue d'ensemble](#/docs/configuration/overview)
+  * [Flux RSS](#/docs/configuration/rss-feeds)
+  * [SEO & Métadonnées](#/docs/configuration/seo)
 
 * 🔌 API
-  * [Vue d'ensemble](#/api/overview)
-  * [Endpoints Publics](#/api/public-endpoints)
-  * [Endpoints Protégés](#/api/protected-endpoints)
-  * [Authentification](#/api/authentication)
-  * [Exemples d'utilisation](#/api/examples)
+  * [Vue d'ensemble](#/docs/api/overview)
+  * [Endpoints Publics](#/docs/api/public-endpoints)
+  * [Endpoints Protégés](#/docs/api/protected-endpoints)
+  * [Authentification](#/docs/api/authentication)
+  * [Exemples d'utilisation](#/docs/api/examples)
 
 * 📝 Contenu
-  * [Articles (Substack)](#/content/articles)
-  * [Vidéos (YouTube)](#/content/videos)
-  * [Podcasts](#/content/podcasts)
-  * [Événements (Meetup)](#/content/events)
+  * [Articles (Substack)](#/docs/content/articles)
+  * [Vidéos (YouTube)](#/docs/content/videos)
+  * [Podcasts](#/docs/content/podcasts)
+  * [Événements (Meetup)](#/docs/content/events)
 
 * 🎨 Interface Admin
   * [Dashboard](#/docs/admin/dashboard)
@@ -43,6 +43,6 @@
   * [Personnalisation](#/docs/advanced/customization)
 
 * ❓ FAQ
-  * [Questions Fréquentes](#/faq/general)
-  * [Dépannage](#/faq/troubleshooting)
+  * [Questions Fréquentes](#/docs/faq/general)
+  * [Dépannage](#/docs/faq/troubleshooting)
 

@@ -158,7 +158,7 @@ fetch('/api/posts')
 
 ## Prochaines Étapes
 
-- [Configuration des flux RSS](configuration/rss-feeds.md)
-- [API Documentation](api/public-endpoints.md)
+- [Configuration des flux RSS](../configuration/rss-feeds.md)
+- [API Documentation](../api/public-endpoints.md)
 - [Interface Admin](admin/dashboard.md)
 

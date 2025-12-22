@@ -77,7 +77,7 @@ ProdBeta/
 
 ### Déploiement sur Cloudflare Pages
 
-Voir le guide [Déploiement sur Cloudflare Pages](deployment/cloudflare-pages.md) pour les instructions complètes.
+Voir le guide [Déploiement sur Cloudflare Pages](../deployment/cloudflare-pages.md) pour les instructions complètes.
 
 ### Variables d'Environnement en Production
 
@@ -132,6 +132,6 @@ Assurez-vous que les URLs de flux RSS sont valides et accessibles.
 ## Prochaines Étapes
 
 - [Développement Local](development.md)
-- [Configuration](configuration/overview.md)
-- [API Documentation](api/overview.md)
+- [Configuration](../configuration/overview.md)
+- [API Documentation](../api/overview.md)
 

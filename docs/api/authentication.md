@@ -177,5 +177,5 @@ POST /api/logout
 
 - [Endpoints protégés](protected-endpoints.md)
 - [Sécurité](advanced/security.md)
-- [Configuration](configuration/overview.md)
+- [Configuration](../configuration/overview.md)
 

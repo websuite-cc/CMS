@@ -102,10 +102,10 @@ Tous les appels API pointent automatiquement vers `https://mcp.websuite.cc/api/*
 
 ## Prochaines Étapes
 
-- 📖 [Configuration des flux RSS](configuration/rss-feeds.md)
-- 🎨 [Personnaliser l'interface admin](admin/dashboard.md)
-- 🔌 [Utiliser l'API](api/overview.md)
-- 🌐 [Configurer un domaine personnalisé](deployment/custom-domain.md)
+- 📖 [Configuration des flux RSS](../configuration/rss-feeds.md)
+- 🎨 [Personnaliser l'interface admin](../admin/dashboard.md)
+- 🔌 [Utiliser l'API](../api/overview.md)
+- 🌐 [Configurer un domaine personnalisé](../deployment/custom-domain.md)
 
 ## Besoin d'Aide ?
 

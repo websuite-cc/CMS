@@ -196,7 +196,7 @@ curl -H "X-Auth-Key: votre_password" \
 
 ## Prochaines Étapes
 
-- [Configuration des flux RSS](configuration/rss-feeds.md)
+- [Configuration des flux RSS](../configuration/rss-feeds.md)
 - [Déploiement](cloudflare-pages.md)
 - [Sécurité](advanced/security.md)
 
