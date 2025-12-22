@@ -1,343 +1,143 @@
-# 🎯 WebSuite Platform - GitHub Pages Edition
+# 🎯 WebSuite Platform
 
 > **CMS headless moderne** basé sur RSS (Substack, YouTube, Podcasts, Meetup)  
-> Worker MCP distant sur `mcp.websuite.cc` - Déployez votre CMS sur GitHub Pages en un clic.
+> Déployez votre CMS sur n'importe quelle plateforme edge en un clic.
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-222222?logo=github)](https://pages.github.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ---
 
 ## ✨ Caractéristiques
 
-- 🚀 **Déploiement automatique** via Git push sur GitHub Pages
-- ⚡ **Worker MCP distant** hébergé sur `mcp.websuite.cc`
+- 🚀 **Déploiement automatique** via Git push
+- ⚡ **Edge Functions** avec runtime Bun.js
 - 🎨 **Interface admin moderne** avec TailwindCSS
 - 📊 **Multi-sources** : Substack + YouTube + Podcasts + Meetup
 - 🔐 **Authentification** simple et sécurisée
-- 💨 **Cache intelligent** géré par le worker MCP
+- 💨 **Cache intelligent** pour des performances optimales
 - 🌍 **CDN global** ultra-rapide
-- 💰 **100% Gratuit** (GitHub Pages + Worker MCP)
-
----
-
-## 🏗️ Architecture
-
-```
-┌─────────────────────────────────────────┐
-│     GitHub Pages (Développeur)          │
-├─────────────────────────────────────────┤
-│  Frontend (Static)                     │
-│  ✓ index.html                          │
-│  ✓ admin/                              │
-│  ✓ core/admin.js                       │
-│  ✓ frontend/index.html                 │
-└─────────────────────────────────────────┘
-                    ↓ (API Calls)
-┌─────────────────────────────────────────┐
-│     mcp.websuite.cc (Worker MCP)        │
-├─────────────────────────────────────────┤
-│  API Backend                            │
-│  ✓ /api/posts                           │
-│  ✓ /api/videos                          │
-│  ✓ /api/podcasts                        │
-│  ✓ /api/events                          │
-│  ✓ /api/login                           │
-│  ✓ Variables d'environnement           │
-│  ✓ RSS Parsing                          │
-│  ✓ Cache Management                     │
-│  ✓ MCP Workers                          │
-└─────────────────────────────────────────┘
-```
-
-**Avantages** :
-- ✅ Déploiement simplifié (GitHub Pages uniquement)
-- ✅ Worker MCP géré et maintenu par WebSuite
-- ✅ Mises à jour automatiques du worker
-- ✅ SSL automatique et gratuit
-- ✅ Auto-deploy sur Git push
-- ✅ CDN global intégré
-- ✅ Pas de configuration serveur nécessaire
+- 💰 **100% Gratuit** (sur la plupart des plateformes edge)
 
 ---
 
 ## 🚀 Démarrage Rapide
 
-### Architecture
+Pour commencer rapidement, suivez le [guide de démarrage rapide](#/guide/quick-start).
 
-WebSuite Platform utilise une architecture hybride :
-- **Worker MCP** : Hébergé sur `mcp.websuite.cc` (géré par WebSuite)
-- **CMS/Frontend** : Déployé par vous sur GitHub Pages
+En résumé :
 
-### 1. Cloner le projet
+1. **Cloner le projet**
+   ```bash
+   git clone https://github.com/VOTRE_USERNAME/StackPagesCMS.git
+   cd StackPagesCMS/ProdBeta
+   ```
 
-```bash
-git clone https://github.com/VOTRE_USERNAME/StackPagesCMS.git
-cd StackPagesCMS/ProdBeta
-```
+2. **Déployer sur votre plateforme edge préférée**
+   - [GitHub Pages](#/deployment/github-pages)
+   - [Cloudflare Pages](#/deployment/cloudflare-pages)
+   - Ou toute autre plateforme supportant Edge Functions
 
-### 2. Déployer sur GitHub Pages
+3. **Configurer vos flux RSS**
+   Voir [Configuration des flux RSS](#/configuration/rss-feeds)
 
-#### Option A : Via GitHub Settings (Recommandé)
+4. **C'est prêt !** 🎉
 
-1. Pousser votre code sur GitHub
-2. Aller dans **Settings** → **Pages**
-3. Sélectionner la branche `main` comme source
-4. Votre site sera disponible sur `https://votre-username.github.io/votre-repo`
-
-#### Option B : Via GitHub Actions (Automatique)
-
-Le déploiement se fait automatiquement à chaque push sur `main`.
-
-### 3. Configurer le Worker MCP
-
-Le worker MCP est déjà configuré sur `mcp.websuite.cc`. Vous n'avez qu'à :
-
-1. Créer un fichier `.dev.vars` à la racine du projet pour le développement local :
-
-```env
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=votre_password_securise
-BLOG_FEED_URL=https://votrecompte.substack.com/feed
-YOUTUBE_FEED_URL=https://www.youtube.com/feeds/videos.xml?channel_id=VOTRE_ID
-PODCAST_FEED_URL=https://anchor.fm/s/VOTRE_ID/podcast/rss
-EVENTS_FEED_URL=https://www.meetup.com/fr-fr/votre-groupe/events/rss
-```
-
-> ⚠️ **Sécurité** : Ajoutez `.dev.vars` à votre `.gitignore` pour ne pas commiter vos secrets !
-
-2. Pour la production, contactez WebSuite pour configurer vos variables sur le worker MCP distant.
-
-### 4. Configuration dans le Code
-
-Tous les appels API pointent automatiquement vers `https://mcp.websuite.cc/api/*`. Le worker MCP gère :
-- Le parsing RSS
-- Le cache
-- L'authentification
-- Les MCP Workers
-
-### 5. C'est prêt ! 🎉
-
-Votre CMS est en ligne :
-```
-https://votre-username.github.io/votre-repo
-```
-
-Le worker MCP sur `mcp.websuite.cc` gère automatiquement toutes les opérations backend.
+> 💡 **Astuce** : Consultez le [guide complet](#/guide/quick-start) pour plus de détails.
 
 ---
 
-## 💻 Développement Local
+## 📚 Documentation
 
-```bash
-# 1. Créer les variables d'environnement
-cp .dev.vars.example .dev.vars
-nano .dev.vars
+### 🎓 Guides
 
-# 2. Lancer un serveur HTTP local
-# Option A : Avec Python
-python -m http.server 8000
+- **[Démarrage Rapide](#/guide/quick-start)** - Installation en 5 minutes
+- **[Installation](#/guide/installation)** - Guide d'installation détaillé
+- **[Développement Local](#/guide/development)** - Développement et test local
+- **[Structure du Projet](#/guide/structure)** - Architecture et organisation
 
-# Option B : Avec Node.js
-npx http-server
+### 🚀 Déploiement
 
-# Option C : Avec PHP
-php -S localhost:8000
+- **[GitHub Pages](#/deployment/github-pages)** - Déploiement sur GitHub Pages
+- **[Cloudflare Pages](#/deployment/cloudflare-pages)** - Déploiement sur Cloudflare Pages
+- **[Domaine Personnalisé](#/deployment/custom-domain)** - Configurer un domaine personnalisé
+- **[Variables d'Environnement](#/deployment/environment-variables)** - Configuration des variables
 
-# 3. Ouvrir dans le navigateur
-open http://localhost:8000
-```
+### ⚙️ Configuration
 
-> 💡 **Note** : Le frontend communiquera automatiquement avec le worker MCP sur `mcp.websuite.cc`. Les variables dans `.dev.vars` sont utilisées pour le développement local uniquement.
+- **[Vue d'ensemble](#/configuration/overview)** - Configuration générale
+- **[Flux RSS](#/configuration/rss-feeds)** - Configurer vos sources de contenu
+- **[SEO & Métadonnées](#/configuration/seo)** - Optimisation SEO
 
----
+### 🔌 API
 
-## 📁 Structure du Projet
+- **[Vue d'ensemble](#/api/overview)** - Documentation API complète
+- **[Endpoints Publics](#/api/public-endpoints)** - Endpoints accessibles sans authentification
+- **[Endpoints Protégés](#/api/protected-endpoints)** - Endpoints nécessitant une authentification
+- **[Authentification](#/api/authentication)** - Système d'authentification
+- **[Exemples](#/api/examples)** - Exemples d'utilisation
 
-```
-ProdBeta/
-├── index.html              # Page d'accueil
-├── admin/                  
-│   ├── index.html          # Login admin
-│   └── dashboard.html      # Dashboard principal
-├── core/
-│   ├── admin.js            # Logique dashboard
-│   └── frontend.js         # Utilitaires frontend
-├── functions/
-│   └── _middleware.js      # API Backend (Pages Functions)
-├── .dev.vars.example       # Template variables env
-└── .gitignore              # Protection secrets
-```
+### 📝 Gestion du Contenu
 
----
+- **[Articles (Substack)](#/content/articles)** - Gérer vos articles
+- **[Vidéos (YouTube)](#/content/videos)** - Gérer vos vidéos
+- **[Podcasts](#/content/podcasts)** - Gérer vos podcasts
+- **[Événements (Meetup)](#/content/events)** - Gérer vos événements
 
+### 🎨 Interface Admin
 
-## 🔌 API Endpoints
+- **[Dashboard](#/docs/admin/dashboard)** - Présentation du dashboard
+- **[Fonctionnalités](#/docs/admin/features)** - Fonctionnalités disponibles
+- **[Gestion du Contenu](#/docs/admin/content-management)** - Gérer votre contenu via l'interface
+- **[API Explorer](#/docs/admin/api-explorer)** - Tester l'API depuis l'interface
 
-Tous les endpoints sont disponibles via le worker MCP sur `https://mcp.websuite.cc/api/*` :
+### 🔧 Avancé
 
-### Public (pas d'auth)
+- **[Cache & Performance](#/docs/advanced/caching)** - Optimisation des performances
+- **[Sécurité](#/docs/advanced/security)** - Bonnes pratiques de sécurité
+- **[HTMX & SSR](#/docs/advanced/htmx-ssr)** - Rendu côté serveur avec HTMX
+- **[Personnalisation](#/docs/advanced/customization)** - Personnaliser votre installation
 
-```http
-GET  https://mcp.websuite.cc/api/siteinfos         # Infos du site
-GET  https://mcp.websuite.cc/api/posts             # Articles Substack
-GET  https://mcp.websuite.cc/api/post/:slug        # Article spécifique
-GET  https://mcp.websuite.cc/api/videos            # Vidéos YouTube
-GET  https://mcp.websuite.cc/api/video/:id         # Vidéo spécifique
-GET  https://mcp.websuite.cc/api/podcasts          # Épisodes podcast
-GET  https://mcp.websuite.cc/api/podcast/:id       # Podcast spécifique
-GET  https://mcp.websuite.cc/api/events            # Événements Meetup
-GET  https://mcp.websuite.cc/api/event/:slug      # Événement spécifique
-POST https://mcp.websuite.cc/api/login             # Connexion admin
-```
+### ❓ FAQ
 
-### Protégé (auth requise)
-
-```http
-GET  https://mcp.websuite.cc/api/config            # Configuration
-POST https://mcp.websuite.cc/api/clear-cache       # Vider le cache
-```
-
-**Authentification** : Header `X-Auth-Key: votre_password`
-
-> 💡 **Note** : Tous les appels API pointent automatiquement vers le worker MCP distant. Vous n'avez pas besoin de spécifier l'URL complète dans votre code.
+- **[Questions Fréquentes](#/faq/general)** - Réponses aux questions courantes
+- **[Dépannage](#/faq/troubleshooting)** - Résolution des problèmes courants
 
 ---
 
-## 🎨 Interface Admin
+## 🏗️ Architecture
 
-L'interface admin offre :
+WebSuite Platform utilise une **architecture Edge Functions** avec runtime Bun.js :
 
-- 📊 **Dashboard** avec statistiques en temps réel
-- 📝 **Gestion articles** avec recherche et pagination
-- 🎥 **Gestion vidéos** avec aperçu intégré
-- 🎙️ **Gestion podcasts** avec lecteur audio
-- 🔧 **API Explorer** pour tester les endpoints
-- 📈 **Google Analytics** intégré
-- 🎨 **Frontend Builder** (Webstudio)
-- ⚙️ **Configuration** en lecture seule
-
----
-
-## 🌐 Sources de Contenu
-
-### Substack
-
-```env
-SUBSTACK_FEED_URL=https://votrecompte.substack.com/feed
+```
+┌─────────────────────────────────────────┐
+│     Frontend (Static)                   │
+│  ✓ HTML/CSS/JavaScript                  │
+│  ✓ Interface Admin                      │
+│  ✓ Templates HTMX                       │
+└─────────────────────────────────────────┘
+                    ↓ (API Calls)
+┌─────────────────────────────────────────┐
+│     Edge Functions (Backend)            │
+│  ✓ API REST                             │
+│  ✓ Parsing RSS                          │
+│  ✓ Cache Management                     │
+│  ✓ Authentification                     │
+└─────────────────────────────────────────┘
 ```
 
-Récupère automatiquement :
-- Titres des articles
-- Contenus complets (HTML)
-- Images de couverture
-- Dates de publication
-- Descriptions
-
-### YouTube
-
-```env
-YOUTUBE_FEED_URL=https://www.youtube.com/feeds/videos.xml?channel_id=VOTRE_ID
-```
-
-Pour trouver votre Channel ID : https://commentpicker.com/youtube-channel-id.php
-
-### Podcasts
-
-```env
-PODCAST_FEED_URL=https://anchor.fm/s/VOTRE_ID/podcast/rss
-```
-
-Compatible avec :
-- Anchor.fm
-- Substack
-- Spotify for Podcasters
-- Ausha
-- Apple Podcasts
-- RSS standards
-- Etc.
-
----
-
-## ⚙️ Configuration
-
-### Variables d'Environnement
-
-Pour le développement local, créez un fichier `.dev.vars` :
-
-```env
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=votre_password_securise
-BLOG_FEED_URL=https://votrecompte.substack.com/feed
-YOUTUBE_FEED_URL=https://www.youtube.com/feeds/videos.xml?channel_id=VOTRE_ID
-PODCAST_FEED_URL=https://anchor.fm/s/VOTRE_ID/podcast/rss
-EVENTS_FEED_URL=https://www.meetup.com/fr-fr/votre-groupe/events/rss
-```
-
-> ⚠️ **Sécurité** : Ajoutez `.dev.vars` à votre `.gitignore` pour ne pas commiter vos secrets !
-
-### Configuration du Worker MCP
-
-Pour la production, les variables d'environnement sont configurées sur le worker MCP distant (`mcp.websuite.cc`) par WebSuite. Contactez WebSuite pour configurer vos variables.
-
-| Variable | Description | Obligatoire |
-|----------|-------------|-------------|
-| `ADMIN_EMAIL` | Email de connexion admin | ✅ |
-| `ADMIN_PASSWORD` | Mot de passe admin | ✅ |
-| `BLOG_FEED_URL` | URL flux RSS Substack | ✅ |
-| `YOUTUBE_FEED_URL` | URL flux RSS YouTube | ❌ |
-| `PODCAST_FEED_URL` | URL flux RSS Podcast | ❌ |
-| `EVENTS_FEED_URL` | URL flux RSS Meetup | ❌ |
-| `FRONTEND_BUILDER_URL` | URL Webstudio (optionnel) | ❌ |
-| `META_TITLE` | Titre du site (SEO) | ❌ |
-| `META_DESCRIPTION` | Description (SEO) | ❌ |
-| `META_KEYWORDS` | Mots-clés (SEO) | ❌ |
-
----
-
-## 🔐 Sécurité
-
-### Bonnes Pratiques
-
-- ✅ Utilisez un mot de passe fort (12+ caractères)
-- ✅ Ne commitez JAMAIS `.dev.vars` dans Git (déjà dans `.gitignore`)
-- ✅ Utilisez HTTPS uniquement (automatique sur GitHub Pages)
-- ✅ Les variables d'environnement sont gérées de manière sécurisée sur le worker MCP
-- ✅ Contactez WebSuite pour toute question de sécurité
-
----
-
-## 📊 Performance
-
-### Cache
-
-- **TTL** : 180 secondes (3 minutes)
-- **Endpoint** : `https://mcp.websuite.cc/api/clear-cache` pour forcer le rafraîchissement
-- **Cache** : Géré par le worker MCP, distribué globalement
-
-### Limites GitHub Pages
-
-| Ressource | Limite |
-|-----------|--------|
-| Bandwidth | 100 GB/mois |
-| Build time | 10 minutes |
-| Taille du repo | 1 GB |
-
-**Largement suffisant pour la plupart des cas d'usage !**
-
-> 💡 **Note** : Le worker MCP gère les limites de requêtes API. Contactez WebSuite pour plus d'informations.
+> 📖 Pour plus de détails sur l'architecture, consultez la [Structure du Projet](#/guide/structure).
 
 ---
 
 ## 🛠️ Technologies
 
-- **Frontend** : HTML, CSS (TailwindCSS), JavaScript
-- **Backend** : Worker MCP distant sur `mcp.websuite.cc`
-- **Déploiement** : GitHub Pages
-- **Parsing** : RSS/XML natif (géré par le worker MCP)
-- **Authentification** : Simple password-based (géré par le worker MCP)
-- **Cache** : Géré par le worker MCP
-- **MCP Workers** : Agents MCP pour LLMs (hébergés sur `mcp.websuite.cc`)
+- **Runtime** : Bun.js
+- **Architecture** : Edge Functions
+- **Frontend** : HTML, CSS (TailwindCSS), JavaScript vanilla
+- **Backend** : Edge Functions (compatible avec toutes les plateformes edge)
+- **Rendu** : HTMX pour le SSR dynamique
+- **Parsing** : RSS/XML natif
+- **Cache** : Edge cache distribué
 
 ---
 
@@ -359,16 +159,6 @@ MIT License - Voir [LICENSE](LICENSE) pour plus de détails.
 
 ---
 
-## 🙏 Remerciements
-
-- [GitHub Pages](https://pages.github.com/) - Hébergement gratuit et performant
-- [TailwindCSS](https://tailwindcss.com/) - Framework CSS
-- [Font Awesome](https://fontawesome.com/) - Icônes
-- [Google Fonts](https://fonts.google.com/) - Typographies
-- [WebSuite](https://websuite.cc) - Worker MCP distant
-
----
-
 ## 📞 Support
 
 - 📧 **Email** : cms@iziweb.page
@@ -380,5 +170,6 @@ MIT License - Voir [LICENSE](LICENSE) pour plus de détails.
 
 <p align="center">
   Fait avec ❤️ pour la communauté<br>
-  <strong>WebSuite</strong> - Votre contenu, partout, facilement.
+  <strong>WebSuite</strong> - Votre contenu, partout, facilement.<br>
+  <small>Built on Edge with Bun</small>
 </p>
