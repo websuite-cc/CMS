@@ -28,8 +28,8 @@ En résumé :
 
 1. **Cloner le projet**
    ```bash
-   git clone https://github.com/VOTRE_USERNAME/StackPagesCMS.git
-   cd StackPagesCMS/ProdBeta
+   git clone https://github.com/VOTRE_USERNAME/WebSuitePlatform.git
+   cd WebSuitePlatform/ProdBeta
    ```
 
 2. **Déployer sur Cloudflare Pages**
@@ -159,10 +159,10 @@ MIT License - Voir [LICENSE](LICENSE) pour plus de détails.
 
 ## 📞 Support
 
-- 📧 **Email** : cms@iziweb.page
+- 📧 **Email** : support@websuite.platform
 - 💬 **Discord** : [Rejoindre la communauté](#)
-- 📖 **Documentation** : https://cms.iziweb.page
-- 🐛 **Issues** : [GitHub Issues](https://github.com/iziweb-studio/CMS/issues)
+- 📖 **Documentation** : https://docs.websuite.platform
+- 🐛 **Issues** : [GitHub Issues](https://github.com/VOTRE_USERNAME/WebSuitePlatform/issues)
 
 ---
 

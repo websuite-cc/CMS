@@ -1,6 +1,6 @@
 # 💡 Exemples d'Utilisation de l'API
 
-Exemples pratiques d'utilisation de l'API WebSuite CMS.
+Exemples pratiques d'utilisation de l'API WebSuite Platform.
 
 ## JavaScript (Vanilla)
 

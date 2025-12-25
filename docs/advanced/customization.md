@@ -1,10 +1,10 @@
 # 🎨 Personnalisation
 
-Guide pour personnaliser et étendre WebSuite CMS.
+Guide pour personnaliser et étendre WebSuite Platform.
 
 ## Vue d'Ensemble
 
-WebSuite CMS est conçu pour être extensible et personnalisable. Ce guide vous montre comment adapter le CMS à vos besoins.
+WebSuite Platform est conçu pour être extensible et personnalisable. Ce guide vous montre comment adapter le CMS à vos besoins.
 
 ## Personnalisation du Frontend
 

@@ -1,6 +1,6 @@
 # ⚙️ Variables d'Environnement
 
-Guide complet des variables d'environnement de WebSuite CMS.
+Guide complet des variables d'environnement de WebSuite Platform.
 
 ## Variables Obligatoires
 
@@ -69,7 +69,7 @@ FRONTEND_BUILDER_URL=https://votre-builder.webstudio.dev
 Titre SEO du site.
 
 ```env
-META_TITLE=WebSuite CMS
+META_TITLE=WebSuite Platform
 ```
 
 ### META_DESCRIPTION

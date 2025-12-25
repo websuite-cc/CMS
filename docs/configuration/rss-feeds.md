@@ -1,6 +1,6 @@
 # 📡 Configuration des Flux RSS
 
-WebSuite CMS supporte plusieurs sources de contenu via RSS.
+WebSuite Platform supporte plusieurs sources de contenu via RSS.
 
 ## Sources Supportées
 

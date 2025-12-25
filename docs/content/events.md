@@ -1,6 +1,6 @@
 # 📅 Événements (Meetup)
 
-WebSuite CMS supporte l'intégration d'événements depuis Meetup via RSS.
+WebSuite Platform supporte l'intégration d'événements depuis Meetup via RSS.
 
 ## Configuration
 

@@ -1,10 +1,10 @@
 # ⚙️ Configuration - Vue d'Ensemble
 
-Guide complet de la configuration de WebSuite CMS.
+Guide complet de la configuration de WebSuite Platform.
 
 ## Méthodes de Configuration
 
-WebSuite CMS peut être configuré de deux façons :
+WebSuite Platform peut être configuré de deux façons :
 
 1. **Variables d'environnement** (recommandé pour la production)
 2. **config.json** (fallback ou développement)
@@ -28,7 +28,7 @@ Le fichier `config.json` à la racine du projet :
   "podcastFeedUrl": "https://anchor.fm/s/VOTRE_ID/podcast/rss",
   "eventsRssUrl": "https://www.meetup.com/fr-fr/votre-groupe/events/rss",
   "seo": {
-    "metaTitle": "WebSuite CMS",
+    "metaTitle": "WebSuite Platform",
     "metaDescription": "Description du site",
     "metaKeywords": "cms, rss, cloudflare"
   }

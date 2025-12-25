@@ -2,9 +2,9 @@
 
 ## Général
 
-### Qu'est-ce que WebSuite CMS ?
+### Qu'est-ce que WebSuite Platform ?
 
-WebSuite CMS est un CMS headless moderne basé sur RSS, déployable sur Cloudflare Pages. Il agrège automatiquement du contenu depuis Substack, YouTube, Podcasts et Meetup.
+WebSuite Platform est un CMS headless moderne basé sur RSS, déployable sur Cloudflare Pages. Il agrège automatiquement du contenu depuis Substack, YouTube, Podcasts et Meetup.
 
 ### Est-ce gratuit ?
 
@@ -27,7 +27,7 @@ Oui ! Le système est extensible. Vous pouvez ajouter de nouvelles sources en cr
 
 ## Installation
 
-### Comment installer WebSuite CMS ?
+### Comment installer WebSuite Platform ?
 
 Voir le guide [Démarrage Rapide](#/docs/guide/quick-start).
 
@@ -106,8 +106,8 @@ Oui, Cloudflare Pages supporte les environnements de production et de preview (b
 
 ### Où obtenir de l'aide ?
 
-- 📧 Email : cms@iziweb.page
-- 🐛 [GitHub Issues](https://github.com/iziweb-studio/CMS/issues)
+- 📧 Email : support@websuite.platform
+- 🐛 [GitHub Issues](https://github.com/VOTRE_USERNAME/WebSuitePlatform/issues)
 - 📖 [Documentation complète](#/)
 
 ### Puis-je contribuer ?

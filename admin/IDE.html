@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IDE - Pages Frame IDE - StackPages CMS</title>
+    <title>IDE - Pages Frame IDE - WebSuite Platform</title>
     <link rel="icon" type="image/x-icon" href="https://stackpages.net/img/logo.png">
     <!-- Tailwind CSS v3 -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -508,7 +508,7 @@
                     localStorage.setItem('stackpages_custom_pages', JSON.stringify(pages));
 
                     // Sauvegarder aussi pour la prévisualisation locale
-                    const PREVIEW_STORAGE_KEY = 'iziwebcms_preview_template';
+                    const PREVIEW_STORAGE_KEY = 'websuiteplatform_preview_template';
                     const previewData = {
                         html: fullTemplate,
                         metadata: {
@@ -757,9 +757,9 @@
 
             try {
                 // Construct the API request with enriched system instruction
-                const systemInstruction = "You are an expert web developer specialized in creating dynamic themes for StackPages CMS.\n\n" +
+                const systemInstruction = "You are an expert web developer specialized in creating dynamic themes for WebSuite Platform.\n\n" +
                     "IMPORTANT ARCHITECTURE: 'SUPER TEMPLATE'\n" +
-                    "StackPages uses a unique 'Super Template' system where the backend (Cloudflare Worker) handles Server-Side Rendering (SSR) using standard HTML <template> tags.\n\n" +
+                    "WebSuite Platform uses a unique 'Super Template' system where the backend (Cloudflare Worker) handles Server-Side Rendering (SSR) using standard HTML <template> tags.\n\n" +
 
                     "CRITICAL RULES:\n" +
                     "1. **NO Client-Side Rendering**: Do NOT write JavaScript to fetch JSON and build HTML strings. The backend does this for you.\n" +

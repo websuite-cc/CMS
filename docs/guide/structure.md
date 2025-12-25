@@ -75,7 +75,7 @@ Gère le cache avec :
 
 ### Architecture Serverless
 
-WebSuite CMS utilise une architecture serverless avec Edge Functions :
+WebSuite Platform utilise une architecture serverless avec Edge Functions :
 
 ```
 ┌─────────────────────────────────────────┐

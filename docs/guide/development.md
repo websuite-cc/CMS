@@ -1,6 +1,6 @@
 # 💻 Développement Local
 
-Guide pour développer et tester WebSuite CMS en local.
+Guide pour développer et tester WebSuite Platform en local.
 
 ## Prérequis
 
@@ -12,8 +12,8 @@ Guide pour développer et tester WebSuite CMS en local.
 ### 1. Cloner le Projet
 
 ```bash
-git clone https://github.com/VOTRE_USERNAME/StackPagesCMS.git
-cd StackPagesCMS/ProdBeta
+git clone https://github.com/VOTRE_USERNAME/WebSuitePlatform.git
+cd WebSuitePlatform/ProdBeta
 ```
 
 ### 2. Configurer les Variables

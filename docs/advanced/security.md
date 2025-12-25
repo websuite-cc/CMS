@@ -1,10 +1,10 @@
 # 🔐 Sécurité
 
-Guide complet sur la sécurité de WebSuite CMS.
+Guide complet sur la sécurité de WebSuite Platform.
 
 ## Vue d'Ensemble
 
-WebSuite CMS est conçu avec la sécurité en tête, mais il est important de suivre les bonnes pratiques pour protéger votre installation.
+WebSuite Platform est conçu avec la sécurité en tête, mais il est important de suivre les bonnes pratiques pour protéger votre installation.
 
 ## Authentification
 

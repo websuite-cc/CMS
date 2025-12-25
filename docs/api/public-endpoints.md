@@ -190,7 +190,7 @@ GET /api/siteinfos
   "siteName": "WebSuite",
   "author": "Ange Kacou Oi",
   "seo": {
-    "metaTitle": "WebSuite CMS",
+    "metaTitle": "WebSuite Platform",
     "metaDescription": "Description du site",
     "metaKeywords": "cms, rss, cloudflare"
   }

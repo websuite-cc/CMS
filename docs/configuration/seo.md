@@ -7,7 +7,7 @@ Configuration SEO pour optimiser le référencement de votre site.
 ### Titre (Meta Title)
 
 ```env
-META_TITLE=WebSuite CMS - Votre Titre
+META_TITLE=WebSuite Platform - Votre Titre
 ```
 
 Ou dans `config.json` :
@@ -15,7 +15,7 @@ Ou dans `config.json` :
 ```json
 {
   "seo": {
-    "metaTitle": "WebSuite CMS - Votre Titre"
+    "metaTitle": "WebSuite Platform - Votre Titre"
   }
 }
 ```

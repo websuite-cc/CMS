@@ -1,6 +1,6 @@
 # 🔌 API - Vue d'ensemble
 
-WebSuite CMS expose une API REST complète pour accéder à tous vos contenus.
+WebSuite Platform expose une API REST complète pour accéder à tous vos contenus.
 
 ## Base URL
 

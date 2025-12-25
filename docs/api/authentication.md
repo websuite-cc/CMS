@@ -1,10 +1,10 @@
 # 🔐 Authentification
 
-Guide complet de l'authentification dans WebSuite CMS.
+Guide complet de l'authentification dans WebSuite Platform.
 
 ## Vue d'Ensemble
 
-WebSuite CMS utilise une authentification simple basée sur un mot de passe pour protéger les endpoints d'administration.
+WebSuite Platform utilise une authentification simple basée sur un mot de passe pour protéger les endpoints d'administration.
 
 ## Endpoints Protégés
 

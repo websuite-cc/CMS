@@ -1,6 +1,6 @@
 # 🚀 Démarrage Rapide
 
-Bienvenue dans **WebSuite CMS** ! Ce guide vous permettra de déployer votre CMS sur Cloudflare Pages en moins de 5 minutes.
+Bienvenue dans **WebSuite Platform** ! Ce guide vous permettra de déployer votre CMS sur Cloudflare Pages en moins de 5 minutes.
 
 ## Prérequis
 
@@ -13,8 +13,8 @@ Bienvenue dans **WebSuite CMS** ! Ce guide vous permettra de déployer votre CMS
 ### 1. Cloner le Projet
 
 ```bash
-git clone https://github.com/VOTRE_USERNAME/StackPagesCMS.git
-cd StackPagesCMS/ProdBeta
+git clone https://github.com/VOTRE_USERNAME/WebSuitePlatform.git
+cd WebSuitePlatform/ProdBeta
 ```
 
 ### 2. Déployer sur Cloudflare Pages
@@ -87,7 +87,7 @@ Le serveur démarre sur `http://localhost:8000`
 
 ## Besoin d'Aide ?
 
-- 📧 Email : cms@iziweb.page
-- 🐛 [GitHub Issues](https://github.com/VOTRE_USERNAME/StackPagesCMS/issues)
+- 📧 Email : support@websuite.platform
+- 🐛 [GitHub Issues](https://github.com/VOTRE_USERNAME/WebSuitePlatform/issues)
 - 📖 [Documentation complète](#/)
 

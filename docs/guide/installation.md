@@ -1,6 +1,6 @@
 # 📦 Installation
 
-Guide détaillé pour installer et configurer WebSuite CMS.
+Guide détaillé pour installer et configurer WebSuite Platform.
 
 ## Installation Locale
 
@@ -20,8 +20,8 @@ npm install -g wrangler
 #### 2. Cloner le Repository
 
 ```bash
-git clone https://github.com/VOTRE_USERNAME/StackPagesCMS.git
-cd StackPagesCMS/ProdBeta
+git clone https://github.com/VOTRE_USERNAME/WebSuitePlatform.git
+cd WebSuitePlatform/ProdBeta
 ```
 
 #### 3. Créer les Variables d'Environnement

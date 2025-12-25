@@ -36,7 +36,7 @@ X-Auth-Key: votre_password_admin
   "podcastFeedUrl": "https://anchor.fm/feed",
   "eventsRssUrl": "https://meetup.com/events/rss",
   "seo": {
-    "metaTitle": "WebSuite CMS",
+    "metaTitle": "WebSuite Platform",
     "metaDescription": "Description",
     "metaKeywords": "cms, rss"
   }
