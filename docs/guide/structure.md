@@ -73,87 +73,86 @@ Gère le cache avec :
 
 ## Architecture
 
-### Architecture Hybride
+### Architecture Serverless
 
-WebSuite Platform utilise une architecture hybride :
+WebSuite CMS utilise une architecture serverless avec Edge Functions :
 
 ```
 ┌─────────────────────────────────────────┐
-│     GitHub Pages (Développeur)          │
-│  Frontend + CMS Interface               │
+│     Cloudflare Pages                    │
+│  Frontend + Backend (Edge Functions)    │
+│  - HTML statique                        │
+│  - Edge Functions (_middleware.js)      │
+│  - API REST                             │
+│  - SSR avec HTMX                        │
 └─────────────────────────────────────────┘
-                    ↓ (API Calls)
+                    ↓
 ┌─────────────────────────────────────────┐
-│     mcp.websuite.cc (Worker MCP)        │
-│  - MCP Workers                          │
-│  - RSS Parsing                          │
-│  - Cache Management                     │
-│  - API Backend                          │
+│     Sources RSS                         │
+│  - Substack (Articles)                  │
+│  - YouTube (Vidéos)                     │
+│  - Podcasts (RSS)                       │
+│  - Meetup (Événements)                  │
 └─────────────────────────────────────────┘
 ```
 
-### Frontend (GitHub Pages)
+### Frontend
 - **HTML statique** avec templates
-- **HTMX** pour le rendu dynamique
+- **HTMX** pour le rendu dynamique (SSR)
 - **TailwindCSS** pour le styling
 - **JavaScript vanilla** pour l'interactivité
-- **Appels API** vers `https://mcp.websuite.cc/api/*`
+- **Appels API** vers `/api/*` (même domaine)
 
-### Backend (mcp.websuite.cc)
-- **MCP Workers** - Agents MCP pour LLMs
-- **RSS Parsing** - Extraction des données
-- **Cache** - Gestion du cache global
-- **API REST** - Endpoints API complets
-- **Variables d'environnement** - Gérées par le worker
-
-### Communication
-
-Le frontend sur GitHub Pages communique avec le worker MCP via :
-- **API REST** : `https://mcp.websuite.cc/api/*`
-- **HTMX** : Requêtes HTMX vers le worker
-- **CORS** : Configuré automatiquement sur le worker
+### Backend (Edge Functions)
+- **Middleware** - Routing et SSR (`_middleware.js`)
+- **API REST** - Endpoints API (`functions/api/`)
+- **RSS Parsing** - Extraction des données (`functions/shared/rss-parser.js`)
+- **Cache** - Gestion du cache (180s, Cloudflare Cache)
+- **HTMX Rendering** - Rendu côté serveur (`functions/shared/htmx-render.js`)
 
 ### Déploiement
-- **GitHub Pages** - Hébergement du frontend
-- **mcp.websuite.cc** - Hébergement du worker MCP (géré par WebSuite)
+- **Cloudflare Pages** - Hébergement complet (frontend + backend)
+- **Edge Functions** - Exécution sur le réseau Cloudflare
 - **Git** - Déploiement automatique
-- **CDN Global** - Distribution via GitHub Pages
+- **CDN Global** - Distribution via Cloudflare (300+ datacenters)
 
 ## Flux de Données
 
 ```
-RSS Feed → Worker MCP (mcp.websuite.cc)
+RSS Feed → Edge Function (_middleware.js)
                 ↓
             Parser → Cache → API
                 ↓
-            Frontend (GitHub Pages)
+            SSR HTMX / API Response
+                ↓
+            Frontend (Browser)
                 ↓
             Admin Dashboard
 ```
 
-1. **RSS Feed** - Source de contenu
-2. **Worker MCP** - Traitement sur `mcp.websuite.cc`
-3. **Parser** - Extraction des données (dans le worker)
-4. **Cache** - Stockage temporaire (180s, géré par le worker)
-5. **API** - Exposition des données via `https://mcp.websuite.cc/api/*`
-6. **Frontend** - Affichage utilisateur (sur GitHub Pages)
+1. **RSS Feed** - Source de contenu (Substack, YouTube, etc.)
+2. **Edge Function** - Traitement sur Cloudflare Edge
+3. **Parser** - Extraction des données (`functions/shared/rss-parser.js`)
+4. **Cache** - Stockage temporaire (180s, Cloudflare Cache)
+5. **API** - Exposition des données via `/api/*`
+6. **Frontend** - Affichage utilisateur (SSR HTMX ou API)
 
 ## Extensibilité
 
 ### Ajouter un Nouveau Type de Contenu
 
-1. Contacter WebSuite pour ajouter le parser dans le worker MCP
-2. Ajouter l'interface dans `admin/dashboard.html`
-3. Ajouter le template dans `frontend/index.html`
-4. Les appels API pointent automatiquement vers `https://mcp.websuite.cc/api/*`
+1. Ajouter le parser RSS dans `functions/shared/rss-parser.js`
+2. Créer les endpoints API dans `functions/api/`
+3. Ajouter l'interface dans `admin/dashboard.html`
+4. Ajouter le template dans `frontend/index.html`
 
 ### Ajouter une Nouvelle Fonctionnalité Frontend
 
 1. Modifier les fichiers frontend (`frontend/index.html`, `admin/dashboard.html`)
-2. Les appels API utilisent automatiquement le worker MCP distant
+2. Ajouter la logique backend dans `functions/api/` si nécessaire
 3. Documenter dans la doc
 
-> ⚠️ **Note** : Les modifications backend (API, parsing, cache) doivent être faites sur le worker MCP distant. Contactez WebSuite pour ces modifications.
+> 💡 **Note** : Toutes les modifications backend (API, parsing, cache) sont dans le même projet et déployées avec Cloudflare Pages.
 
 ## Bonnes Pratiques
 

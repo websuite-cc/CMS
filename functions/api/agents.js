@@ -1,3 +1,6 @@
+// ====================================================================
+// API: Agents - Liste des agents IA
+// ====================================================================
 
 import { isAuthenticated, jsonResponse, errorResponse } from '../shared/utils.js';
 

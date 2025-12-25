@@ -1,18 +1,11 @@
 # 🚀 Démarrage Rapide
 
-Bienvenue dans **WebSuite Platform** ! Ce guide vous permettra de déployer votre CMS sur GitHub Pages en moins de 5 minutes.
-
-## Architecture
-
-WebSuite Platform utilise une architecture hybride :
-- **Worker MCP** : Hébergé sur `mcp.websuite.cc` (géré par WebSuite)
-- **CMS/Frontend** : Déployé par vous sur GitHub Pages
-
-Tous les appels API pointent automatiquement vers le worker MCP distant.
+Bienvenue dans **WebSuite CMS** ! Ce guide vous permettra de déployer votre CMS sur Cloudflare Pages en moins de 5 minutes.
 
 ## Prérequis
 
-- Un compte [GitHub](https://github.com/signup) (gratuit)
+- Un compte [Cloudflare](https://dash.cloudflare.com/sign-up) (gratuit)
+- Un repository GitHub/GitLab/Bitbucket
 - Des flux RSS de vos contenus (Substack, YouTube, Podcasts, Meetup)
 
 ## Étapes de Déploiement
@@ -24,43 +17,25 @@ git clone https://github.com/VOTRE_USERNAME/StackPagesCMS.git
 cd StackPagesCMS/ProdBeta
 ```
 
-### 2. Déployer sur GitHub Pages
+### 2. Déployer sur Cloudflare Pages
 
-#### Option A : Via GitHub Settings (Recommandé)
+1. Allez sur [Cloudflare Dashboard](https://dash.cloudflare.com/)
+2. Cliquez sur **Workers & Pages** → **Create application**
+3. Sélectionnez **Pages** → **Connect to Git**
+4. Autorisez Cloudflare à accéder à votre repository
+5. Sélectionnez votre repository et cliquez sur **Begin setup**
 
-1. Pousser votre code sur GitHub :
-```bash
-git add .
-git commit -m "Initial commit"
-git push origin main
-```
+**Configuration du Build :**
+- **Project name** : `websuite-cms` (ou votre choix)
+- **Production branch** : `main`
+- **Build command** : (laisser vide)
+- **Build output directory** : `/` (racine)
 
-2. Aller sur votre repository GitHub
-3. Cliquer sur **Settings** → **Pages**
-4. Sous **Source**, sélectionner :
-   - **Branch** : `main`
-   - **Folder** : `/` (root)
-5. Cliquer sur **Save**
+Cliquez sur **Save and Deploy**
 
-Votre site sera disponible sur :
-```
-https://votre-username.github.io/votre-repo
-```
+### 3. Configurer les Variables d'Environnement
 
-#### Option B : Via GitHub Actions (Automatique)
-
-Le déploiement se fait automatiquement à chaque push sur `main`.
-
-### 3. Configurer les Variables de Développement
-
-Pour le développement local, créez un fichier `.dev.vars` à la racine :
-
-```bash
-cp .dev.vars.example .dev.vars
-nano .dev.vars
-```
-
-Contenu de `.dev.vars` :
+Une fois déployé, allez dans **Settings** → **Environment variables** et ajoutez :
 
 ```env
 ADMIN_EMAIL=admin@example.com
@@ -71,34 +46,36 @@ PODCAST_FEED_URL=https://anchor.fm/s/VOTRE_ID/podcast/rss
 EVENTS_FEED_URL=https://www.meetup.com/fr-fr/votre-groupe/events/rss
 ```
 
-> ⚠️ **Important** : Ajoutez `.dev.vars` à votre `.gitignore` pour ne pas commiter vos secrets !
+> 🔒 **Sécurité** : Marquez `ADMIN_PASSWORD` comme **Encrypted** !
 
-### 4. Configuration du Worker MCP
-
-Le worker MCP est déjà configuré sur `mcp.websuite.cc`. Pour la production :
-
-1. Contactez WebSuite pour configurer vos variables d'environnement sur le worker MCP distant
-2. Le worker gère automatiquement :
-   - Le parsing RSS
-   - Le cache
-   - L'authentification
-   - Les MCP Workers
-
-### 5. Accéder à votre CMS
+### 4. Accéder à votre CMS
 
 Une fois déployé, votre CMS est accessible à :
 
 ```
-https://votre-username.github.io/votre-repo
+https://votre-projet.pages.dev
 ```
 
 L'interface admin est disponible à :
 
 ```
-https://votre-username.github.io/votre-repo/admin
+https://votre-projet.pages.dev/admin
 ```
 
-Tous les appels API pointent automatiquement vers `https://mcp.websuite.cc/api/*`
+## Développement Local
+
+Pour tester localement avec Bun :
+
+```bash
+# Créer .dev.vars
+cp .dev.vars.example .dev.vars
+# Éditer .dev.vars avec vos valeurs
+
+# Lancer le serveur
+bun server.js
+```
+
+Le serveur démarre sur `http://localhost:8000`
 
 ## Prochaines Étapes
 
@@ -106,10 +83,11 @@ Tous les appels API pointent automatiquement vers `https://mcp.websuite.cc/api/*
 - 🎨 [Personnaliser l'interface admin](../admin/dashboard.md)
 - 🔌 [Utiliser l'API](../api/overview.md)
 - 🌐 [Configurer un domaine personnalisé](../deployment/custom-domain.md)
+- 📚 [Guide de déploiement complet](../deployment/cloudflare-pages.md)
 
 ## Besoin d'Aide ?
 
 - 📧 Email : cms@iziweb.page
-- 🐛 [GitHub Issues](https://github.com/iziweb-studio/CMS/issues)
-- 📖 [Documentation complète](README.md)
+- 🐛 [GitHub Issues](https://github.com/VOTRE_USERNAME/StackPagesCMS/issues)
+- 📖 [Documentation complète](../../README.md)
 

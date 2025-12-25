@@ -1270,42 +1270,63 @@ async function loadAgents() {
 
     await checkAgentsConfig();
 
-    // TODO: Fetch from /api/agents
+    try {
+        const authKey = localStorage.getItem('websuite_auth');
+        const response = await fetch(buildApiUrl('/api/agents'), {
+            headers: { 'X-Auth-Key': authKey }
+        });
 
-    if (mockAgents.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-slate-500">Aucun agent configuré.</td></tr>';
-        return;
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const agents = await response.json();
+
+        if (!agents || agents.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-slate-500">Aucun agent configuré.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = agents.map(agent => `
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition border-b border-transparent dark:border-slate-700/50 last:border-0">
+                <td class="px-6 py-4">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${agent.status === 'active' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400'}">
+                        <span class="w-1.5 h-1.5 rounded-full ${agent.status === 'active' ? 'bg-emerald-500' : 'bg-slate-400'}"></span>
+                        ${agent.status === 'active' ? 'Actif' : 'Inactif'}
+                    </span>
+                </td>
+                <td class="px-6 py-4 font-medium text-slate-800 dark:text-white">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold shadow-sm">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div>
+                            ${agent.name || agent.id}
+                            ${agent.path ? `<div class="text-xs text-slate-400 mt-0.5">${agent.path}</div>` : ''}
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs text-right">
+                    ${agent.lastRun ? new Date(agent.lastRun).toLocaleString('fr-FR') : 'Jamais'}
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <button onclick="alert('Agent: ${agent.name || agent.id}')" class="text-slate-400 hover:text-emerald-500 transition mx-1" title="Lancer manuellement">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+
+    } catch (error) {
+        console.error('Error loading agents:', error);
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" class="px-6 py-4 text-center text-red-500">
+                    Erreur lors du chargement des agents: ${error.message}
+                </td>
+            </tr>
+        `;
     }
-
-    tbody.innerHTML = mockAgents.map(agent => `
-        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition border-b border-transparent dark:border-slate-700/50 last:border-0">
-            <td class="px-6 py-4">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${agent.status === 'active' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400'}">
-                    <span class="w-1.5 h-1.5 rounded-full ${agent.status === 'active' ? 'bg-emerald-500' : 'bg-slate-400'}"></span>
-                    ${agent.status === 'active' ? 'Actif' : 'Inactif'}
-                </span>
-            </td>
-            <td class="px-6 py-4 font-medium text-slate-800 dark:text-white">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 dark:bg-slate-700 dark:border-slate-600 flex items-center justify-center text-xl shadow-sm">
-                        <i class="fab fa-google text-lg"></i>
-                    </div>
-                    <div>
-                        ${agent.name}
-                        <div class="text-xs text-slate-400 mt-0.5">${agent.schedule}</div>
-                    </div>
-                </div>
-            </td>
-            <td class="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs text-right">
-                ${agent.lastRun ? new Date(agent.lastRun).toLocaleString('fr-FR') : 'Jamais'}
-            </td>
-            <td class="px-6 py-4 text-right">
-                <button onclick="alert('Déclenchement du script Google...')" class="text-slate-400 hover:text-emerald-500 transition mx-1" title="Lancer manuellement">
-                    <i class="fas fa-play"></i>
-                </button>
-            </td>
-        </tr>
-    `).join('');
 }
 
 
