@@ -181,7 +181,7 @@ Le SSR utilise le même cache que l'API :
 
 ## Prochaines Étapes
 
-- [Cache & Performance](caching.md)
-- [Sécurité](security.md)
-- [Personnalisation](customization.md)
+- [Cache & Performance](#/docs/advanced/caching)
+- [Sécurité](#/docs/advanced/security)
+- [Personnalisation](#/docs/advanced/customization)
 

@@ -13,7 +13,7 @@ WebSuite CMS peut être configuré de deux façons :
 
 ## Variables d'Environnement
 
-Voir [Variables d'Environnement](../deployment/environment-variables.md) pour la liste complète.
+Voir [Variables d'Environnement](#/docs/deployment/environment-variables) pour la liste complète.
 
 ## config.json
 
@@ -98,7 +98,7 @@ curl -H "X-Auth-Key: votre_password" \
 
 ## Prochaines Étapes
 
-- [Flux RSS](rss-feeds.md)
-- [SEO](seo.md)
-- [Variables d'environnement](../deployment/environment-variables.md)
+- [Flux RSS](#/docs/configuration/rss-feeds)
+- [SEO](#/docs/configuration/seo)
+- [Variables d'environnement](#/docs/deployment/environment-variables)
 

@@ -115,7 +115,7 @@ Pour rediriger `www.monsite.com` vers `monsite.com` :
 
 ## Prochaines Étapes
 
-- [Configuration](../configuration/overview.md)
-- [SEO](../configuration/seo.md)
-- [Déploiement](cloudflare-pages.md)
+- [Configuration](#/docs/configuration/overview)
+- [SEO](#/docs/configuration/seo)
+- [Déploiement](#/docs/deployment/cloudflare-pages)
 

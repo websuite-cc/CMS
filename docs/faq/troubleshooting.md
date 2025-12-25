@@ -191,7 +191,7 @@ Si le problème persiste :
 
 1. 📧 Email : cms@iziweb.page
 2. 🐛 [GitHub Issues](https://github.com/iziweb-studio/CMS/issues)
-3. 📖 [Documentation complète](README.md)
+3. 📖 [Documentation complète](#/)
 
 Incluez dans votre demande :
 - Description du problème

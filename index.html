@@ -645,7 +645,7 @@
     // Détection automatique du basePath
     const path = window.location.pathname;
     let basePath = '/';
-    // Si on est sur GitHub Pages dans un repo (pas username.github.io)
+    // Si on est sur Cloudflare Pages dans un sous-chemin
     if (path !== '/' && path !== '/index.html') {
       const parts = path.split('/').filter(p => p && p !== 'index.html');
       if (parts.length > 0) {

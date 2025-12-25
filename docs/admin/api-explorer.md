@@ -117,7 +117,7 @@ L'explorateur affiche le code de statut HTTP :
 
 ## Prochaines Étapes
 
-- [Vue d'ensemble de l'API](../api/overview.md)
-- [Endpoints publics](../api/public-endpoints.md)
-- [Endpoints protégés](../api/protected-endpoints.md)
+- [Vue d'ensemble de l'API](#/docs/api/overview)
+- [Endpoints publics](#/docs/api/public-endpoints)
+- [Endpoints protégés](#/docs/api/protected-endpoints)
 

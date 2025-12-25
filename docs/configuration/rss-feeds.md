@@ -193,7 +193,7 @@ curl https://votre-projet.pages.dev/api/events
 
 ## Prochaines Étapes
 
-- [Configuration SEO](seo.md)
-- [Variables d'environnement](../deployment/environment-variables.md)
-- [API Documentation](../api/overview.md)
+- [Configuration SEO](#/docs/configuration/seo)
+- [Variables d'environnement](#/docs/deployment/environment-variables)
+- [API Documentation](#/docs/api/overview)
 

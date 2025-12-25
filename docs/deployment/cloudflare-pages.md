@@ -164,7 +164,7 @@ Vous pouvez définir des variables différentes pour chaque environnement dans l
 
 ## Prochaines Étapes
 
-- [Configurer un domaine personnalisé](custom-domain.md)
-- [Variables d'environnement](environment-variables.md)
-- [Configuration](../configuration/overview.md)
+- [Configurer un domaine personnalisé](#/docs/deployment/custom-domain)
+- [Variables d'environnement](#/docs/deployment/environment-variables)
+- [Configuration](#/docs/configuration/overview)
 

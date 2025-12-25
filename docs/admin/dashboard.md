@@ -77,7 +77,7 @@ Testez directement les endpoints API depuis l'interface :
 
 ## Prochaines Étapes
 
-- [Fonctionnalités détaillées](features.md)
-- [Gestion du contenu](content-management.md)
-- [API Explorer](api-explorer.md)
+- [Fonctionnalités détaillées](#/docs/admin/features)
+- [Gestion du contenu](#/docs/admin/content-management)
+- [API Explorer](#/docs/admin/api-explorer)
 

@@ -29,7 +29,7 @@ Oui ! Le système est extensible. Vous pouvez ajouter de nouvelles sources en cr
 
 ### Comment installer WebSuite CMS ?
 
-Voir le guide [Démarrage Rapide](../guide/quick-start.md).
+Voir le guide [Démarrage Rapide](#/docs/guide/quick-start).
 
 ### Puis-je l'installer ailleurs que sur Cloudflare Pages ?
 
@@ -92,7 +92,7 @@ Oui, les images sont extraites automatiquement des flux RSS et servies via le CD
 
 ### Puis-je utiliser mon propre domaine ?
 
-Oui ! Voir [Domaine Personnalisé](../deployment/custom-domain.md).
+Oui ! Voir [Domaine Personnalisé](#/docs/deployment/custom-domain).
 
 ### Le déploiement est-il automatique ?
 
@@ -108,7 +108,7 @@ Oui, Cloudflare Pages supporte les environnements de production et de preview (b
 
 - 📧 Email : cms@iziweb.page
 - 🐛 [GitHub Issues](https://github.com/iziweb-studio/CMS/issues)
-- 📖 [Documentation complète](README.md)
+- 📖 [Documentation complète](#/)
 
 ### Puis-je contribuer ?
 
@@ -135,5 +135,5 @@ Oui ! Les contributions sont les bienvenues. Voir la section Contribution dans l
 2. Vérifiez que vous utilisez HTTPS
 3. Videz le cache du navigateur
 
-Pour plus d'aide, voir [Dépannage](troubleshooting.md).
+Pour plus d'aide, voir [Dépannage](#/docs/faq/troubleshooting).
 

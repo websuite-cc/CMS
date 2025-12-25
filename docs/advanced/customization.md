@@ -207,7 +207,7 @@ Créez des endpoints webhook dans `functions/api/webhooks/` pour :
 
 ## Prochaines Étapes
 
-- [Cache & Performance](caching.md)
-- [Sécurité](security.md)
-- [HTMX & SSR](htmx-ssr.md)
+- [Cache & Performance](#/docs/advanced/caching)
+- [Sécurité](#/docs/advanced/security)
+- [HTMX & SSR](#/docs/advanced/htmx-ssr)
 

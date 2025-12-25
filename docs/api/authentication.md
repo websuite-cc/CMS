@@ -175,7 +175,7 @@ POST /api/logout
 
 ## Prochaines Étapes
 
-- [Endpoints protégés](protected-endpoints.md)
-- [Sécurité](advanced/security.md)
-- [Configuration](../configuration/overview.md)
+- [Endpoints protégés](#/docs/api/protected-endpoints)
+- [Sécurité](#/docs/advanced/security)
+- [Configuration](#/docs/configuration/overview)
 

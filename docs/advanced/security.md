@@ -168,7 +168,7 @@ Cloudflare Pages inclut un rate limiting automatique :
 
 ## Prochaines Étapes
 
-- [Cache & Performance](caching.md)
-- [HTMX & SSR](htmx-ssr.md)
-- [Personnalisation](customization.md)
+- [Cache & Performance](#/docs/advanced/caching)
+- [HTMX & SSR](#/docs/advanced/htmx-ssr)
+- [Personnalisation](#/docs/advanced/customization)
 

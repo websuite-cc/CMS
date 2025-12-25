@@ -159,7 +159,7 @@ Le dashboard affiche :
 
 ## Prochaines Étapes
 
-- [Dashboard](dashboard.md)
-- [Fonctionnalités](features.md)
-- [API Explorer](api-explorer.md)
+- [Dashboard](#/docs/admin/dashboard)
+- [Fonctionnalités](#/docs/admin/features)
+- [API Explorer](#/docs/admin/api-explorer)
 

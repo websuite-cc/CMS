@@ -79,15 +79,15 @@ Le serveur démarre sur `http://localhost:8000`
 
 ## Prochaines Étapes
 
-- 📖 [Configuration des flux RSS](../configuration/rss-feeds.md)
-- 🎨 [Personnaliser l'interface admin](../admin/dashboard.md)
-- 🔌 [Utiliser l'API](../api/overview.md)
-- 🌐 [Configurer un domaine personnalisé](../deployment/custom-domain.md)
-- 📚 [Guide de déploiement complet](../deployment/cloudflare-pages.md)
+- 📖 [Configuration des flux RSS](#/docs/configuration/rss-feeds)
+- 🎨 [Personnaliser l'interface admin](#/docs/admin/dashboard)
+- 🔌 [Utiliser l'API](#/docs/api/overview)
+- 🌐 [Configurer un domaine personnalisé](#/docs/deployment/custom-domain)
+- 📚 [Guide de déploiement complet](#/docs/deployment/cloudflare-pages)
 
 ## Besoin d'Aide ?
 
 - 📧 Email : cms@iziweb.page
 - 🐛 [GitHub Issues](https://github.com/VOTRE_USERNAME/StackPagesCMS/issues)
-- 📖 [Documentation complète](../../README.md)
+- 📖 [Documentation complète](#/)
 

@@ -620,8 +620,8 @@
 
                 if (response.ok) {
                     alert(deployToGitHub 
-                        ? 'Template déployé avec succès sur GitHub !\nLe site sera mis à jour après le prochain déploiement Cloudflare Pages.'
-                        : 'Template sauvegardé !\nPour déployer en production, configurez GitHub dans les paramètres.');
+                        ? 'Template déployé avec succès !\nLe site sera mis à jour après le prochain déploiement Cloudflare Pages.'
+                        : 'Template sauvegardé !\nPour déployer en production, configurez vos variables d'environnement.');
                 } else {
                     throw new Error(result.error || 'Erreur lors du déploiement');
                 }

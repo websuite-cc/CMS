@@ -199,7 +199,7 @@ Le cache est géré localement en mémoire. Pour le vider :
 
 ## Prochaines Étapes
 
-- [Structure du projet](structure.md)
-- [API Documentation](../api/overview.md)
-- [Déploiement sur Cloudflare Pages](../deployment/cloudflare-pages.md)
+- [Structure du projet](#/docs/guide/structure)
+- [API Documentation](#/docs/api/overview)
+- [Déploiement sur Cloudflare Pages](#/docs/deployment/cloudflare-pages)
 

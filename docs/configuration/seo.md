@@ -133,7 +133,7 @@ curl https://votre-projet.pages.dev/api/siteinfos
 
 ## Prochaines Étapes
 
-- [Configuration générale](overview.md)
-- [Flux RSS](rss-feeds.md)
-- [Déploiement](../deployment/cloudflare-pages.md)
+- [Configuration générale](#/docs/configuration/overview)
+- [Flux RSS](#/docs/configuration/rss-feeds)
+- [Déploiement](#/docs/deployment/cloudflare-pages)
 

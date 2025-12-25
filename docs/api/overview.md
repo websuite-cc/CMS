@@ -133,8 +133,8 @@ config = response.json()
 
 ## Documentation Complète
 
-- [Endpoints Publics](public-endpoints.md)
-- [Endpoints Protégés](protected-endpoints.md)
-- [Authentification](authentication.md)
-- [Exemples d'utilisation](examples.md)
+- [Endpoints Publics](#/docs/api/public-endpoints)
+- [Endpoints Protégés](#/docs/api/protected-endpoints)
+- [Authentification](#/docs/api/authentication)
+- [Exemples d'utilisation](#/docs/api/examples)
 

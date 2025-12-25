@@ -164,7 +164,7 @@ RSS Feed → Edge Function (_middleware.js)
 
 ## Prochaines Étapes
 
-- [Développement Local](development.md)
-- [Configuration](../configuration/overview.md)
-- [API Documentation](../api/overview.md)
+- [Développement Local](#/docs/guide/development)
+- [Configuration](#/docs/configuration/overview)
+- [API Documentation](#/docs/api/overview)
 

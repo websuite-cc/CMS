@@ -135,7 +135,7 @@ Les réponses incluent des headers de cache :
 
 ## Prochaines Étapes
 
-- [Sécurité](security.md)
-- [HTMX & SSR](htmx-ssr.md)
-- [Personnalisation](customization.md)
+- [Sécurité](#/docs/advanced/security)
+- [HTMX & SSR](#/docs/advanced/htmx-ssr)
+- [Personnalisation](#/docs/advanced/customization)
 

@@ -7,6 +7,6 @@
 > Documentation complète pour développeurs  
 > CMS headless moderne basé sur RSS, déployable sur Cloudflare Pages
 
-[🚀 Démarrage Rapide](docs/guide/quick-start.md)
-[📖 Lire la Documentation](README.md)
+[🚀 Démarrage Rapide](#/docs/guide/quick-start)
+[📖 Lire la Documentation](#/)
 
