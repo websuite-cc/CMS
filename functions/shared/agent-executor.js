@@ -34,6 +34,11 @@ export async function loadAgentFromGitHub(agentId, env) {
 
 /**
  * Exécute le code de l'agent dans un contexte sécurisé
+ * 
+ * @deprecated Cette fonction utilise new Function() qui n'est pas compatible avec Cloudflare Workers.
+ * Les agents doivent maintenant être des endpoints API standards dans functions/api/agents/[id]/handler.js
+ * Cette fonction est conservée uniquement comme fallback pour la migration des anciens agents.
+ * 
  * Note: En production Cloudflare, on pourrait utiliser un Worker isolé pour plus de sécurité
  */
 export async function executeAgent(agentCode, env) {

@@ -219,6 +219,26 @@ async function handleApiRoute(pathname, request) {
       return await handler.onRequestGet?.(context);
     }
     
+    // Routes agents : /api/agents/[id]/handler (direct handler access)
+    const agentHandlerMatch = apiPath.match(/^agents\/(.+)\/handler$/);
+    if (agentHandlerMatch) {
+      const agentId = agentHandlerMatch[1];
+      try {
+        // Importer directement le handler de l'agent
+        const handler = await import(`./functions/api/agents/${agentId}/handler.js`);
+        const context = { request, env, params: { id: agentId } };
+        if (request.method === 'POST' && handler.onRequestPost) {
+          return await handler.onRequestPost(context);
+        }
+        if (request.method === 'GET' && handler.onRequestGet) {
+          return await handler.onRequestGet(context);
+        }
+      } catch (error) {
+        console.error(`Error loading agent handler ${agentId}:`, error);
+        return new Response(`Agent handler not found: ${error.message}`, { status: 404 });
+      }
+    }
+    
     // Routes agents : /api/agents/[id]/execute
     const agentExecuteMatch = apiPath.match(/^agents\/(.+)\/execute$/);
     if (agentExecuteMatch) {
@@ -232,10 +252,10 @@ async function handleApiRoute(pathname, request) {
       }
     }
     
-    // Route agent info : /api/agents/[id] (sans /execute)
+    // Route agent info : /api/agents/[id] (sans /execute, /handler, /logs)
     const agentMatch = apiPath.match(/^agents\/(.+)$/);
     if (agentMatch) {
-      // Vérifier si c'est pas une sous-route (logs, execute, etc.)
+      // Vérifier si c'est pas une sous-route (logs, execute, handler, etc.)
       const agentId = agentMatch[1];
       if (!agentId.includes('/')) {
         // C'est juste un ID, retourner les infos de l'agent

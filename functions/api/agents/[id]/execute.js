@@ -7,7 +7,7 @@
 
 import { jsonResponse, errorResponse } from '../../../shared/utils.js';
 import { isAuthenticated } from '../../../shared/utils.js';
-import { loadAgentFromGitHub, executeAgent, saveLogToGitHub } from '../../../shared/agent-executor.js';
+import { saveLogToGitHub } from '../../../shared/agent-executor.js';
 
 /**
  * Vérifie le token CronJob depuis le header ou query param
@@ -50,40 +50,97 @@ async function handleExecute(context) {
   }
   
   try {
-    // 1. Charger l'agent depuis GitHub
-    const agentCode = await loadAgentFromGitHub(id, env);
+    // Importer directement le handler de l'agent
+    // Le handler est dans functions/api/agents/[id]/handler.js
+    // Cloudflare Pages Functions route automatiquement ce fichier
     
-    // 2. Exécuter l'agent
     const startTime = Date.now();
-    const result = await executeAgent(agentCode, env);
-    const executionTime = Date.now() - startTime;
+    let response;
+    let executionTime;
     
-    // 3. Créer l'entrée de log
+    // Pour l'import dynamique, on utilise une URL relative à la racine du projet
+    // En production Cloudflare, le handler doit être déployé dans functions/api/agents/[id]/handler.js
+    // En local Bun, on utilise un chemin relatif depuis server.js qui pointe vers le bon fichier
+    
+    // Construire le chemin du handler
+    // Depuis functions/api/agents/[id]/execute.js, handler.js est dans le même dossier
+    // Utiliser un chemin relatif pour compatibilité locale et production
+    // En local Bun: le chemin est résolu depuis server.js qui importe execute.js
+    // En production Cloudflare: le routing automatique gère les fichiers dans le même dossier
+    
+    // Essayer d'importer le handler directement
+    // En production Cloudflare, le handler doit être dans functions/api/agents/[id]/handler.js
+    // En local Bun, le chemin est résolu depuis server.js
+    
+    let handler;
+    let importError = null;
+    
+    // Stratégie 1: Chemin relatif depuis le même dossier (pour Cloudflare Pages Functions)
+    try {
+      handler = await import(`./handler.js`);
+    } catch (e1) {
+      importError = e1;
+      // Stratégie 2: Chemin relatif depuis shared (pour certains cas)
+      try {
+        handler = await import(`../../../api/agents/${id}/handler.js`);
+      } catch (e2) {
+        importError = e2;
+        // Stratégie 3: Chemin absolu (pour Bun local)
+        try {
+          // En local Bun, server.js peut résoudre depuis la racine
+          handler = await import(`../../../../functions/api/agents/${id}/handler.js`);
+        } catch (e3) {
+          throw new Error(`Could not import agent handler from any path. Please ensure the agent is saved and deployed. Errors: ${e1.message}, ${e2.message}, ${e3.message}`);
+        }
+      }
+    }
+    
+    // Déterminer quelle méthode appeler
+    if (request.method === 'POST' && handler.onRequestPost) {
+      response = await handler.onRequestPost(context);
+    } else if (request.method === 'GET' && handler.onRequestGet) {
+      response = await handler.onRequestGet(context);
+    } else {
+      throw new Error(`Method ${request.method} not supported by agent handler`);
+    }
+    
+    executionTime = Date.now() - startTime;
+    
+    // Extraire le résultat de la réponse JSON
+    let result = null;
+    if (response && response.ok) {
+      try {
+        result = await response.clone().json();
+      } catch (e) {
+        // Si ce n'est pas du JSON, prendre le texte
+        result = { message: await response.clone().text() };
+      }
+    } else {
+      // Si la réponse n'est pas OK, extraire l'erreur
+      const errorText = await response.text();
+      result = { error: errorText, success: false };
+    }
+    
+    // Créer l'entrée de log
     const logEntry = {
       agentId: id,
-      success: result.success !== false, // Par défaut true si pas défini
+      success: result.success !== false && response.ok,
       executionTime,
       result: result,
       triggeredBy: isCronJob ? 'cronjob' : 'admin',
       timestamp: new Date().toISOString()
     };
     
-    // 4. Sauvegarder le log (en arrière-plan, ne bloque pas la réponse)
+    // Sauvegarder le log (en arrière-plan, ne bloque pas la réponse)
     saveLogToGitHub(id, logEntry, env).catch(err => {
       console.error(`Failed to save log for agent ${id}:`, err);
     });
     
-    // 5. Retourner le résultat
-    return jsonResponse({
-      success: true,
-      agentId: id,
-      executionTime,
-      result: result,
-      logged: true
-    });
+    // Retourner la réponse du handler
+    return response;
     
   } catch (error) {
-    // Logger l'erreur aussi
+    // Logger l'erreur
     const errorLog = {
       agentId: id,
       success: false,

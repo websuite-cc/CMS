@@ -466,27 +466,42 @@
         function loadAgentTemplate() {
             const template = `/**
  * Agent Description
+ * Route: /api/agents/[id]/execute (POST ou GET)
  * 
  */
 
-export default async function agent(context) {
+import { jsonResponse, errorResponse } from '../../../shared/utils.js';
+
+/**
+ * Exécute l'agent (POST)
+ */
+export async function onRequestPost(context) {
+  return handleAgent(context);
+}
+
+/**
+ * Exécute l'agent (GET)
+ */
+export async function onRequestGet(context) {
+  return handleAgent(context);
+}
+
+async function handleAgent(context) {
   const { env } = context;
   
   try {
     // Votre logique ici
     // Accès exclusif aux variables d'environnement via env
     
-    return {
+    const result = {
       success: true,
       message: "Agent exécuté avec succès",
       timestamp: new Date().toISOString()
     };
+    
+    return jsonResponse(result);
   } catch (error) {
-    return {
-      success: false,
-      error: error.message,
-      timestamp: new Date().toISOString()
-    };
+    return errorResponse(\`Erreur: \${error.message}\`, 500);
   }
 }`;
             
@@ -530,9 +545,9 @@ export default async function agent(context) {
                 return;
             }
 
-            // Valider que le code exporte bien une fonction agent
-            if (!code.includes('export default') || !code.includes('function agent')) {
-                if (!confirm('Le code ne semble pas exporter une fonction "agent". Voulez-vous continuer quand même ?')) {
+            // Valider que le code exporte bien des endpoints API
+            if (!code.includes('onRequestPost') && !code.includes('onRequestGet')) {
+                if (!confirm('Le code ne semble pas exporter onRequestPost ou onRequestGet. Voulez-vous continuer quand même ?')) {
                     return;
                 }
             }
@@ -1083,43 +1098,46 @@ export default async function agent(context) {
                         "Agents are JavaScript functions that run automatically via CronJob or manually from the admin interface.\n\n" +
                         
                         "MANDATORY REQUIREMENTS:\n" +
-                        "1. **Function Signature**: MUST export default async function agent(context)\n" +
-                        "2. **Context Parameter**: The context object contains { env } - environment variables ONLY\n" +
-                        "3. **Environment Variables**: Access variables EXCLUSIVELY via context.env (e.g., env.GITHUB_TOKEN, env.ADMIN_PASSWORD)\n" +
-                        "4. **Return Format**: MUST return an object with:\n" +
-                        "   - success: boolean (true/false)\n" +
-                        "   - message: string (description of the result)\n" +
-                        "   - timestamp: string (ISO 8601 format)\n" +
-                        "   - data: any (optional, additional result data)\n" +
-                        "5. **Error Handling**: MUST use try/catch and return success: false on errors\n" +
-                        "6. **No File System**: Agents CANNOT access file system, only environment variables\n" +
-                        "7. **No External APIs without env**: Use env variables for API keys, tokens, etc.\n\n" +
+                        "1. **API Endpoint Format**: MUST export onRequestPost(context) and/or onRequestGet(context)\n" +
+                        "2. **Imports**: MUST import jsonResponse and errorResponse from '../../../shared/utils.js'\n" +
+                        "3. **Context Parameter**: The context object contains { env, request, params } - environment variables via env\n" +
+                        "4. **Return Format**: MUST use jsonResponse() or errorResponse() helpers\n" +
+                        "5. **Environment Variables**: Access variables EXCLUSIVELY via context.env (e.g., env.GITHUB_TOKEN, env.ADMIN_PASSWORD)\n" +
+                        "6. **Error Handling**: MUST use try/catch and return errorResponse() on errors\n" +
+                        "7. **No File System**: Agents CANNOT access file system, only environment variables\n" +
+                        "8. **No External APIs without env**: Use env variables for API keys, tokens, etc.\n\n" +
                         
                         "EXAMPLE STRUCTURE:\n" +
                         "```javascript\n" +
                         "/**\n" +
                         " * Agent Description\n" +
+                        " * Route: /api/agents/[id]/execute (POST ou GET)\n" +
                         " * Schedule: 0 9 * * * (daily at 9 AM)\n" +
                         " */\n\n" +
-                        "export default async function agent(context) {\n" +
+                        "import { jsonResponse, errorResponse } from '../../../shared/utils.js';\n\n" +
+                        "export async function onRequestPost(context) {\n" +
+                        "  return handleAgent(context);\n" +
+                        "}\n\n" +
+                        "export async function onRequestGet(context) {\n" +
+                        "  return handleAgent(context);\n" +
+                        "}\n\n" +
+                        "async function handleAgent(context) {\n" +
                         "  const { env } = context;\n" +
                         "  \n" +
                         "  try {\n" +
                         "    // Your logic here\n" +
                         "    // Access env variables: env.GITHUB_TOKEN, env.ADMIN_PASSWORD, etc.\n" +
                         "    \n" +
-                        "    return {\n" +
+                        "    const result = {\n" +
                         "      success: true,\n" +
                         "      message: \"Agent executed successfully\",\n" +
                         "      timestamp: new Date().toISOString(),\n" +
                         "      data: { /* optional result data */ }\n" +
                         "    };\n" +
+                        "    \n" +
+                        "    return jsonResponse(result);\n" +
                         "  } catch (error) {\n" +
-                        "    return {\n" +
-                        "      success: false,\n" +
-                        "      error: error.message,\n" +
-                        "      timestamp: new Date().toISOString()\n" +
-                        "    };\n" +
+                        "    return errorResponse(\`Erreur: \${error.message}\`, 500);\n" +
                         "  }\n" +
                         "}\n" +
                         "```\n\n" +
@@ -1144,45 +1162,45 @@ export default async function agent(context) {
                 } else {
                     // HTMX MODE: HTML templates
                     systemInstruction = "You are an expert web developer specialized in creating dynamic themes for StackPages CMS.\n\n" +
-                        "IMPORTANT ARCHITECTURE: 'SUPER TEMPLATE'\n" +
-                        "StackPages uses a unique 'Super Template' system where the backend (Cloudflare Worker) handles Server-Side Rendering (SSR) using standard HTML <template> tags.\n\n" +
+                    "IMPORTANT ARCHITECTURE: 'SUPER TEMPLATE'\n" +
+                    "StackPages uses a unique 'Super Template' system where the backend (Cloudflare Worker) handles Server-Side Rendering (SSR) using standard HTML <template> tags.\n\n" +
 
-                        "CRITICAL RULES:\n" +
-                        "1. **NO Client-Side Rendering**: Do NOT write JavaScript to fetch JSON and build HTML strings. The backend does this for you.\n" +
-                        "2. **Use <template> Tags**: You MUST define the following templates in your HTML:\n" +
-                        "   - <template id='tpl-home'>: The default homepage content.\n" +
-                        "   - <template id='tpl-blog-card'>: HTML structure for a single blog post card.\n" +
-                        "   - <template id='tpl-video-card'>: HTML structure for a single video card.\n" +
-                        "   - <template id='tpl-post-detail'>: Layout for viewing a full blog post.\n" +
-                        "   - <template id='tpl-video-detail'>: Layout for viewing a full video.\n" +
-                        "3. **Use HTMX**: Use HTMX attributes for navigation and dynamic loading.\n" +
-                        "   - <a href='/publications' hx-get='/publications' hx-target='#main-content' hx-push-url='true'>...</a>\n" +
-                        "   - <div hx-get='/api/posts' hx-trigger='load' hx-target='#publications-container'></div>\n" +
-                        "4. **Tailwind CSS**: Use Tailwind CSS for all styling.\n\n" +
+                    "CRITICAL RULES:\n" +
+                    "1. **NO Client-Side Rendering**: Do NOT write JavaScript to fetch JSON and build HTML strings. The backend does this for you.\n" +
+                    "2. **Use <template> Tags**: You MUST define the following templates in your HTML:\n" +
+                    "   - <template id='tpl-home'>: The default homepage content.\n" +
+                    "   - <template id='tpl-blog-card'>: HTML structure for a single blog post card.\n" +
+                    "   - <template id='tpl-video-card'>: HTML structure for a single video card.\n" +
+                    "   - <template id='tpl-post-detail'>: Layout for viewing a full blog post.\n" +
+                    "   - <template id='tpl-video-detail'>: Layout for viewing a full video.\n" +
+                    "3. **Use HTMX**: Use HTMX attributes for navigation and dynamic loading.\n" +
+                    "   - <a href='/publications' hx-get='/publications' hx-target='#main-content' hx-push-url='true'>...</a>\n" +
+                    "   - <div hx-get='/api/posts' hx-trigger='load' hx-target='#publications-container'></div>\n" +
+                    "4. **Tailwind CSS**: Use Tailwind CSS for all styling.\n\n" +
 
-                        "TEMPLATE VARIABLES:\n" +
-                        "Inside your <template> tags, use these placeholders which the backend will replace:\n" +
-                        "- Blog Card: {{title}}, {{image}}, {{description}}, {{date}}, {{slug}}, {{author}}\n" +
-                        "- Video Card: {{title}}, {{thumbnail}}, {{date}}, {{link}}\n" +
-                        "- Post Detail: {{title}}, {{image}}, {{content}}, {{date}}, {{author}}\n" +
-                        "- Video Detail: {{title}}, {{embedUrl}}, {{description}}, {{published}}, {{link}}\n\n" +
+                    "TEMPLATE VARIABLES:\n" +
+                    "Inside your <template> tags, use these placeholders which the backend will replace:\n" +
+                    "- Blog Card: {{title}}, {{image}}, {{description}}, {{date}}, {{slug}}, {{author}}\n" +
+                    "- Video Card: {{title}}, {{thumbnail}}, {{date}}, {{link}}\n" +
+                    "- Post Detail: {{title}}, {{image}}, {{content}}, {{date}}, {{author}}\n" +
+                    "- Video Detail: {{title}}, {{embedUrl}}, {{description}}, {{published}}, {{link}}\n\n" +
 
-                        "EXAMPLE STRUCTURE:\n" +
-                        "```html\n" +
-                        "<body>\n" +
-                        "  <main id='main-content'>\n" +
-                        "    <!-- Content will be swapped here -->\n" +
-                        "  </main>\n\n" +
-                        "  <template id='tpl-blog-card'>\n" +
-                        "    <article class='card'>\n" +
-                        "      <img src='{{image}}' alt='{{title}}'>\n" +
-                        "      <h3><a href='/post/{{slug}}' hx-get='/post/{{slug}}' hx-target='#main-content' hx-push-url='true'>{{title}}</a></h3>\n" +
-                        "    </article>\n" +
-                        "  </template>\n" +
-                        "</body>\n" +
-                        "```\n\n" +
-                        "Generate ONLY valid HTML code. Do not include markdown backticks or explanations.";
-                    
+                    "EXAMPLE STRUCTURE:\n" +
+                    "```html\n" +
+                    "<body>\n" +
+                    "  <main id='main-content'>\n" +
+                    "    <!-- Content will be swapped here -->\n" +
+                    "  </main>\n\n" +
+                    "  <template id='tpl-blog-card'>\n" +
+                    "    <article class='card'>\n" +
+                    "      <img src='{{image}}' alt='{{title}}'>\n" +
+                    "      <h3><a href='/post/{{slug}}' hx-get='/post/{{slug}}' hx-target='#main-content' hx-push-url='true'>{{title}}</a></h3>\n" +
+                    "    </article>\n" +
+                    "  </template>\n" +
+                    "</body>\n" +
+                    "```\n\n" +
+                    "Generate ONLY valid HTML code. Do not include markdown backticks or explanations.";
+
                     codeLanguage = "html";
                     codeBlockType = "```html";
                 }
