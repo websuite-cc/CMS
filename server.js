@@ -330,14 +330,7 @@ const server = Bun.serve({
     // SSR avec frontend/index.html et HTMX
     const template = await loadFile('frontend/index.html');
     if (!template) {
-      // Fallback vers index.html racine (pour la doc)
-      const index = await loadFile('index.html');
-      if (index) {
-        return new Response(index, {
-          headers: { 'Content-Type': 'text/html; charset=utf-8' }
-        });
-      }
-      return new Response('Template not found', { status: 500 });
+      return new Response('Template frontend/index.html not found', { status: 500 });
     }
     
     // Importer les fonctions HTMX
