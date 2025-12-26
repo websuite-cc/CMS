@@ -251,8 +251,11 @@ export async function onRequest(context) {
         }
     }
     
-    // Route explicite pour /admin/ide.html (doit être avant la logique générale)
-    if (url.pathname === '/admin/ide.html' || url.pathname === '/admin/IDE.html') {
+    // Route explicite pour /admin/ide.html (doit être AVANT la logique générale)
+    // IMPORTANT: Cette route doit retourner un 404 explicite si le fichier n'existe pas,
+    // pour éviter de servir index.html de la racine
+    if (url.pathname === '/admin/ide.html' || url.pathname === '/admin/IDE.html' || 
+        url.pathname.toLowerCase() === '/admin/ide.html') {
         // Essayer plusieurs chemins possibles
         const idePaths = ['admin/ide.html', 'admin/IDE.html', '/admin/ide.html', '/admin/IDE.html'];
         
@@ -264,14 +267,34 @@ export async function onRequest(context) {
             });
             const ideResponse = await env.ASSETS.fetch(ideRequest);
             
+            // Vérifier que la réponse est vraiment le fichier IDE et pas un fallback
             if (ideResponse.status === 200) {
-                console.log(`[IDE Route] Found ide.html at: ${idePath}`);
-                return ideResponse;
+                // Vérifier que l'URL de la réponse pointe bien vers ide.html
+                const responseUrl = ideResponse.url || ideUrl.toString();
+                if (responseUrl.includes('ide.html') || responseUrl.includes('IDE.html')) {
+                    console.log(`[IDE Route] Found ide.html at: ${idePath}`);
+                    return ideResponse;
+                }
             }
         }
         
-        // Si aucun chemin ne fonctionne, continuer vers la logique générale
-        console.log(`[IDE Route] ide.html not found, falling back to general routing`);
+        // Si aucun chemin ne fonctionne, retourner un 404 explicite
+        // Ne pas continuer vers la logique générale qui pourrait servir index.html
+        console.log(`[IDE Route] ide.html not found, returning 404`);
+        return new Response(
+            `404 - IDE file not found\n\n` +
+            `The file admin/ide.html does not exist in the repository.\n` +
+            `Please ensure the file exists at: admin/ide.html or admin/IDE.html`,
+            { 
+                status: 404,
+                statusText: 'Not Found',
+                headers: { 
+                    'Content-Type': 'text/plain',
+                    'Cache-Control': 'no-cache',
+                    'X-Content-Type-Options': 'nosniff'
+                }
+            }
+        );
     }
     
     // Route spéciale : /admin/dashboard/ide → servir admin/ide.html
@@ -400,6 +423,34 @@ export async function onRequest(context) {
                     !responseUrl.includes('/core/') &&
                     !responseUrl.includes('/frontend/')) {
                     console.log(`[Admin/Core Route] WARNING: Response URL points to root index.html: ${responseUrl}`);
+                    
+                    // Pour /admin/ide.html, vérifier aussi le contenu pour être sûr
+                    if (url.pathname.toLowerCase().includes('ide.html')) {
+                        try {
+                            const responseText = await assetResponse.clone().text();
+                            // Si le contenu contient "WebSuite Platform" (titre de index.html racine), c'est le mauvais fichier
+                            if (responseText.includes('WebSuite Platform') && !responseText.includes('Monaco Editor') && !responseText.includes('switchMode')) {
+                                console.log(`[Admin/Core Route] Detected root index.html content for ide.html request`);
+                                return new Response(
+                                    `404 - IDE file not found\n\n` +
+                                    `The file admin/ide.html does not exist. Cloudflare Pages is serving the root index.html instead.\n` +
+                                    `Please ensure admin/IDE.html exists in your repository.`,
+                                    { 
+                                        status: 404,
+                                        statusText: 'Not Found',
+                                        headers: { 
+                                            'Content-Type': 'text/plain',
+                                            'Cache-Control': 'no-cache',
+                                            'X-Content-Type-Options': 'nosniff'
+                                        }
+                                    }
+                                );
+                            }
+                        } catch (e) {
+                            console.error('Error checking response content:', e);
+                        }
+                    }
+                    
                     // Retourner un 404 au lieu de servir l'index racine
                     return new Response(
                         `404 - File not found: ${url.pathname}\n\n` +
