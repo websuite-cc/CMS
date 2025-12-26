@@ -257,7 +257,8 @@ export async function onRequest(context) {
     if (url.pathname === '/admin/ide.html' || url.pathname === '/admin/IDE.html' || 
         url.pathname.toLowerCase() === '/admin/ide.html') {
         // Essayer plusieurs chemins possibles
-        const idePaths = ['admin/ide.html', 'admin/IDE.html', '/admin/ide.html', '/admin/IDE.html'];
+        // IMPORTANT: Le fichier est commité comme IDE.html (majuscules), donc essayer celui-ci en premier
+        const idePaths = ['admin/IDE.html', '/admin/IDE.html', 'admin/ide.html', '/admin/ide.html'];
         
         for (const idePath of idePaths) {
             const ideUrl = new URL(idePath, request.url);
@@ -265,16 +266,61 @@ export async function onRequest(context) {
                 method: 'GET',
                 headers: request.headers
             });
-            const ideResponse = await env.ASSETS.fetch(ideRequest);
+            
+            let ideResponse = await env.ASSETS.fetch(ideRequest);
+            
+            // Suivre les redirections si nécessaire
+            let redirectCount = 0;
+            while ((ideResponse.status === 308 || ideResponse.status === 301 || ideResponse.status === 302) && redirectCount < 5) {
+                const location = ideResponse.headers.get('Location');
+                if (location) {
+                    const redirectUrl = location.startsWith('http') 
+                        ? new URL(location) 
+                        : new URL(location, request.url);
+                    ideResponse = await env.ASSETS.fetch(new Request(redirectUrl.toString(), {
+                        method: 'GET',
+                        headers: request.headers
+                    }));
+                    redirectCount++;
+                    console.log(`[IDE Route] Following redirect to: ${redirectUrl.toString()}`);
+                } else {
+                    break;
+                }
+            }
             
             // Vérifier que la réponse est vraiment le fichier IDE et pas un fallback
             if (ideResponse.status === 200) {
-                // Vérifier que l'URL de la réponse pointe bien vers ide.html
-                const responseUrl = ideResponse.url || ideUrl.toString();
-                if (responseUrl.includes('ide.html') || responseUrl.includes('IDE.html')) {
-                    console.log(`[IDE Route] Found ide.html at: ${idePath}`);
-                    return ideResponse;
+                // Vérifier d'abord le contenu HTML pour être sûr que c'est bien l'IDE
+                try {
+                    const responseText = await ideResponse.clone().text();
+                    // Vérifier que c'est bien l'IDE (contient des éléments spécifiques)
+                    if (responseText.includes('Monaco Editor') || 
+                        responseText.includes('switchMode') || 
+                        responseText.includes('WebSuite IDE') ||
+                        responseText.includes('mode-htmx-btn')) {
+                        console.log(`[IDE Route] Found ide.html at: ${idePath} (verified by content)`);
+                        // Re-créer la réponse car on a utilisé clone().text()
+                        return new Response(responseText, {
+                            status: 200,
+                            headers: {
+                                'Content-Type': 'text/html; charset=utf-8',
+                                'Cache-Control': 'no-cache'
+                            }
+                        });
+                    }
+                    // Si le contenu ne correspond pas, c'est probablement index.html
+                    console.log(`[IDE Route] Response at ${idePath} doesn't contain IDE-specific content. Response URL: ${ideResponse.url}`);
+                } catch (e) {
+                    console.error(`[IDE Route] Error checking content for ${idePath}:`, e);
+                    // Si on ne peut pas lire le contenu, vérifier au moins l'URL
+                    const responseUrl = ideResponse.url || ideUrl.toString();
+                    if (responseUrl.toLowerCase().includes('ide.html')) {
+                        console.log(`[IDE Route] Found ide.html at: ${idePath} (by URL)`);
+                        return ideResponse;
+                    }
                 }
+            } else {
+                console.log(`[IDE Route] Path ${idePath} returned status ${ideResponse.status}`);
             }
         }
         
@@ -284,7 +330,8 @@ export async function onRequest(context) {
         return new Response(
             `404 - IDE file not found\n\n` +
             `The file admin/ide.html does not exist in the repository.\n` +
-            `Please ensure the file exists at: admin/ide.html or admin/IDE.html`,
+            `Please ensure the file exists at: admin/ide.html or admin/IDE.html\n\n` +
+            `Note: On Cloudflare Pages, file names are case-sensitive. Make sure the file is committed to git.`,
             { 
                 status: 404,
                 statusText: 'Not Found',
