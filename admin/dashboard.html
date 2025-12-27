@@ -1648,52 +1648,115 @@
 
     <script src="/core/admin.js"></script>
     <script>
-        // Vérifier que openServicesModal est disponible après le chargement
-        // Attendre que le DOM et admin.js soient chargés
-        (function() {
-            function checkAndDefineModal() {
-                if (typeof window.openServicesModal === 'undefined') {
-                    console.warn('openServicesModal not found, defining fallback...');
-                    // Fallback: définir une version qui ouvre juste la modal
-                    window.openServicesModal = function() {
-                        console.log('[Fallback] Opening services modal');
-                        const modal = document.getElementById('services-modal');
-                        if (modal) {
-                            modal.classList.remove('hidden');
-                            // Afficher un message dans la modal
-                            const container = document.getElementById('services-list');
-                            if (container) {
-                                container.innerHTML = `
-                                    <div class="text-center p-8 text-yellow-600">
-                                        <i class="fas fa-exclamation-triangle text-3xl mb-4"></i>
-                                        <p>Fonction de chargement non disponible</p>
-                                        <p class="text-sm mt-2">Vérifiez la console pour plus d'informations</p>
-                                    </div>
-                                `;
-                            }
-                        } else {
-                            console.error('Modal element #services-modal not found!');
-                            alert('Erreur: La popup des services n\'a pas pu être trouvée.');
-                        }
-                    };
-                    console.log('Fallback openServicesModal defined');
-                } else {
-                    console.log('✓ openServicesModal function is available');
+        // Définir openServicesModal AVANT le chargement de admin.js pour éviter les conflits
+        // Cette fonction sera remplacée par celle de admin.js si elle charge après
+        if (typeof window.openServicesModal === 'undefined') {
+            window.openServicesModal = function() {
+                console.log('[openServicesModal] Opening modal...');
+                const modal = document.getElementById('services-modal');
+                if (!modal) {
+                    console.error('[openServicesModal] Modal element not found!');
+                    alert('Erreur: La popup des services n\'a pas pu être trouvée.');
+                    return;
                 }
+                
+                modal.classList.remove('hidden');
+                
+                const container = document.getElementById('services-list');
+                if (!container) {
+                    console.error('[openServicesModal] Container services-list not found!');
+                    return;
+                }
+                
+                // Afficher le loading
+                container.innerHTML = `
+                    <div class="text-center p-8">
+                        <i class="fas fa-spinner fa-spin text-3xl text-slate-400 mb-4"></i>
+                        <p class="text-slate-500 dark:text-slate-400">Chargement des services...</p>
+                    </div>
+                `;
+                
+                // Essayer d'utiliser la fonction de admin.js si elle est disponible
+                if (typeof window.loadConnectedServices === 'function') {
+                    console.log('[openServicesModal] Using loadConnectedServices from admin.js');
+                    window.loadConnectedServices();
+                    return;
+                }
+                
+                // Sinon, charger directement
+                console.log('[openServicesModal] Loading services directly...');
+                loadServicesDirectly();
+            };
+        }
+        
+        // Fonction de chargement directe (fallback si admin.js n'est pas chargé)
+        async function loadServicesDirectly() {
+            const container = document.getElementById('services-list');
+            if (!container) return;
+            
+            try {
+                const authKey = localStorage.getItem('websuite_auth') || 
+                              localStorage.getItem('stackpages_auth') || 
+                              localStorage.getItem('admin_token');
+                
+                if (!authKey) {
+                    throw new Error('Non authentifié. Veuillez vous reconnecter.');
+                }
+                
+                const response = await fetch('/api/env-vars', {
+                    headers: { 'X-Auth-Key': authKey }
+                });
+                
+                console.log('[loadServicesDirectly] Response status:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Erreur ${response.status}: ${errorText || 'Erreur lors du chargement'}`);
+                }
+                
+                const data = await response.json();
+                console.log('[loadServicesDirectly] Data received, variables:', data.count);
+                
+                // Utiliser la fonction de rendu de admin.js si disponible, sinon utiliser une version simple
+                if (typeof window.renderServicesModal === 'function') {
+                    // Créer les données dans le format attendu
+                    const envVarNames = data.variables.map(v => v.name);
+                    // Cette logique devrait être dans admin.js, mais pour le fallback, on affiche juste les variables
+                    container.innerHTML = `
+                        <div class="p-8">
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">
+                                Variables d'environnement disponibles (${data.count || 0})
+                            </h3>
+                            <div class="space-y-2">
+                                ${data.variables.map(v => `
+                                    <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-lg">
+                                        <div class="font-medium text-slate-900 dark:text-white">${v.name}</div>
+                                        <div class="text-sm text-slate-600 dark:text-slate-400">${v.description}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Si loadConnectedServices est maintenant disponible après le chargement de admin.js, l'utiliser
+                    setTimeout(function() {
+                        if (typeof window.loadConnectedServices === 'function') {
+                            console.log('[loadServicesDirectly] loadConnectedServices now available, calling it...');
+                            window.loadConnectedServices();
+                        }
+                    }, 500);
+                }
+            } catch (error) {
+                console.error('[loadServicesDirectly] Error:', error);
+                container.innerHTML = `
+                    <div class="text-center p-8 text-red-500">
+                        <i class="fas fa-exclamation-circle text-3xl mb-4"></i>
+                        <p>Erreur lors du chargement des services</p>
+                        <p class="text-sm mt-2">${error.message}</p>
+                    </div>
+                `;
             }
-            
-            // Essayer immédiatement
-            checkAndDefineModal();
-            
-            // Essayer après DOMContentLoaded
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', checkAndDefineModal);
-            }
-            
-            // Essayer après un court délai (au cas où admin.js se charge après)
-            setTimeout(checkAndDefineModal, 500);
-            setTimeout(checkAndDefineModal, 1000);
-        })();
+        }
         
         // Logout Handler
         async function logout() {

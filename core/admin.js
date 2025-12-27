@@ -1517,14 +1517,19 @@ window.openServicesModal = function() {
         console.log('[Services Modal] Modal found, removing hidden class');
         modal.classList.remove('hidden');
         console.log('[Services Modal] Loading services...');
-        loadConnectedServices(); // Charger les services dynamiquement
+        if (typeof window.loadConnectedServices === 'function') {
+            window.loadConnectedServices(); // Charger les services dynamiquement
+        } else {
+            console.error('[Services Modal] loadConnectedServices function not found!');
+        }
     } catch (error) {
         console.error('[Services Modal] Error opening modal:', error);
         alert('Erreur lors de l\'ouverture de la popup: ' + error.message);
     }
 }
 
-async function loadConnectedServices() {
+// Rendre cette fonction accessible globalement pour le fallback
+window.loadConnectedServices = async function loadConnectedServices() {
     const container = document.getElementById('services-list');
     if (!container) return;
 
@@ -1659,7 +1664,11 @@ async function loadConnectedServices() {
         });
 
         // Rendre la liste dans la modal
-        renderServicesModal(connectedServices, availableServices);
+        if (typeof window.renderServicesModal === 'function') {
+            window.renderServicesModal(connectedServices, availableServices);
+        } else {
+            console.error('[loadConnectedServices] renderServicesModal function not found!');
+        }
 
     } catch (error) {
         console.error('Erreur lors du chargement des services:', error);
@@ -1676,7 +1685,7 @@ async function loadConnectedServices() {
     }
 }
 
-function renderServicesModal(connectedServices, availableServices) {
+window.renderServicesModal = function renderServicesModal(connectedServices, availableServices) {
     const container = document.getElementById('services-list');
     if (!container) return;
 
