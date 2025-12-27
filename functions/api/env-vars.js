@@ -66,7 +66,60 @@ const ENV_VAR_DESCRIPTIONS = {
   'PEXELS_API_KEY': 'Clé API Pexels pour récupérer des images libres de droits (https://www.pexels.com/api/)',
   
   // Google Apps Script
-  'APPSCRIPT_URL': 'URL du webhook Google Apps Script pour le traitement des emails et autres intégrations - Format: https://script.google.com/macros/s/SCRIPT_ID/exec (doit être déployé en tant que Web App avec accès "Anyone")',
+  'APPSCRIPT_URL': 'URL du webhook Google Apps Script pour le traitement des emails et autres intégrations Google (Gmail, Drive, Docs, Sheets, Calendar, Meet, Forms) - Format: https://script.google.com/macros/s/SCRIPT_ID/exec (doit être déployé en tant que Web App avec accès "Anyone")',
+  
+  // AI & LLM
+  'MICROSOFT_COPILOT_API_KEY': 'Clé API Microsoft Copilot pour l\'intelligence artificielle',
+  'DEEPSEEK_API_KEY': 'Clé API DeepSeek pour le modèle de langage AI',
+  
+  // Content & Media
+  'WORDPRESS_URL': 'URL de votre site WordPress pour l\'API REST (ex: https://votresite.com)',
+  'WORDPRESS_API_KEY': 'Clé API WordPress (Application Password) pour authentifier les requêtes REST',
+  'SPOTIFY_CLIENT_ID': 'Client ID Spotify pour l\'API Spotify Web API',
+  'SPOTIFY_CLIENT_SECRET': 'Client Secret Spotify pour l\'API Spotify Web API',
+  'STREAMYARD_API_KEY': 'Clé API StreamYard pour le streaming et la diffusion en direct (optionnel)',
+  
+  // Social & Ads
+  'FACEBOOK_ACCESS_TOKEN': 'Token d\'accès Facebook Graph API pour les posts et interactions (créer via https://developers.facebook.com/apps)',
+  'TWITTER_API_KEY': 'Clé API Twitter (X) pour les tweets et interactions (créer via https://developer.twitter.com/en/portal/dashboard)',
+  'TWITTER_API_SECRET': 'Secret API Twitter (X)',
+  'TWITTER_BEARER_TOKEN': 'Token Bearer Twitter (X) pour l\'authentification OAuth 2.0',
+  'INSTAGRAM_ACCESS_TOKEN': 'Token d\'accès Instagram Basic Display API pour les posts et stories',
+  'LINKEDIN_CLIENT_ID': 'Client ID LinkedIn pour l\'API LinkedIn (créer via https://www.linkedin.com/developers/apps)',
+  'LINKEDIN_CLIENT_SECRET': 'Client Secret LinkedIn pour l\'API LinkedIn',
+  'TIKTOK_CLIENT_KEY': 'Client Key TikTok pour l\'API TikTok (créer via https://developers.tiktok.com/)',
+  'TIKTOK_CLIENT_SECRET': 'Client Secret TikTok pour l\'API TikTok',
+  'META_ADS_ACCESS_TOKEN': 'Token d\'accès Facebook Ads API pour les campagnes publicitaires Meta',
+  
+  // Business & E-commerce
+  'STRIPE_SECRET_KEY': 'Clé secrète Stripe pour les paiements en ligne (commence par sk_live_ ou sk_test_, créer via https://dashboard.stripe.com/apikeys)',
+  'STRIPE_PUBLISHABLE_KEY': 'Clé publique Stripe (commence par pk_live_ ou pk_test_)',
+  'PAYPAL_CLIENT_ID': 'Client ID PayPal pour l\'API PayPal (créer via https://developer.paypal.com/)',
+  'PAYPAL_CLIENT_SECRET': 'Client Secret PayPal pour l\'API PayPal',
+  'SHOPIFY_API_KEY': 'Clé API Shopify pour accéder aux données de votre boutique (créer via Shopify Partners)',
+  'SHOPIFY_API_SECRET': 'Secret API Shopify',
+  'SHOPIFY_STORE_URL': 'URL de votre boutique Shopify (ex: votreboutique.myshopify.com)',
+  'GOOGLE_ADS_API_KEY': 'Clé API Google Ads pour gérer les campagnes publicitaires (créer via https://ads.google.com/aw/apicenter)',
+  'GOOGLE_ADS_CLIENT_ID': 'Client ID Google Ads pour l\'OAuth',
+  'GOOGLE_ADS_CLIENT_SECRET': 'Client Secret Google Ads pour l\'OAuth',
+  
+  // Development & Data
+  'SUPABASE_URL': 'URL de votre projet Supabase (ex: https://xxxxx.supabase.co, créer via https://app.supabase.com)',
+  'SUPABASE_ANON_KEY': 'Clé anonyme Supabase (publique, pour les requêtes client-side)',
+  'SUPABASE_SERVICE_ROLE_KEY': 'Clé service role Supabase (privée, pour les opérations admin côté serveur uniquement)',
+  'GITLAB_TOKEN': 'Token d\'accès GitLab pour l\'API GitLab (créer via https://gitlab.com/-/user_settings/personal_access_tokens)',
+  'GITLAB_URL': 'URL de votre instance GitLab (par défaut: https://gitlab.com)',
+  'GOOGLE_ANALYTICS_API_KEY': 'Clé API Google Analytics pour accéder aux données Analytics',
+  'GOOGLE_ANALYTICS_VIEW_ID': 'ID de vue Google Analytics (trouvable dans Admin > Vue > Paramètres de la vue)',
+  'AIRTABLE_API_KEY': 'Clé API Airtable pour accéder aux bases de données (créer via https://airtable.com/create/tokens)',
+  'AIRTABLE_BASE_ID': 'ID de la base Airtable (trouvable dans l\'URL de votre base: https://airtable.com/BASE_ID/...)',
+  
+  // Productivity & Collaboration
+  'TRELLO_API_KEY': 'Clé API Trello pour accéder aux boards et cartes (créer via https://trello.com/app-key)',
+  'TRELLO_TOKEN': 'Token Trello (généré après avoir autorisé l\'application avec la clé API)',
+  'CANVA_API_KEY': 'Clé API Canva pour accéder aux designs et créer du contenu visuel (si disponible, créer via https://www.canva.com/developers/)',
+  'SLACK_BOT_TOKEN': 'Token de bot Slack pour envoyer des messages et interagir (créer via https://api.slack.com/apps, format: xoxb-...)',
+  'SLACK_WEBHOOK_URL': 'URL de webhook Slack pour envoyer des notifications (format: https://hooks.slack.com/services/...)',
   
   // Services de génération PDF
   'PDF_GENERATION_SERVICE_URL': 'URL du service de génération de fichiers PDF (optionnel)',
@@ -110,11 +163,23 @@ function getDescription(varName) {
   if (varName.startsWith('EVENTS_')) {
     return 'Variable liée aux événements';
   }
-  if (varName.startsWith('GITHUB_')) {
-    return 'Variable liée à GitHub';
+  if (varName.startsWith('GITHUB_') || varName.startsWith('GITLAB_')) {
+    return 'Variable liée à GitHub ou GitLab';
   }
   if (varName.startsWith('META_')) {
-    return 'Variable liée au SEO et métadonnées';
+    return 'Variable liée au SEO, métadonnées ou Meta/Facebook Ads';
+  }
+  if (varName.includes('STRIPE_') || varName.includes('PAYPAL_') || varName.includes('SHOPIFY_')) {
+    return 'Variable liée aux paiements ou e-commerce';
+  }
+  if (varName.includes('FACEBOOK_') || varName.includes('TWITTER_') || varName.includes('INSTAGRAM_') || varName.includes('LINKEDIN_') || varName.includes('TIKTOK_') || varName.includes('SLACK_')) {
+    return 'Variable liée aux réseaux sociaux ou communication';
+  }
+  if (varName.includes('SUPABASE_') || varName.includes('AIRTABLE_')) {
+    return 'Variable liée à une base de données ou stockage';
+  }
+  if (varName.includes('SPOTIFY_') || varName.includes('WORDPRESS_') || varName.includes('STREAMYARD_')) {
+    return 'Variable liée au contenu ou média';
   }
   if (varName.includes('API_KEY') || varName.includes('_KEY')) {
     return 'Clé API pour authentifier les requêtes';

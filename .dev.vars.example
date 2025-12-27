@@ -71,8 +71,84 @@ PEXELS_API_KEY=votre_cle_pexels_ici
 # URL du webhook Google Apps Script pour le traitement des emails et autres intégrations
 # Format: https://script.google.com/macros/s/SCRIPT_ID/exec
 # Le script doit être déployé en tant que "Web App" avec accès "Anyone" (ou "Anyone with link")
-# Utilisé principalement pour le traitement automatique des emails
+# Utilisé pour: Gmail, Google Drive, Google Docs, Google Sheets, Google Calendar, Google Meet, Google Forms
 APPSCRIPT_URL=https://script.google.com/macros/s/VOTRE_SCRIPT_ID/exec
+
+# --- INTÉGRATIONS AI & LLM ---
+# Microsoft Copilot - Clé API Microsoft Copilot
+MICROSOFT_COPILOT_API_KEY=
+# DeepSeek - Clé API DeepSeek
+DEEPSEEK_API_KEY=
+# (Gemini déjà configuré ci-dessus avec GOOGLE_AI_KEY)
+
+# --- INTÉGRATIONS CONTENU & MÉDIA ---
+# WordPress - URL du site WordPress pour l'API REST
+WORDPRESS_URL=
+WORDPRESS_API_KEY=
+# Spotify - Clés API Spotify (Spotify Web API)
+SPOTIFY_CLIENT_ID=
+SPOTIFY_CLIENT_SECRET=
+# StreamYard - Clé API StreamYard (si disponible)
+STREAMYARD_API_KEY=
+
+# --- INTÉGRATIONS RÉSEAUX SOCIAUX & PUBLICITÉ ---
+# Facebook - Token d'accès Facebook Graph API
+FACEBOOK_ACCESS_TOKEN=
+# Twitter/X - Clés API Twitter (X)
+TWITTER_API_KEY=
+TWITTER_API_SECRET=
+TWITTER_BEARER_TOKEN=
+# Instagram - Token d'accès Instagram Basic Display API
+INSTAGRAM_ACCESS_TOKEN=
+# LinkedIn - Clés API LinkedIn
+LINKEDIN_CLIENT_ID=
+LINKEDIN_CLIENT_SECRET=
+# TikTok - Clés API TikTok
+TIKTOK_CLIENT_KEY=
+TIKTOK_CLIENT_SECRET=
+# Meta Ads - Token d'accès Facebook Ads API
+META_ADS_ACCESS_TOKEN=
+
+# --- INTÉGRATIONS BUSINESS & E-COMMERCE ---
+# Stripe - Clé secrète Stripe
+STRIPE_SECRET_KEY=
+STRIPE_PUBLISHABLE_KEY=
+# PayPal - Clés API PayPal
+PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_SECRET=
+# Shopify - Clé API Shopify et mot de passe
+SHOPIFY_API_KEY=
+SHOPIFY_API_SECRET=
+SHOPIFY_STORE_URL=
+# Google Ads - Clés API Google Ads
+GOOGLE_ADS_API_KEY=
+GOOGLE_ADS_CLIENT_ID=
+GOOGLE_ADS_CLIENT_SECRET=
+
+# --- INTÉGRATIONS DÉVELOPPEMENT & DONNÉES ---
+# Supabase - URL et clé API Supabase
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+# GitLab - Token d'accès GitLab
+GITLAB_TOKEN=
+GITLAB_URL=https://gitlab.com
+# Google Analytics - Clés API Google Analytics
+GOOGLE_ANALYTICS_API_KEY=
+GOOGLE_ANALYTICS_VIEW_ID=
+# Airtable - Clé API Airtable
+AIRTABLE_API_KEY=
+AIRTABLE_BASE_ID=
+
+# --- INTÉGRATIONS PRODUCTIVITÉ & COLLABORATION ---
+# Trello - Clé API et token Trello
+TRELLO_API_KEY=
+TRELLO_TOKEN=
+# Canva - Clé API Canva (si disponible)
+CANVA_API_KEY=
+# Slack - Token d'accès Slack Bot
+SLACK_BOT_TOKEN=
+SLACK_WEBHOOK_URL=
 
 # ====================================================================
 # INSTRUCTIONS

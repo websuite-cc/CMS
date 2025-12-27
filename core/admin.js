@@ -1596,6 +1596,7 @@ window.loadConnectedServices = async function loadConnectedServices() {
         const servicesMap = {
             'GitHub': {
                 icon: 'fab fa-github',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/github-icon-2.svg',
                 color: 'bg-slate-900',
                 description: 'Stockage et versionning de vos agents. Indispensable pour l\'exécution du code.',
                 configUrl: 'https://github.com/settings/tokens',
@@ -1610,6 +1611,7 @@ window.loadConnectedServices = async function loadConnectedServices() {
             },
             'Google AI (Gemini)': {
                 icon: 'fab fa-google',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/gemini-icon-logo.svg',
                 color: 'bg-gradient-to-br from-blue-500 to-purple-600',
                 description: 'Moteur d\'intelligence artificielle Gemini pour générer le code de vos agents.',
                 configUrl: 'https://aistudio.google.com/app/apikey',
@@ -1624,6 +1626,7 @@ window.loadConnectedServices = async function loadConnectedServices() {
             },
             'YouTube': {
                 icon: 'fab fa-youtube',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/youtube-icon-8.svg',
                 color: 'bg-red-600',
                 description: 'Flux RSS YouTube pour récupérer les vidéos d\'une chaîne',
                 configUrl: null,
@@ -1652,8 +1655,66 @@ window.loadConnectedServices = async function loadConnectedServices() {
             },
             'Google Apps Script': {
                 icon: 'fab fa-google',
+                iconSvg: 'https://cdn.simpleicons.org/googleappsscript',
                 color: 'bg-yellow-600',
                 description: 'Traitement automatique des emails et intégrations via Google Apps Script',
+                configUrl: 'https://script.google.com/',
+                required: ['APPSCRIPT_URL']
+            },
+            // Services Google via Apps Script
+            'Gmail': {
+                icon: 'fab fa-google',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/official-gmail-icon-2020-.svg',
+                color: 'bg-red-600',
+                description: 'Envoi et gestion d\'emails via Google Apps Script',
+                configUrl: 'https://script.google.com/',
+                required: ['APPSCRIPT_URL']
+            },
+            'Google Drive': {
+                icon: 'fab fa-google-drive',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/google-drive-icon-2020.svg',
+                color: 'bg-blue-400',
+                description: 'Upload, download et gestion de fichiers via Google Apps Script',
+                configUrl: 'https://script.google.com/',
+                required: ['APPSCRIPT_URL']
+            },
+            'Google Docs': {
+                icon: 'fas fa-file-alt',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/google-docs-icon-2.svg',
+                color: 'bg-blue-600',
+                description: 'Création et édition de documents via Google Apps Script',
+                configUrl: 'https://script.google.com/',
+                required: ['APPSCRIPT_URL']
+            },
+            'Google Sheets': {
+                icon: 'fas fa-table',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/google-sheets-logo-icon.svg',
+                color: 'bg-green-500',
+                description: 'Lecture et écriture de feuilles de calcul via Google Apps Script',
+                configUrl: 'https://script.google.com/',
+                required: ['APPSCRIPT_URL']
+            },
+            'Google Calendar': {
+                icon: 'fas fa-calendar',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/google-calendar-icon-2020-.svg',
+                color: 'bg-blue-500',
+                description: 'Création et gestion d\'événements via Google Apps Script',
+                configUrl: 'https://script.google.com/',
+                required: ['APPSCRIPT_URL']
+            },
+            'Google Meet': {
+                icon: 'fas fa-video',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/google-meet-icon-2020-.svg',
+                color: 'bg-green-600',
+                description: 'Création de réunions via Google Apps Script',
+                configUrl: 'https://script.google.com/',
+                required: ['APPSCRIPT_URL']
+            },
+            'Google Forms': {
+                icon: 'fas fa-poll',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/google-forms.svg',
+                color: 'bg-purple-500',
+                description: 'Création et gestion de formulaires via Google Apps Script',
                 configUrl: 'https://script.google.com/',
                 required: ['APPSCRIPT_URL']
             },
@@ -1670,6 +1731,188 @@ window.loadConnectedServices = async function loadConnectedServices() {
                 description: 'Service d\'envoi d\'email via API externe',
                 configUrl: null,
                 required: ['EMAIL_API_KEY', 'EMAIL_SERVICE_URL']
+            },
+            // AI & LLM
+            'Microsoft Copilot': {
+                icon: 'fab fa-microsoft',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/microsoft-copilot-1.svg',
+                color: 'bg-blue-600',
+                description: 'Intelligence artificielle Microsoft Copilot',
+                configUrl: 'https://copilot.microsoft.com',
+                required: ['MICROSOFT_COPILOT_API_KEY']
+            },
+            'DeepSeek': {
+                icon: 'fas fa-brain',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/deepseek-2.svg',
+                color: 'bg-indigo-600',
+                description: 'Modèle de langage DeepSeek AI',
+                configUrl: 'https://www.deepseek.com',
+                required: ['DEEPSEEK_API_KEY']
+            },
+            // Content & Media
+            'WordPress': {
+                icon: 'fab fa-wordpress',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/wordpress-icon-1.svg',
+                color: 'bg-blue-600',
+                description: 'CMS WordPress via API REST',
+                configUrl: null,
+                required: ['WORDPRESS_URL']
+            },
+            'Spotify': {
+                icon: 'fab fa-spotify',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/spotify-2.svg',
+                color: 'bg-green-500',
+                description: 'API Spotify pour podcasts et musiques',
+                configUrl: 'https://developer.spotify.com/dashboard',
+                required: ['SPOTIFY_CLIENT_ID', 'SPOTIFY_CLIENT_SECRET']
+            },
+            'StreamYard': {
+                icon: 'fas fa-video',
+                iconSvg: 'https://static.wikia.nocookie.net/logopedia/images/c/ca/StreamYard_2021_%28Icon%29.svg',
+                color: 'bg-purple-600',
+                description: 'Streaming et diffusion en direct',
+                configUrl: 'https://streamyard.com',
+                required: ['STREAMYARD_API_KEY']
+            },
+            // Social & Ads
+            'Facebook': {
+                icon: 'fab fa-facebook',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/facebook-2020-1-1.svg',
+                color: 'bg-blue-700',
+                description: 'Graph API Facebook pour les posts et interactions',
+                configUrl: 'https://developers.facebook.com/apps',
+                required: ['FACEBOOK_ACCESS_TOKEN']
+            },
+            'Twitter/X': {
+                icon: 'fab fa-twitter',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/twitter-6.svg',
+                color: 'bg-black',
+                description: 'API Twitter (X) pour tweets et interactions',
+                configUrl: 'https://developer.twitter.com/en/portal/dashboard',
+                required: ['TWITTER_API_KEY', 'TWITTER_API_SECRET']
+            },
+            'Instagram': {
+                icon: 'fab fa-instagram',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/instagram-2016-5.svg',
+                color: 'bg-gradient-to-br from-purple-600 to-pink-600',
+                description: 'API Instagram pour posts et stories',
+                configUrl: 'https://developers.facebook.com/apps',
+                required: ['INSTAGRAM_ACCESS_TOKEN']
+            },
+            'LinkedIn': {
+                icon: 'fab fa-linkedin',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/linkedin-icon-3.svg',
+                color: 'bg-blue-700',
+                description: 'API LinkedIn pour posts professionnels',
+                configUrl: 'https://www.linkedin.com/developers/apps',
+                required: ['LINKEDIN_CLIENT_ID', 'LINKEDIN_CLIENT_SECRET']
+            },
+            'TikTok': {
+                icon: 'fab fa-tiktok',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/tiktok-icon-2.svg',
+                color: 'bg-black',
+                description: 'API TikTok pour vidéos et interactions',
+                configUrl: 'https://developers.tiktok.com/',
+                required: ['TIKTOK_CLIENT_KEY', 'TIKTOK_CLIENT_SECRET']
+            },
+            'Meta Ads': {
+                icon: 'fab fa-meta',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/meta-3.svg',
+                color: 'bg-blue-600',
+                description: 'API Facebook Ads pour campagnes publicitaires',
+                configUrl: 'https://business.facebook.com/ads/manager',
+                required: ['META_ADS_ACCESS_TOKEN']
+            },
+            // Business & E-commerce
+            'Stripe': {
+                icon: 'fab fa-stripe',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/stripe-4.svg',
+                color: 'bg-indigo-600',
+                description: 'Paiements en ligne sécurisés',
+                configUrl: 'https://dashboard.stripe.com/apikeys',
+                required: ['STRIPE_SECRET_KEY']
+            },
+            'PayPal': {
+                icon: 'fab fa-paypal',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/paypal-4.svg',
+                color: 'bg-blue-600',
+                description: 'Paiements PayPal',
+                configUrl: 'https://developer.paypal.com/',
+                required: ['PAYPAL_CLIENT_ID', 'PAYPAL_CLIENT_SECRET']
+            },
+            'Shopify': {
+                icon: 'fab fa-shopify',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/shopify.svg',
+                color: 'bg-green-600',
+                description: 'Plateforme e-commerce Shopify',
+                configUrl: 'https://partners.shopify.com/organizations',
+                required: ['SHOPIFY_API_KEY', 'SHOPIFY_STORE_URL']
+            },
+            'Google Ads': {
+                icon: 'fab fa-google',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/google-ads-2.svg',
+                color: 'bg-blue-500',
+                description: 'API Google Ads pour campagnes publicitaires',
+                configUrl: 'https://ads.google.com/aw/apicenter',
+                required: ['GOOGLE_ADS_API_KEY']
+            },
+            // Development & Data
+            'Supabase': {
+                icon: 'fas fa-database',
+                iconSvg: 'https://www.vectorlogo.zone/logos/supabase/supabase-icon.svg',
+                color: 'bg-green-600',
+                description: 'Base de données et backend as a service',
+                configUrl: 'https://app.supabase.com/project/_/settings/api',
+                required: ['SUPABASE_URL', 'SUPABASE_ANON_KEY']
+            },
+            'GitLab': {
+                icon: 'fab fa-gitlab',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/gitlab.svg',
+                color: 'bg-orange-600',
+                description: 'Plateforme DevOps GitLab',
+                configUrl: 'https://gitlab.com/-/user_settings/personal_access_tokens',
+                required: ['GITLAB_TOKEN']
+            },
+            'Google Analytics': {
+                icon: 'fab fa-google',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/google-analytics-4.svg',
+                color: 'bg-orange-500',
+                description: 'Analytics et statistiques de trafic',
+                configUrl: 'https://analytics.google.com/',
+                required: ['GOOGLE_ANALYTICS_VIEW_ID']
+            },
+            'Airtable': {
+                icon: 'fas fa-table',
+                iconSvg: 'https://companieslogo.com/img/orig/airtable-5e5cc25f.svg',
+                color: 'bg-orange-500',
+                description: 'Base de données collaborative Airtable',
+                configUrl: 'https://airtable.com/create/tokens',
+                required: ['AIRTABLE_API_KEY']
+            },
+            // Productivity & Collaboration
+            'Trello': {
+                icon: 'fab fa-trello',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/trello.svg',
+                color: 'bg-blue-600',
+                description: 'Gestion de projet et kanban boards',
+                configUrl: 'https://trello.com/app-key',
+                required: ['TRELLO_API_KEY']
+            },
+            'Canva': {
+                icon: 'fab fa-canva',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/canva-wordmark-2.svg',
+                color: 'bg-blue-600',
+                description: 'Design graphique et création visuelle',
+                configUrl: 'https://www.canva.com/developers/',
+                required: ['CANVA_API_KEY']
+            },
+            'Slack': {
+                icon: 'fab fa-slack',
+                iconSvg: 'https://cdn.worldvectorlogo.com/logos/slack-new-logo.svg',
+                color: 'bg-purple-600',
+                description: 'Communication d\'équipe et notifications',
+                configUrl: 'https://api.slack.com/apps',
+                required: ['SLACK_BOT_TOKEN']
             }
         };
 
@@ -1795,8 +2038,8 @@ window.renderServicesModal = function renderServicesModal(connectedServices, ava
                         </span>
                     </div>
                     <div class="mb-4">
-                        <div class="w-12 h-12 ${service.color} rounded-lg flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-110 transition-transform">
-                            <i class="${service.icon}"></i>
+                        <div class="w-12 h-12 ${service.iconSvg ? 'bg-gray-50 dark:bg-slate-800' : service.color} rounded-lg flex items-center justify-center ${service.iconSvg ? '' : 'text-white'} text-2xl shadow-md group-hover:scale-110 transition-transform ${service.iconSvg ? 'p-2' : ''}">
+                            ${service.iconSvg ? `<img src="${service.iconSvg}" alt="${service.name}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.fa-fallback').style.display='block';" /><i class="${service.icon} fa-fallback" style="display:none;"></i>` : `<i class="${service.icon}"></i>`}
                         </div>
                     </div>
                     <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">${service.name}</h3>
@@ -1840,8 +2083,8 @@ window.renderServicesModal = function renderServicesModal(connectedServices, ava
                 <div class="group relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg opacity-75 transition-all duration-300">
                     <div class="absolute top-4 right-4">${statusBadge}</div>
                     <div class="mb-4">
-                        <div class="w-12 h-12 ${service.color} rounded-lg flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-110 transition-transform">
-                            <i class="${service.icon}"></i>
+                        <div class="w-12 h-12 ${service.iconSvg ? 'bg-gray-50 dark:bg-slate-800' : service.color} rounded-lg flex items-center justify-center ${service.iconSvg ? '' : 'text-white'} text-2xl shadow-md group-hover:scale-110 transition-transform ${service.iconSvg ? 'p-2' : ''}">
+                            ${service.iconSvg ? `<img src="${service.iconSvg}" alt="${service.name}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.fa-fallback').style.display='block';" /><i class="${service.icon} fa-fallback" style="display:none;"></i>` : `<i class="${service.icon}"></i>`}
                         </div>
                     </div>
                     <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">${service.name}</h3>
