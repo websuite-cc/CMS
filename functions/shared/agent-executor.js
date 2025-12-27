@@ -35,54 +35,109 @@ export async function loadAgentFromGitHub(agentId, env) {
 /**
  * Exécute le code de l'agent dans un contexte sécurisé
  * 
- * @deprecated Cette fonction utilise new Function() qui n'est pas compatible avec Cloudflare Workers.
- * Les agents doivent maintenant être des endpoints API standards dans functions/api/agents/[id]/handler.js
- * Cette fonction est conservée uniquement comme fallback pour la migration des anciens agents.
+ * Note: Cette fonction utilise new Function() qui fonctionne en local (Bun) mais pas en production Cloudflare Workers.
+ * Pour la production, les agents doivent être déployés vers GitHub et utilisent le routing automatique.
  * 
- * Note: En production Cloudflare, on pourrait utiliser un Worker isolé pour plus de sécurité
+ * Supporte deux formats :
+ * 1. Ancien format: export default async function agent(context) { ... }
+ * 2. Nouveau format: export async function onRequestPost(context) { ... }
  */
 export async function executeAgent(agentCode, env) {
   // Créer un contexte similaire aux autres fonctions API
   const context = {
     env, // Les agents ont accès exclusif aux variables d'environnement
-    request: null // Les agents n'ont pas besoin de request pour l'instant
+    request: { method: 'POST', url: 'http://localhost' }, // Mock request
+    params: {} // Pas de params pour l'exécution directe
   };
   
-  // Vérifier que le code exporte bien une fonction par défaut
-  if (!agentCode.includes('export default')) {
-    throw new Error('Agent must export default async function agent(context)');
+  // Vérifier le format du code
+  const isOldFormat = agentCode.includes('export default') && agentCode.includes('function agent');
+  const isNewFormat = agentCode.includes('onRequestPost') || agentCode.includes('onRequestGet');
+  
+  if (!isOldFormat && !isNewFormat) {
+    throw new Error('Agent code must export either "export default async function agent(context)" or "onRequestPost/onRequestGet"');
   }
   
-  // Extraire la fonction export default
-  // Pattern: export default async function agent(context) { ... }
-  const exportMatch = agentCode.match(/export\s+default\s+async\s+function\s+agent\s*\([^)]*\)\s*\{[\s\S]*\}/);
-  if (!exportMatch) {
-    throw new Error('Agent must export default async function agent(context)');
-  }
-  
-  // Créer la fonction dynamiquement
-  // On remplace "export default" par une assignation locale
-  const funcCode = agentCode
-    .replace(/export\s+default\s+async\s+function\s+agent/, 'async function _agent');
-  
-  // Créer un contexte isolé avec seulement les objets nécessaires
-  // Utiliser Function() qui est plus sûr que eval() car il crée un nouveau scope
   let agentFunction;
-  try {
-    agentFunction = new Function(
-      'context',
-      `
-      ${funcCode}
-      return _agent(context);
-      `
-    );
-  } catch (error) {
-    throw new Error(`Invalid agent code: ${error.message}`);
+  
+  if (isNewFormat) {
+    // Nouveau format : onRequestPost/onRequestGet
+    // On doit extraire la fonction handleAgent ou wrapper onRequestPost
+    // Chercher handleAgent d'abord (fonction interne)
+    let funcCode = agentCode;
+    
+    // Si on a handleAgent, l'utiliser
+    if (agentCode.includes('async function handleAgent')) {
+      funcCode = funcCode.replace(/export\s+async\s+function\s+onRequestPost[^{]*\{[\s\S]*?return\s+handleAgent\(context\);[\s\S]*?\}/g, '');
+      funcCode = funcCode.replace(/export\s+async\s+function\s+onRequestGet[^{]*\{[\s\S]*?return\s+handleAgent\(context\);[\s\S]*?\}/g, '');
+      funcCode = funcCode.replace(/async function handleAgent/, 'async function _agent');
+    } else {
+      // Sinon, wrapper onRequestPost
+      funcCode = agentCode.replace(/export\s+async\s+function\s+onRequestPost/g, 'async function _agent');
+      // Supprimer onRequestGet si présent
+      funcCode = funcCode.replace(/export\s+async\s+function\s+onRequestGet[^{]*\{[\s\S]*?\}/g, '');
+    }
+    
+    try {
+      // Ajouter les imports nécessaires (jsonResponse, errorResponse)
+      const helperCode = `
+        function jsonResponse(data) {
+          return new Response(JSON.stringify(data), {
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        function errorResponse(message, status = 500) {
+          return new Response(JSON.stringify({ error: message, success: false }), {
+            status: status,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+      `;
+      
+      agentFunction = new Function(
+        'context',
+        `
+        ${helperCode}
+        ${funcCode}
+        return _agent(context);
+        `
+      );
+    } catch (error) {
+      throw new Error(`Invalid agent code (new format): ${error.message}`);
+    }
+  } else {
+    // Ancien format : export default async function agent
+    const funcCode = agentCode.replace(/export\s+default\s+async\s+function\s+agent/g, 'async function _agent');
+    
+    try {
+      agentFunction = new Function(
+        'context',
+        `
+        ${funcCode}
+        return _agent(context);
+        `
+      );
+    } catch (error) {
+      throw new Error(`Invalid agent code (old format): ${error.message}`);
+    }
   }
   
   // Exécuter l'agent
   try {
     const result = await agentFunction(context);
+    
+    // Si le résultat est une Response (nouveau format), extraire le JSON
+    if (result instanceof Response) {
+      if (result.ok) {
+        const json = await result.json();
+        return json;
+      } else {
+        const text = await result.text();
+        return { success: false, error: text };
+      }
+    }
+    
+    // Sinon, retourner le résultat tel quel (ancien format)
     return result;
   } catch (error) {
     throw new Error(`Agent execution error: ${error.message}`);

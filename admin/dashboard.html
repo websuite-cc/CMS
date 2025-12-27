@@ -874,7 +874,7 @@
                                 propulsés
                                 par Gemini.</p>
                             <div class="flex flex-wrap gap-3">
-                                <button onclick="document.getElementById('services-modal').classList.remove('hidden')"
+                                <button onclick="openServicesModal()"
                                     class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium backdrop-blur-sm transition flex items-center gap-2">
                                     <i class="fas fa-plug"></i> Services connectés
                                 </button>
@@ -974,185 +974,13 @@
 
                             <!-- Content Grid -->
                             <div class="p-8">
-                                <!-- Google Ecosystem -->
-                                <div class="mb-8">
-
-
-                                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                                        <!-- Gmail -->
-                                        <div
-                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                            <i class="fas fa-envelope text-red-500 text-2xl mb-2"></i>
-                                            <span
-                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Gmail</span>
-                                        </div>
-                                        <!-- Sheets -->
-                                        <div
-                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                            <i class="fas fa-table text-emerald-500 text-2xl mb-2"></i>
-                                            <span
-                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Sheets</span>
-                                        </div>
-                                        <!-- Drive -->
-                                        <div
-                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                            <i class="fab fa-google-drive text-blue-500 text-2xl mb-2"></i>
-                                            <span
-                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Drive</span>
-                                        </div>
-                                        <!-- Docs -->
-                                        <div
-                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                            <i class="fas fa-file-alt text-blue-600 text-2xl mb-2"></i>
-                                            <span
-                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Docs</span>
-                                        </div>
-                                        <!-- YouTube -->
-                                        <div
-                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                            <i class="fab fa-youtube text-red-600 text-2xl mb-2"></i>
-                                            <span
-                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">YouTube</span>
-                                        </div>
-                                        <!-- Analytics -->
-                                        <div
-                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                            <i class="fas fa-chart-line text-orange-500 text-2xl mb-2"></i>
-                                            <span
-                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Analytics</span>
-                                        </div>
-                                        <!-- Calendar -->
-                                        <div
-                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                            <i class="fas fa-calendar-alt text-blue-500 text-2xl mb-2"></i>
-                                            <span
-                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Calendar</span>
-                                        </div>
-                                        <!-- BigQuery -->
-                                        <div
-                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                            <i class="fas fa-database text-teal-600 text-2xl mb-2"></i>
-                                            <span
-                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">BigQuery</span>
-                                        </div>
-                                        <!-- Forms -->
-                                        <div
-                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                            <i class="fas fa-list-alt text-purple-500 text-2xl mb-2"></i>
-                                            <span
-                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Forms</span>
-                                        </div>
-                                        <!-- Contacts -->
-                                        <div
-                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                            <i class="fas fa-address-book text-blue-400 text-2xl mb-2"></i>
-                                            <span
-                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Contacts</span>
-                                        </div>
-                                        <!-- Tasks -->
-                                        <div
-                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                            <i class="fas fa-check-circle text-blue-500 text-2xl mb-2"></i>
-                                            <span
-                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Tasks</span>
-                                        </div>
-                                        <!-- Meet -->
-                                        <div
-                                            class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                                            <i class="fas fa-video text-emerald-600 text-2xl mb-2"></i>
-                                            <span
-                                                class="text-xs font-medium text-slate-700 dark:text-slate-300">Meet</span>
-                                        </div>
+                                <div id="services-list" class="min-h-[200px]">
+                                    <!-- Loading state -->
+                                    <div class="text-center p-8">
+                                        <i class="fas fa-spinner fa-spin text-3xl text-slate-400 mb-4"></i>
+                                        <p class="text-slate-500 dark:text-slate-400">Chargement des services...</p>
                                     </div>
                                 </div>
-
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                                    <!-- GitHub -->
-                                    <div
-                                        class="group relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg hover:border-emerald-500/50 transition-all duration-300">
-                                        <div class="absolute top-4 right-4">
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                                <i class="fas fa-check-circle mr-1"></i> Connecté
-                                            </span>
-                                        </div>
-                                        <div class="mb-4">
-                                            <div
-                                                class="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-110 transition-transform">
-                                                <i class="fab fa-github"></i>
-                                            </div>
-                                        </div>
-                                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">GitHub
-                                        </h3>
-                                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 min-h-[40px]">
-                                            Stockage et versionning de vos agents. Indispensable pour l'exécution du
-                                            code.
-                                        </p>
-                                        <a href="https://github.com/settings/tokens" target="_blank"
-                                            class="inline-flex w-full justify-center items-center px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg text-sm font-medium transition gap-2">
-                                            <i class="fas fa-external-link-alt"></i> Configurer
-                                        </a>
-                                    </div>
-
-                                    <!-- CronJob.org -->
-                                    <div
-                                        class="group relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg hover:border-blue-500/50 transition-all duration-300">
-                                        <div class="absolute top-4 right-4">
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                                <i class="fas fa-check-circle mr-1"></i> Connecté
-                                            </span>
-                                        </div>
-                                        <div class="mb-4">
-                                            <div
-                                                class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-110 transition-transform">
-                                                <i class="fas fa-clock"></i>
-                                            </div>
-                                        </div>
-                                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
-                                            CronJob</h3>
-                                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 min-h-[40px]">
-                                            Planificateur de tâches externe gratuit et fiable pour exécuter vos
-                                            agents.
-                                        </p>
-                                        <a href="https://console.cron-job.org/settings" target="_blank"
-                                            class="inline-flex w-full justify-center items-center px-4 py-2 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-lg text-sm font-medium transition gap-2">
-                                            <i class="fas fa-cog"></i> Configurer
-                                        </a>
-                                    </div>
-
-                                    <!-- Google AI -->
-                                    <div
-                                        class="group relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg hover:border-purple-500/50 transition-all duration-300">
-                                        <div class="absolute top-4 right-4">
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                                <i class="fas fa-check-circle mr-1"></i> Connecté
-                                            </span>
-                                        </div>
-                                        <div class="mb-4">
-                                            <div
-                                                class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-110 transition-transform">
-                                                <i class="fab fa-google"></i>
-                                            </div>
-                                        </div>
-                                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Google AI
-                                        </h3>
-                                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 min-h-[40px]">
-                                            Moteur d'intelligence artificielle Gemini pour générer le code de vos
-                                            agents.
-                                        </p>
-                                        <a href="https://aistudio.google.com/app/apikey" target="_blank"
-                                            class="inline-flex w-full justify-center items-center px-4 py-2 bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-300 rounded-lg text-sm font-medium transition gap-2">
-                                            <i class="fas fa-key"></i> Obtenir Clé API
-                                        </a>
-                                    </div>
-
-                                </div>
-
-
-
                             </div>
                         </div>
                     </div>

@@ -275,15 +275,38 @@ async function handleApiRoute(pathname, request) {
       return await handler.onRequestGet?.(context);
     }
     
-    // Route sauvegarde agent : /api/agents/save
+    // Route preview agent (cache) : /api/agents/preview
+    if (apiPath === 'agents/preview') {
+      const handler = await import('./functions/api/agents/preview.js');
+      if (request.method === 'POST' && handler.onRequestPost) {
+        return await handler.onRequestPost({ request, env });
+      }
+      if (request.method === 'GET' && handler.onRequestGet) {
+        return await handler.onRequestGet({ request, env });
+      }
+    }
+    
+    // Route deploy agent (GitHub) : /api/agents/deploy
+    if (apiPath === 'agents/deploy' && request.method === 'POST') {
+      const handler = await import('./functions/api/agents/deploy.js');
+      return await handler.onRequestPost?.({ request, env });
+    }
+    
+    // Route sauvegarde agent (ancien, gardé pour compatibilité) : /api/agents/save
     if (apiPath === 'agents/save' && request.method === 'POST') {
       const handler = await import('./functions/api/agents/save.js');
       return await handler.onRequestPost?.({ request, env });
     }
     
-    // Route chargement agent : /api/agents/load?id=xxx
+    // Route chargement agent : /api/agents/load?id=xxx (fallback depuis GitHub)
     if (apiPath === 'agents/load' && request.method === 'GET') {
       const handler = await import('./functions/api/agents/load.js');
+      return await handler.onRequestGet?.({ request, env });
+    }
+    
+    // Route variables d'environnement : /api/env-vars
+    if (apiPath === 'env-vars' && request.method === 'GET') {
+      const handler = await import('./functions/api/env-vars.js');
       return await handler.onRequestGet?.({ request, env });
     }
     

@@ -75,6 +75,13 @@ function updateDarkModeIcon() {
     });
 }
 
+// Helper function to get auth token
+function getAuthToken() {
+    return localStorage.getItem('websuite_auth') || 
+           localStorage.getItem('stackpages_auth') || 
+           localStorage.getItem('admin_token');
+}
+
 // Search Listeners
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('search-posts')?.addEventListener('input', () => {
@@ -1495,6 +1502,259 @@ function editAgent(agentId) {
 function createNewAgent() {
     // Ouvrir l'IDE pour créer un nouvel agent
     window.open('/admin/ide.html?new-agent=true', '_blank');
+}
+
+// Services Modal Functions
+window.openServicesModal = function() {
+    const modal = document.getElementById('services-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        loadConnectedServices(); // Charger les services dynamiquement
+    }
+}
+
+async function loadConnectedServices() {
+    const container = document.getElementById('services-list');
+    if (!container) return;
+
+    // Afficher le loading
+    container.innerHTML = `
+        <div class="text-center p-8">
+            <i class="fas fa-spinner fa-spin text-3xl text-slate-400 mb-4"></i>
+            <p class="text-slate-500 dark:text-slate-400">Chargement des services...</p>
+        </div>
+    `;
+
+    try {
+        const authKey = localStorage.getItem('websuite_auth');
+        const response = await fetch(buildApiUrl('/api/env-vars'), {
+            headers: {
+                'X-Auth-Key': authKey
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Erreur lors du chargement des services');
+        }
+
+        const data = await response.json();
+        const envVars = data.variables || [];
+
+        // Mapping des variables d'env vers les services
+        const servicesMap = {
+            'GitHub': {
+                icon: 'fab fa-github',
+                color: 'bg-slate-900',
+                description: 'Stockage et versionning de vos agents. Indispensable pour l\'exécution du code.',
+                configUrl: 'https://github.com/settings/tokens',
+                required: ['GITHUB_TOKEN', 'GITHUB_USER', 'GITHUB_REPO']
+            },
+            'CronJob': {
+                icon: 'fas fa-clock',
+                color: 'bg-blue-600',
+                description: 'Planificateur de tâches externe gratuit et fiable pour exécuter vos agents.',
+                configUrl: 'https://console.cron-job.org/settings',
+                required: ['CRONJOB_API_KEY']
+            },
+            'Google AI (Gemini)': {
+                icon: 'fab fa-google',
+                color: 'bg-gradient-to-br from-blue-500 to-purple-600',
+                description: 'Moteur d\'intelligence artificielle Gemini pour générer le code de vos agents.',
+                configUrl: 'https://aistudio.google.com/app/apikey',
+                required: ['GOOGLE_AI_KEY']
+            },
+            'Blog RSS': {
+                icon: 'fas fa-rss',
+                color: 'bg-orange-500',
+                description: 'Flux RSS pour récupérer les articles de blog (Substack, WordPress, etc.)',
+                configUrl: null,
+                required: ['BLOG_FEED_URL', 'BLOG_RSS_URL']
+            },
+            'YouTube': {
+                icon: 'fab fa-youtube',
+                color: 'bg-red-600',
+                description: 'Flux RSS YouTube pour récupérer les vidéos d\'une chaîne',
+                configUrl: null,
+                required: ['YOUTUBE_FEED_URL']
+            },
+            'Podcast': {
+                icon: 'fas fa-podcast',
+                color: 'bg-purple-600',
+                description: 'Flux RSS du podcast (Anchor.fm, Spotify, etc.)',
+                configUrl: null,
+                required: ['PODCAST_FEED_URL']
+            },
+            'PDF Generation': {
+                icon: 'fas fa-file-pdf',
+                color: 'bg-red-700',
+                description: 'Service de génération de fichiers PDF',
+                configUrl: null,
+                required: ['PDF_GENERATION_SERVICE_URL']
+            },
+            'Email': {
+                icon: 'fas fa-envelope',
+                color: 'bg-blue-500',
+                description: 'Service d\'envoi d\'email',
+                configUrl: null,
+                required: ['EMAIL_API_KEY', 'EMAIL_SERVICE_URL']
+            }
+        };
+
+        // Vérifier quels services sont connectés
+        const envVarNames = envVars.map(v => v.name);
+        const connectedServices = [];
+        const availableServices = [];
+
+        Object.entries(servicesMap).forEach(([serviceName, serviceConfig]) => {
+            // Vérifier si au moins une variable requise est présente
+            const hasAnyRequired = serviceConfig.required.some(req => envVarNames.includes(req));
+            // Vérifier si toutes les variables requises sont présentes
+            const hasAllRequired = serviceConfig.required.every(req => envVarNames.includes(req));
+            
+            if (hasAllRequired) {
+                connectedServices.push({
+                    name: serviceName,
+                    ...serviceConfig,
+                    status: 'connected',
+                    varsFound: serviceConfig.required.filter(v => envVarNames.includes(v))
+                });
+            } else if (hasAnyRequired) {
+                availableServices.push({
+                    name: serviceName,
+                    ...serviceConfig,
+                    status: 'partial',
+                    varsFound: serviceConfig.required.filter(v => envVarNames.includes(v)),
+                    varsMissing: serviceConfig.required.filter(v => !envVarNames.includes(v))
+                });
+            } else {
+                availableServices.push({
+                    name: serviceName,
+                    ...serviceConfig,
+                    status: 'disconnected',
+                    varsMissing: serviceConfig.required
+                });
+            }
+        });
+
+        // Rendre la liste dans la modal
+        renderServicesModal(connectedServices, availableServices);
+
+    } catch (error) {
+        console.error('Erreur lors du chargement des services:', error);
+        const container = document.getElementById('services-list');
+        if (container) {
+            container.innerHTML = `
+                <div class="text-center p-8 text-red-500">
+                    <i class="fas fa-exclamation-circle text-3xl mb-4"></i>
+                    <p>Erreur lors du chargement des services connectés</p>
+                    <p class="text-sm mt-2">${error.message}</p>
+                </div>
+            `;
+        }
+    }
+}
+
+function renderServicesModal(connectedServices, availableServices) {
+    const container = document.getElementById('services-list');
+    if (!container) return;
+
+    let html = '';
+
+    // Services connectés
+    if (connectedServices.length > 0) {
+        html += `
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-check-circle text-emerald-500"></i>
+                    Services Connectés (${connectedServices.length})
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        `;
+
+        connectedServices.forEach(service => {
+            html += `
+                <div class="group relative bg-white dark:bg-slate-800 rounded-xl border-2 border-emerald-200 dark:border-emerald-800 p-6 hover:shadow-lg transition-all duration-300">
+                    <div class="absolute top-4 right-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
+                            <i class="fas fa-check-circle mr-1"></i> Connecté
+                        </span>
+                    </div>
+                    <div class="mb-4">
+                        <div class="w-12 h-12 ${service.color} rounded-lg flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-110 transition-transform">
+                            <i class="${service.icon}"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">${service.name}</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4 min-h-[40px]">${service.description}</p>
+                    <div class="mb-4">
+                        <p class="text-xs text-emerald-600 dark:text-emerald-400 mb-1 font-medium">Variables configurées:</p>
+                        <div class="flex flex-wrap gap-1">
+                            ${service.varsFound.map(v => `<span class="px-2 py-0.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 rounded text-xs">${v}</span>`).join('')}
+                        </div>
+                    </div>
+                    ${service.configUrl ? `
+                        <a href="${service.configUrl}" target="_blank"
+                            class="inline-flex w-full justify-center items-center px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg text-sm font-medium transition gap-2">
+                            <i class="fas fa-external-link-alt"></i> Configurer
+                        </a>
+                    ` : ''}
+                </div>
+            `;
+        });
+
+        html += `</div></div>`;
+    }
+
+    // Services disponibles mais non connectés
+    if (availableServices.length > 0) {
+        html += `
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-plug text-slate-400"></i>
+                    Services Disponibles (${availableServices.length})
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        `;
+
+        availableServices.forEach(service => {
+            const statusBadge = service.status === 'partial' 
+                ? '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400"><i class="fas fa-exclamation-circle mr-1"></i> Partiel</span>'
+                : '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400"><i class="fas fa-times-circle mr-1"></i> Non connecté</span>';
+
+            html += `
+                <div class="group relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg opacity-75 transition-all duration-300">
+                    <div class="absolute top-4 right-4">${statusBadge}</div>
+                    <div class="mb-4">
+                        <div class="w-12 h-12 ${service.color} rounded-lg flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-110 transition-transform">
+                            <i class="${service.icon}"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">${service.name}</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4 min-h-[40px]">${service.description}</p>
+                    ${service.varsMissing && service.varsMissing.length > 0 ? `
+                        <div class="mb-4">
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-1 font-medium">Variables manquantes:</p>
+                            <div class="flex flex-wrap gap-1">
+                                ${service.varsMissing.map(v => `<span class="px-2 py-0.5 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-400 rounded text-xs">${v}</span>`).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${service.configUrl ? `
+                        <a href="${service.configUrl}" target="_blank"
+                            class="inline-flex w-full justify-center items-center px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg text-sm font-medium transition gap-2">
+                            <i class="fas fa-external-link-alt"></i> Configurer
+                        </a>
+                    ` : `
+                        <p class="text-xs text-slate-500 dark:text-slate-400 text-center">Ajoutez les variables d'environnement requises dans .dev.vars ou Cloudflare</p>
+                    `}
+                </div>
+            `;
+        });
+
+        html += `</div></div>`;
+    }
+
+    container.innerHTML = html || '<div class="text-center p-8 text-slate-500">Aucun service configuré</div>';
 }
 
 

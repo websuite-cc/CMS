@@ -87,6 +87,10 @@
                         class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white rounded-lg font-medium transition shadow-lg flex items-center gap-2">
                         <i class="fas fa-save"></i> Sauvegarder
                     </button>
+                    <button onclick="deployAgent()" id="btn-deploy-agent"
+                        class="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white rounded-lg font-medium transition shadow-lg flex items-center gap-2">
+                        <i class="fas fa-rocket"></i> Déployer
+                    </button>
                 </div>
             </div>
     </header>
@@ -553,7 +557,8 @@ async function handleAgent(context) {
             }
 
             try {
-                const response = await fetch('/api/agents/save', {
+                // Sauvegarder en cache (comme HTMX preview)
+                const response = await fetch('/api/agents/preview', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -569,13 +574,73 @@ async function handleAgent(context) {
                 const result = await response.json();
 
                 if (response.ok) {
-                    alert('Agent sauvegardé avec succès sur GitHub !\n\nID: ' + agentId);
+                    alert('Agent sauvegardé en cache !\n\nID: ' + agentId + '\n\nVous pouvez maintenant le tester ou le déployer vers GitHub.');
                     document.getElementById('page-status').textContent = `Agent: ${agentId}`;
+                    
+                    // Mettre à jour le statut badge
+                    const statusBadge = document.getElementById('page-status-badge');
+                    if (statusBadge) {
+                        statusBadge.innerHTML = '<i class="fas fa-circle text-orange-500 mr-1" style="font-size: 6px;"></i> En cache';
+                        statusBadge.className = 'text-xs px-2 py-1 rounded bg-orange-900 text-orange-300';
+                    }
                 } else {
                     throw new Error(result.error || 'Erreur lors de la sauvegarde');
                 }
             } catch (error) {
                 console.error('Save agent error:', error);
+                alert(`Erreur: ${error.message}`);
+            }
+        }
+
+        async function deployAgent() {
+            const agentId = document.getElementById('agent-id')?.value.trim();
+            const description = document.getElementById('agent-description')?.value.trim();
+            const code = monacoEditor ? monacoEditor.getValue().trim() : '';
+
+            if (!agentId) {
+                alert('Veuillez d\'abord sauvegarder l\'agent avec un ID');
+                return;
+            }
+
+            if (!code) {
+                alert('Le code de l\'agent ne peut pas être vide');
+                return;
+            }
+
+            if (!confirm(`Voulez-vous déployer l'agent "${agentId}" vers GitHub ?\n\nCela sauvegardera le fichier dans functions/agents/${agentId}.js`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/agents/deploy', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Auth-Key': getAuthToken()
+                    },
+                    body: JSON.stringify({
+                        agentId,
+                        code,
+                        description
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('Agent déployé avec succès sur GitHub !\n\nID: ' + agentId);
+                    
+                    // Mettre à jour le statut badge
+                    const statusBadge = document.getElementById('page-status-badge');
+                    if (statusBadge) {
+                        statusBadge.innerHTML = '<i class="fas fa-circle text-green-500 mr-1" style="font-size: 6px;"></i> Déployé';
+                        statusBadge.className = 'text-xs px-2 py-1 rounded bg-green-900 text-green-300';
+                    }
+                } else {
+                    throw new Error(result.error || 'Erreur lors du déploiement');
+                }
+            } catch (error) {
+                console.error('Deploy agent error:', error);
                 alert(`Erreur: ${error.message}`);
             }
         }
@@ -588,7 +653,7 @@ async function handleAgent(context) {
                 return;
             }
 
-            if (!confirm(`Voulez-vous tester l'agent "${agentId}" ?\n\nAssurez-vous d'avoir sauvegardé les modifications.`)) {
+            if (!confirm(`Voulez-vous tester l'agent "${agentId}" ?`)) {
                 return;
             }
 
@@ -615,24 +680,45 @@ async function handleAgent(context) {
 
         async function loadAgent(agentId) {
             try {
-                const response = await fetch(`/api/agents/load?id=${encodeURIComponent(agentId)}`, {
+                // Essayer d'abord de charger depuis le cache (comme HTMX)
+                let response = await fetch(`/api/agents/preview?id=${encodeURIComponent(agentId)}`, {
                     headers: {
                         'X-Auth-Key': getAuthToken()
                     }
                 });
 
-                const result = await response.json();
+                let result = await response.json();
+                let code = null;
 
-                if (response.ok) {
-                    document.getElementById('agent-id').value = agentId;
-                    if (monacoEditor) {
-                        monacoEditor.setValue(result.code);
+                if (response.ok && result.data) {
+                    // Chargé depuis le cache
+                    code = result.data.code;
+                    if (result.data.description) {
+                        document.getElementById('agent-description').value = result.data.description;
                     }
-                    document.getElementById('page-status').textContent = `Agent: ${agentId}`;
-                    switchMode('agent');
                 } else {
-                    throw new Error(result.error || 'Erreur lors du chargement');
+                    // Fallback: charger depuis GitHub
+                    response = await fetch(`/api/agents/load?id=${encodeURIComponent(agentId)}`, {
+                        headers: {
+                            'X-Auth-Key': getAuthToken()
+                        }
+                    });
+
+                    result = await response.json();
+
+                    if (response.ok) {
+                        code = result.code;
+                    } else {
+                        throw new Error(result.error || 'Erreur lors du chargement');
+                    }
                 }
+
+                document.getElementById('agent-id').value = agentId;
+                if (monacoEditor) {
+                    monacoEditor.setValue(code);
+                }
+                document.getElementById('page-status').textContent = `Agent: ${agentId}`;
+                switchMode('agent');
             } catch (error) {
                 console.error('Load agent error:', error);
                 alert(`Erreur: ${error.message}`);
@@ -1086,12 +1172,38 @@ async function handleAgent(context) {
                 // Get current editor content
                 const currentCode = monacoEditor ? monacoEditor.getValue().trim() : '';
                 
+                // Récupérer la liste des variables d'environnement disponibles avec leurs descriptions
+                let availableEnvVars = [];
+                try {
+                    const envResponse = await fetch('/api/env-vars', {
+                        headers: { 'X-Auth-Key': getAuthToken() }
+                    });
+                    if (envResponse.ok) {
+                        const envData = await envResponse.json();
+                        availableEnvVars = envData.variables || [];
+                    }
+                } catch (e) {
+                    console.warn('Could not fetch env vars:', e);
+                }
+                
                 // Determine system instruction based on current mode
                 let systemInstruction = "";
                 let codeLanguage = "";
                 let codeBlockType = "";
                 
                 if (currentMode === 'agent') {
+                    // Construire la section des variables d'environnement disponibles
+                    let envVarsSection = "\n**AVAILABLE ENVIRONMENT VARIABLES:**\n";
+                    if (availableEnvVars.length > 0) {
+                        envVarsSection += "You can ONLY use these variables (access via env.VARIABLE_NAME). DO NOT invent variables that are not in this list.\n\n";
+                        availableEnvVars.forEach(v => {
+                            envVarsSection += `- env.${v.name} : ${v.description}\n`;
+                        });
+                        envVarsSection += "\n";
+                    } else {
+                        envVarsSection += "No environment variables are currently configured. Use generic names like env.API_URL or env.API_KEY if needed, but prefer to configure specific variables.\n\n";
+                    }
+                    
                     // AGENT MODE: JavaScript agent function
                     systemInstruction = "You are an expert JavaScript developer specialized in creating automated agents for WebSuite CMS.\n\n" +
                         "CRITICAL ARCHITECTURE: AGENT SYSTEM\n" +
@@ -1102,7 +1214,7 @@ async function handleAgent(context) {
                         "2. **Imports**: MUST import jsonResponse and errorResponse from '../../../shared/utils.js'\n" +
                         "3. **Context Parameter**: The context object contains { env, request, params } - environment variables via env\n" +
                         "4. **Return Format**: MUST use jsonResponse() or errorResponse() helpers\n" +
-                        "5. **Environment Variables**: Access variables EXCLUSIVELY via context.env (e.g., env.GITHUB_TOKEN, env.ADMIN_PASSWORD)\n" +
+                        "5. **Environment Variables**: Access variables EXCLUSIVELY via context.env. " + envVarsSection +
                         "6. **Error Handling**: MUST use try/catch and return errorResponse() on errors\n" +
                         "7. **No File System**: Agents CANNOT access file system, only environment variables\n" +
                         "8. **No External APIs without env**: Use env variables for API keys, tokens, etc.\n\n" +
@@ -1126,7 +1238,8 @@ async function handleAgent(context) {
                         "  \n" +
                         "  try {\n" +
                         "    // Your logic here\n" +
-                        "    // Access env variables: env.GITHUB_TOKEN, env.ADMIN_PASSWORD, etc.\n" +
+                        "    // Access env variables: const apiKey = env.YOUR_VARIABLE_NAME;\n" +
+                        "    // Always check if variables exist: if (!env.REQUIRED_VAR) return errorResponse('Missing required env var', 400);\n" +
                         "    \n" +
                         "    const result = {\n" +
                         "      success: true,\n" +

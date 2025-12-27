@@ -7,7 +7,7 @@
 
 import { jsonResponse, errorResponse } from '../../../shared/utils.js';
 import { isAuthenticated } from '../../../shared/utils.js';
-import { saveLogToGitHub } from '../../../shared/agent-executor.js';
+import { saveLogToGitHub, loadAgentFromGitHub, executeAgent } from '../../../shared/agent-executor.js';
 
 /**
  * Vérifie le token CronJob depuis le header ou query param
@@ -44,87 +44,58 @@ async function handleExecute(context) {
     return errorResponse("Non autorisé. Token CronJob ou authentification admin requise.", 401);
   }
   
-  // Vérifier la configuration GitHub
-  if (!env.GITHUB_TOKEN || !env.GITHUB_USER || !env.GITHUB_REPO) {
-    return errorResponse("Configuration GitHub manquante", 500);
-  }
-  
   try {
-    // Importer directement le handler de l'agent
-    // Le handler est dans functions/api/agents/[id]/handler.js
-    // Cloudflare Pages Functions route automatiquement ce fichier
-    
     const startTime = Date.now();
-    let response;
+    let agentCode = null;
     let executionTime;
     
-    // Pour l'import dynamique, on utilise une URL relative à la racine du projet
-    // En production Cloudflare, le handler doit être déployé dans functions/api/agents/[id]/handler.js
-    // En local Bun, on utilise un chemin relatif depuis server.js qui pointe vers le bon fichier
+    // STRATÉGIE 1: Charger depuis le cache (comme HTMX preview)
+    const CACHE_KEY_PREFIX = 'agent_';
+    const cacheKey = `${CACHE_KEY_PREFIX}${id}`;
     
-    // Construire le chemin du handler
-    // Depuis functions/api/agents/[id]/execute.js, handler.js est dans le même dossier
-    // Utiliser un chemin relatif pour compatibilité locale et production
-    // En local Bun: le chemin est résolu depuis server.js qui importe execute.js
-    // En production Cloudflare: le routing automatique gère les fichiers dans le même dossier
-    
-    // Essayer d'importer le handler directement
-    // En production Cloudflare, le handler doit être dans functions/api/agents/[id]/handler.js
-    // En local Bun, le chemin est résolu depuis server.js
-    
-    let handler;
-    let importError = null;
-    
-    // Stratégie 1: Chemin relatif depuis le même dossier (pour Cloudflare Pages Functions)
-    try {
-      handler = await import(`./handler.js`);
-    } catch (e1) {
-      importError = e1;
-      // Stratégie 2: Chemin relatif depuis shared (pour certains cas)
+    if (env.FRONTEND_TEMPLATE_CACHE) {
+      // Cloudflare KV
+      const cached = await env.FRONTEND_TEMPLATE_CACHE.get(cacheKey);
+      if (cached) {
+        const agentData = JSON.parse(cached);
+        agentCode = agentData.code;
+      }
+    } else {
+      // Fallback: Cache API (local Bun ou Cloudflare sans KV)
       try {
-        handler = await import(`../../../api/agents/${id}/handler.js`);
-      } catch (e2) {
-        importError = e2;
-        // Stratégie 3: Chemin absolu (pour Bun local)
-        try {
-          // En local Bun, server.js peut résoudre depuis la racine
-          handler = await import(`../../../../functions/api/agents/${id}/handler.js`);
-        } catch (e3) {
-          throw new Error(`Could not import agent handler from any path. Please ensure the agent is saved and deployed. Errors: ${e1.message}, ${e2.message}, ${e3.message}`);
+        const cache = caches.default;
+        const cacheRequest = new Request(`https://cache.local/${cacheKey}`);
+        const cachedResponse = await cache.match(cacheRequest);
+        if (cachedResponse) {
+          const agentData = await cachedResponse.json();
+          agentCode = agentData.code;
         }
-      }
-    }
-    
-    // Déterminer quelle méthode appeler
-    if (request.method === 'POST' && handler.onRequestPost) {
-      response = await handler.onRequestPost(context);
-    } else if (request.method === 'GET' && handler.onRequestGet) {
-      response = await handler.onRequestGet(context);
-    } else {
-      throw new Error(`Method ${request.method} not supported by agent handler`);
-    }
-    
-    executionTime = Date.now() - startTime;
-    
-    // Extraire le résultat de la réponse JSON
-    let result = null;
-    if (response && response.ok) {
-      try {
-        result = await response.clone().json();
       } catch (e) {
-        // Si ce n'est pas du JSON, prendre le texte
-        result = { message: await response.clone().text() };
+        // Cache API non disponible, continuer avec fallback GitHub
       }
-    } else {
-      // Si la réponse n'est pas OK, extraire l'erreur
-      const errorText = await response.text();
-      result = { error: errorText, success: false };
     }
+    
+    // STRATÉGIE 2: Fallback vers GitHub si pas en cache
+    if (!agentCode) {
+      if (!env.GITHUB_TOKEN || !env.GITHUB_USER || !env.GITHUB_REPO) {
+        return errorResponse("Agent non trouvé en cache et configuration GitHub manquante", 404);
+      }
+      
+      try {
+        agentCode = await loadAgentFromGitHub(id, env);
+      } catch (error) {
+        return errorResponse(`Agent non trouvé: ${error.message}`, 404);
+      }
+    }
+    
+    // Exécuter l'agent depuis le code (simple, comme avant)
+    const result = await executeAgent(agentCode, env);
+    executionTime = Date.now() - startTime;
     
     // Créer l'entrée de log
     const logEntry = {
       agentId: id,
-      success: result.success !== false && response.ok,
+      success: result.success !== false,
       executionTime,
       result: result,
       triggeredBy: isCronJob ? 'cronjob' : 'admin',
@@ -132,12 +103,21 @@ async function handleExecute(context) {
     };
     
     // Sauvegarder le log (en arrière-plan, ne bloque pas la réponse)
-    saveLogToGitHub(id, logEntry, env).catch(err => {
-      console.error(`Failed to save log for agent ${id}:`, err);
-    });
+    // Seulement si GitHub est configuré
+    if (env.GITHUB_TOKEN && env.GITHUB_USER && env.GITHUB_REPO) {
+      saveLogToGitHub(id, logEntry, env).catch(err => {
+        console.error(`Failed to save log for agent ${id}:`, err);
+      });
+    }
     
-    // Retourner la réponse du handler
-    return response;
+    // Retourner le résultat
+    return jsonResponse({
+      success: true,
+      agentId: id,
+      executionTime,
+      result: result,
+      logged: !!(env.GITHUB_TOKEN && env.GITHUB_USER && env.GITHUB_REPO)
+    });
     
   } catch (error) {
     // Logger l'erreur
