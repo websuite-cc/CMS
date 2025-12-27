@@ -89,7 +89,8 @@ async function handleExecute(context) {
     }
     
     // Exécuter l'agent depuis le code (simple, comme avant)
-    const result = await executeAgent(agentCode, env);
+    // Passer l'URL de la requête pour résoudre les URLs relatives
+    const result = await executeAgent(agentCode, env, request.url);
     executionTime = Date.now() - startTime;
     
     // Créer l'entrée de log

@@ -647,9 +647,16 @@ async function handleAgent(context) {
 
         async function testAgent() {
             const agentId = document.getElementById('agent-id')?.value.trim();
+            const agentCode = monacoEditor ? monacoEditor.getValue().trim() : '';
+            const agentDescription = document.getElementById('agent-description')?.value.trim() || '';
             
             if (!agentId) {
                 alert('Veuillez d\'abord sauvegarder l\'agent avec un ID');
+                return;
+            }
+
+            if (!agentCode) {
+                alert('Le code de l\'agent est vide');
                 return;
             }
 
@@ -658,6 +665,29 @@ async function handleAgent(context) {
             }
 
             try {
+                // Étape 1: Sauvegarder l'agent en cache pour qu'il soit disponible pour l'exécution
+                console.log('[testAgent] Saving agent to cache first...');
+                const saveResponse = await fetch('/api/agents/preview', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Auth-Key': getAuthToken()
+                    },
+                    body: JSON.stringify({
+                        agentId: agentId,
+                        code: agentCode,
+                        description: agentDescription
+                    })
+                });
+
+                const saveResult = await saveResponse.json();
+                if (!saveResponse.ok) {
+                    throw new Error(saveResult.error || 'Erreur lors de la sauvegarde en cache');
+                }
+
+                console.log('[testAgent] Agent saved to cache, executing...');
+
+                // Étape 2: Exécuter l'agent
                 const response = await fetch(`/api/agents/${agentId}/execute`, {
                     method: 'POST',
                     headers: {
@@ -1279,6 +1309,22 @@ async function handleAgent(context) {
                         "- Send notifications via webhooks (using env variables for URLs/keys)\n" +
                         "- Aggregate data from multiple sources\n" +
                         "- Schedule automated tasks\n\n" +
+                        
+                        "GOOGLE AI / GEMINI API:\n" +
+                        "If the agent needs to use Google Gemini AI API (via env.GOOGLE_AI_KEY):\n" +
+                        "- CRITICAL: Use 'gemini-2.5-flash' (same model as the IDE uses - NEVER use 'gemini-pro' or 'gemini-1.5-flash' which are deprecated)\n" +
+                        "- Correct endpoint: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent\n" +
+                        "- This is the SAME model used by the IDE for code generation, ensuring consistency\n" +
+                        "- Example usage:\n" +
+                        "  const apiKey = env.GOOGLE_AI_KEY;\n" +
+                        "  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;\n" +
+                        "  const response = await fetch(url, {\n" +
+                        "    method: 'POST',\n" +
+                        "    headers: { 'Content-Type': 'application/json' },\n" +
+                        "    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })\n" +
+                        "  });\n" +
+                        "  const data = await response.json();\n" +
+                        "  const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';\n\n" +
                         
                         "SECURITY RULES:\n" +
                         "- NEVER hardcode API keys, tokens, or secrets\n" +

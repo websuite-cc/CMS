@@ -42,12 +42,39 @@ export async function loadAgentFromGitHub(agentId, env) {
  * 1. Ancien format: export default async function agent(context) { ... }
  * 2. Nouveau format: export async function onRequestPost(context) { ... }
  */
-export async function executeAgent(agentCode, env) {
+export async function executeAgent(agentCode, env, requestUrl = null) {
+  // Déterminer l'URL de base pour résoudre les URLs relatives
+  let baseUrl = 'http://localhost:8000';
+  if (requestUrl) {
+    try {
+      const url = new URL(requestUrl);
+      baseUrl = `${url.protocol}//${url.host}`;
+    } catch (e) {
+      // Si l'URL est invalide, utiliser localhost par défaut
+      baseUrl = 'http://localhost:8000';
+    }
+  }
+  
   // Créer un contexte similaire aux autres fonctions API
   const context = {
     env, // Les agents ont accès exclusif aux variables d'environnement
-    request: { method: 'POST', url: 'http://localhost' }, // Mock request
+    request: { 
+      method: 'POST', 
+      url: requestUrl || 'http://localhost:8000',
+      baseUrl: baseUrl // URL de base pour résoudre les URLs relatives
+    },
     params: {} // Pas de params pour l'exécution directe
+  };
+  
+  // Créer une fonction fetch wrapper qui résout les URLs relatives
+  const fetchWithBaseUrl = (url, options = {}) => {
+    // Si l'URL est relative, la convertir en URL absolue
+    if (typeof url === 'string' && url.startsWith('/')) {
+      url = `${baseUrl}${url}`;
+    } else if (typeof url === 'string' && !url.startsWith('http://') && !url.startsWith('https://')) {
+      url = `${baseUrl}/${url}`;
+    }
+    return fetch(url, options);
   };
   
   // Vérifier le format du code
@@ -66,6 +93,9 @@ export async function executeAgent(agentCode, env) {
     // Chercher handleAgent d'abord (fonction interne)
     let funcCode = agentCode;
     
+    // SUPPRIMER les imports ES6 (new Function() ne les supporte pas)
+    funcCode = funcCode.replace(/import\s+.*?from\s+['"][^'"]+['"];?\s*\n?/g, '');
+    
     // Si on a handleAgent, l'utiliser
     if (agentCode.includes('async function handleAgent')) {
       funcCode = funcCode.replace(/export\s+async\s+function\s+onRequestPost[^{]*\{[\s\S]*?return\s+handleAgent\(context\);[\s\S]*?\}/g, '');
@@ -73,14 +103,26 @@ export async function executeAgent(agentCode, env) {
       funcCode = funcCode.replace(/async function handleAgent/, 'async function _agent');
     } else {
       // Sinon, wrapper onRequestPost
-      funcCode = agentCode.replace(/export\s+async\s+function\s+onRequestPost/g, 'async function _agent');
+      funcCode = funcCode.replace(/export\s+async\s+function\s+onRequestPost/g, 'async function _agent');
       // Supprimer onRequestGet si présent
       funcCode = funcCode.replace(/export\s+async\s+function\s+onRequestGet[^{]*\{[\s\S]*?\}/g, '');
     }
     
     try {
       // Ajouter les imports nécessaires (jsonResponse, errorResponse)
+      // Ces fonctions sont injectées car new Function() ne supporte pas les imports ES6
+      // Aussi injecter fetch() avec résolution d'URL relative
       const helperCode = `
+        const baseUrl = context.request.baseUrl || 'http://localhost:8000';
+        const fetch = (url, options = {}) => {
+          // Si l'URL est relative, la convertir en URL absolue
+          if (typeof url === 'string' && url.startsWith('/')) {
+            url = baseUrl + url;
+          } else if (typeof url === 'string' && !url.startsWith('http://') && !url.startsWith('https://')) {
+            url = baseUrl + '/' + url;
+          }
+          return global.fetch(url, options);
+        };
         function jsonResponse(data) {
           return new Response(JSON.stringify(data), {
             headers: { 'Content-Type': 'application/json' }
@@ -96,6 +138,7 @@ export async function executeAgent(agentCode, env) {
       
       agentFunction = new Function(
         'context',
+        'global',
         `
         ${helperCode}
         ${funcCode}
@@ -103,28 +146,55 @@ export async function executeAgent(agentCode, env) {
         `
       );
     } catch (error) {
+      if (error.message && error.message.includes('Code generation from strings disallowed')) {
+        throw new Error('Code generation from strings disallowed for this context. In production, agents must be deployed to GitHub first (use "Deploy" button), then they will execute via Cloudflare Pages Functions routing. Local testing (Bun) works differently.');
+      }
       throw new Error(`Invalid agent code (new format): ${error.message}`);
     }
   } else {
     // Ancien format : export default async function agent
-    const funcCode = agentCode.replace(/export\s+default\s+async\s+function\s+agent/g, 'async function _agent');
+    let funcCode = agentCode;
+    
+    // SUPPRIMER les imports ES6 (new Function() ne les supporte pas)
+    funcCode = funcCode.replace(/import\s+.*?from\s+['"][^'"]+['"];?\s*\n?/g, '');
+    
+    funcCode = funcCode.replace(/export\s+default\s+async\s+function\s+agent/g, 'async function _agent');
     
     try {
+      // Ajouter les helpers pour l'ancien format aussi
+      const helperCode = `
+        const baseUrl = context.request.baseUrl || 'http://localhost:8000';
+        const fetch = (url, options = {}) => {
+          // Si l'URL est relative, la convertir en URL absolue
+          if (typeof url === 'string' && url.startsWith('/')) {
+            url = baseUrl + url;
+          } else if (typeof url === 'string' && !url.startsWith('http://') && !url.startsWith('https://')) {
+            url = baseUrl + '/' + url;
+          }
+          return global.fetch(url, options);
+        };
+      `;
+      
       agentFunction = new Function(
         'context',
+        'global',
         `
+        ${helperCode}
         ${funcCode}
         return _agent(context);
         `
       );
     } catch (error) {
+      if (error.message && error.message.includes('Code generation from strings disallowed')) {
+        throw new Error('Code generation from strings disallowed for this context. In production, agents must be deployed to GitHub first (use "Deploy" button), then they will execute via Cloudflare Pages Functions routing. Local testing (Bun) works differently.');
+      }
       throw new Error(`Invalid agent code (old format): ${error.message}`);
     }
   }
   
-  // Exécuter l'agent
+  // Exécuter l'agent avec fetch global disponible
   try {
-    const result = await agentFunction(context);
+    const result = await agentFunction(context, globalThis);
     
     // Si le résultat est une Response (nouveau format), extraire le JSON
     if (result instanceof Response) {
