@@ -21,22 +21,30 @@ const ENV_VAR_DESCRIPTIONS = {
   'GITHUB_REPO': 'Nom du dépôt GitHub',
   
   // Blog / RSS
-  'BLOG_FEED_URL': 'URL du flux RSS pour récupérer les articles de blog (ex: Substack, WordPress, Ghost, Medium) - Format: https://domain.com/feed ou https://username.substack.com/feed',
-  'BLOG_API_URL': 'URL de l\'API pour récupérer les articles de blog (alternative au RSS)',
-  'BLOG_API_KEY': 'Clé API optionnelle pour authentifier les requêtes vers BLOG_API_URL',
-  'BLOG_POST_COUNT': 'Nombre d\'articles à récupérer par défaut (optionnel, défaut: 10)',
-  'BLOG_RSS_URL': 'Alias pour BLOG_FEED_URL (pour compatibilité)',
+  // IMPORTANT: Ces variables sont utilisées par le système pour alimenter la route API interne /api/posts
+  // Les agents DOIVENT utiliser fetch('/api/posts') pour récupérer les articles, PAS env.BLOG_FEED_URL directement
+  'BLOG_FEED_URL': 'URL du flux RSS pour alimenter /api/posts (configurée par l\'admin) - Format: https://domain.com/feed ou https://username.substack.com/feed - Les agents doivent utiliser fetch(\'/api/posts\') pour récupérer les articles',
+  'BLOG_API_URL': 'URL de l\'API pour récupérer les articles de blog (alternative au RSS, utilisé par le système)',
+  'BLOG_API_KEY': 'Clé API optionnelle pour authentifier les requêtes vers BLOG_API_URL (utilisée par le système)',
+  'BLOG_POST_COUNT': 'Nombre d\'articles à récupérer par défaut (optionnel, défaut: 10, utilisé par /api/posts)',
+  'BLOG_RSS_URL': 'Alias pour BLOG_FEED_URL (pour compatibilité, utilisé par le système)',
   
   // YouTube
-  'YOUTUBE_FEED_URL': 'URL du flux RSS YouTube pour récupérer les vidéos d\'une chaîne - Format: https://www.youtube.com/feeds/videos.xml?channel_id=CHANNEL_ID (trouver CHANNEL_ID sur commentpicker.com/youtube-channel-id.php)',
-  'YOUTUBE_API_KEY': 'Clé API YouTube pour les opérations avancées (optionnel, nécessite YouTube Data API v3)',
-  'YOUTUBE_CHANNEL_ID': 'ID de la chaîne YouTube (optionnel si YOUTUBE_FEED_URL contient déjà le channel_id)',
+  // IMPORTANT: Cette variable est utilisée par le système pour alimenter la route API interne /api/videos
+  // Les agents DOIVENT utiliser fetch('/api/videos') pour récupérer les vidéos, PAS env.YOUTUBE_FEED_URL directement
+  'YOUTUBE_FEED_URL': 'URL du flux RSS YouTube pour alimenter /api/videos (configurée par l\'admin) - Format: https://www.youtube.com/feeds/videos.xml?channel_id=CHANNEL_ID - Les agents doivent utiliser fetch(\'/api/videos\') pour récupérer les vidéos',
+  'YOUTUBE_API_KEY': 'Clé API YouTube pour les opérations avancées (optionnel, nécessite YouTube Data API v3, utilisé par le système)',
+  'YOUTUBE_CHANNEL_ID': 'ID de la chaîne YouTube (optionnel si YOUTUBE_FEED_URL contient déjà le channel_id, utilisé par le système)',
   
   // Podcast
-  'PODCAST_FEED_URL': 'URL du flux RSS du podcast (ex: Anchor.fm, Spotify, Apple Podcasts, RSS.com) - Format: https://anchor.fm/s/PODCAST_ID/podcast/rss',
+  // IMPORTANT: Cette variable est utilisée par le système pour alimenter la route API interne /api/podcasts
+  // Les agents DOIVENT utiliser fetch('/api/podcasts') pour récupérer les podcasts, PAS env.PODCAST_FEED_URL directement
+  'PODCAST_FEED_URL': 'URL du flux RSS du podcast pour alimenter /api/podcasts (configurée par l\'admin) - Format: https://anchor.fm/s/PODCAST_ID/podcast/rss - Les agents doivent utiliser fetch(\'/api/podcasts\') pour récupérer les podcasts',
   
   // Événements
-  'EVENTS_FEED_URL': 'URL du flux RSS des événements (ex: Meetup, Eventbrite) - Format: https://www.meetup.com/GROUP_NAME/events/rss',
+  // IMPORTANT: Cette variable est utilisée par le système pour alimenter la route API interne /api/events
+  // Les agents DOIVENT utiliser fetch('/api/events') pour récupérer les événements, PAS env.EVENTS_FEED_URL directement
+  'EVENTS_FEED_URL': 'URL du flux RSS des événements pour alimenter /api/events (configurée par l\'admin) - Format: https://www.meetup.com/GROUP_NAME/events/rss - Les agents doivent utiliser fetch(\'/api/events\') pour récupérer les événements',
   
   // Services externes
   'FRONTEND_BUILDER_URL': 'URL du service de build frontend (optionnel)',
