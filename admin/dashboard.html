@@ -1648,6 +1648,53 @@
 
     <script src="/core/admin.js"></script>
     <script>
+        // Vérifier que openServicesModal est disponible après le chargement
+        // Attendre que le DOM et admin.js soient chargés
+        (function() {
+            function checkAndDefineModal() {
+                if (typeof window.openServicesModal === 'undefined') {
+                    console.warn('openServicesModal not found, defining fallback...');
+                    // Fallback: définir une version qui ouvre juste la modal
+                    window.openServicesModal = function() {
+                        console.log('[Fallback] Opening services modal');
+                        const modal = document.getElementById('services-modal');
+                        if (modal) {
+                            modal.classList.remove('hidden');
+                            // Afficher un message dans la modal
+                            const container = document.getElementById('services-list');
+                            if (container) {
+                                container.innerHTML = `
+                                    <div class="text-center p-8 text-yellow-600">
+                                        <i class="fas fa-exclamation-triangle text-3xl mb-4"></i>
+                                        <p>Fonction de chargement non disponible</p>
+                                        <p class="text-sm mt-2">Vérifiez la console pour plus d'informations</p>
+                                    </div>
+                                `;
+                            }
+                        } else {
+                            console.error('Modal element #services-modal not found!');
+                            alert('Erreur: La popup des services n\'a pas pu être trouvée.');
+                        }
+                    };
+                    console.log('Fallback openServicesModal defined');
+                } else {
+                    console.log('✓ openServicesModal function is available');
+                }
+            }
+            
+            // Essayer immédiatement
+            checkAndDefineModal();
+            
+            // Essayer après DOMContentLoaded
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', checkAndDefineModal);
+            }
+            
+            // Essayer après un court délai (au cas où admin.js se charge après)
+            setTimeout(checkAndDefineModal, 500);
+            setTimeout(checkAndDefineModal, 1000);
+        })();
+        
         // Logout Handler
         async function logout() {
             // await fetch('/api/logout'); // Optional: Call backend logout if needed

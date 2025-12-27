@@ -1506,10 +1506,21 @@ function createNewAgent() {
 
 // Services Modal Functions
 window.openServicesModal = function() {
-    const modal = document.getElementById('services-modal');
-    if (modal) {
+    try {
+        console.log('[Services Modal] Opening modal...');
+        const modal = document.getElementById('services-modal');
+        if (!modal) {
+            console.error('[Services Modal] Modal element not found!');
+            alert('Erreur: La popup des services n\'a pas pu être trouvée.');
+            return;
+        }
+        console.log('[Services Modal] Modal found, removing hidden class');
         modal.classList.remove('hidden');
+        console.log('[Services Modal] Loading services...');
         loadConnectedServices(); // Charger les services dynamiquement
+    } catch (error) {
+        console.error('[Services Modal] Error opening modal:', error);
+        alert('Erreur lors de l\'ouverture de la popup: ' + error.message);
     }
 }
 
@@ -1527,14 +1538,25 @@ async function loadConnectedServices() {
 
     try {
         const authKey = localStorage.getItem('websuite_auth');
-        const response = await fetch(buildApiUrl('/api/env-vars'), {
+        if (!authKey) {
+            throw new Error('Non authentifié. Veuillez vous reconnecter.');
+        }
+        
+        const apiUrl = buildApiUrl('/api/env-vars');
+        console.log('[Services Modal] Fetching from:', apiUrl);
+        
+        const response = await fetch(apiUrl, {
             headers: {
                 'X-Auth-Key': authKey
             }
         });
 
+        console.log('[Services Modal] Response status:', response.status);
+
         if (!response.ok) {
-            throw new Error('Erreur lors du chargement des services');
+            const errorText = await response.text();
+            console.error('[Services Modal] API Error:', response.status, errorText);
+            throw new Error(`Erreur ${response.status}: ${errorText || 'Erreur lors du chargement des services'}`);
         }
 
         const data = await response.json();
